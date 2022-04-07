@@ -1,6 +1,20 @@
 # docker-hascheevos
 More details soon.... work in progress...
 
+## Supported Architectures
+
+The architectures supported by this image are:
+
+| Architecture | Tag |
+| :----: | --- |
+| x86-64 | latest |
+
+## Version Tags
+
+| Tag | Description |
+| :----: | --- |
+| latest | Newest release code |
+
 ### docker
 
 ```
