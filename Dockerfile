@@ -13,6 +13,7 @@ RUN \
 		jq \
 		unzip \
 		gzip \
+		git \
 		p7zip-full \
 		curl \
 		python3-pip && \
