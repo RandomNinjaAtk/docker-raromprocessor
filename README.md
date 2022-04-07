@@ -21,6 +21,19 @@ The architectures supported by this image are:
 | :----: | --- |
 | latest | Newest release code |
 
+## Parameters
+
+Container images are configured using parameters passed at runtime (such as those above). These parameters are separated by a colon and indicate `<external>:<internal>` respectively. For example, `-p 8080:80` would expose port `80` from inside the container to be accessible from the host's IP on port `8080` outside the container.
+
+| Parameter | Function |
+| --- | --- |
+| `-e PUID=1000` | for UserID - see below for explanation |
+| `-e PGID=1000` | for GroupID - see below for explanation |
+| `-v /config` | Configuration files for AMTD. |
+| `-v /import` | Place ROMs to be processed in this directory |
+| `-v /output` | ROMs that have been processed will end up here |
+| `-e AutoStart=true` | true = Enabled :: Runs script automatically on startup |
+
 ### docker
 
 ```
@@ -31,6 +44,7 @@ docker create \
   -v /path/to/rom_output_folder:/output \
   -e PUID=1000 \
   -e PGID=1000 \
+  -e AutoStart=true \
   --restart unless-stopped \
   randomninjaatk/hascheevos 
 ```
@@ -53,5 +67,6 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
+      - AutoStart=true
     restart: unless-stopped
 ```
