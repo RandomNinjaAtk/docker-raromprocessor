@@ -31,7 +31,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e PGID=1000` | for GroupID - see below for explanation |
 | `-v /config` | Configuration files for hascheevos. |
 | `-v /cache` | cache location for skyscraper. |
-| `-v /impurt` | Place ROMs to be processed in this directory |
+| `-v /input` | Place ROMs to be processed in this directory |
 | `-v /backup` | Processed ROMs are backed up to this directory |
 | `-v /output` | ROMs that have been processed will end up here |
 | `-e AutoStart=true` | true = Enabled :: Runs script automatically on startup |
