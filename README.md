@@ -31,7 +31,8 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e PGID=1000` | for GroupID - see below for explanation |
 | `-v /config` | Configuration files for hascheevos. |
 | `-v /cache` | cache location for skyscraper. |
-| `-v /import` | Place ROMs to be processed in this directory |
+| `-v /impurt` | Place ROMs to be processed in this directory |
+| `-v /backup` | Processed ROMs are backed up to this directory |
 | `-v /output` | ROMs that have been processed will end up here |
 | `-e AutoStart=true` | true = Enabled :: Runs script automatically on startup |
 | `-e ScriptInterval=1h` | When AutoStart is enabled, script will loop indefinitely, this allows the script to puase between loops, via sleep command |
@@ -45,7 +46,8 @@ docker create \
   --name=hascheevos \
   -v /path/to/config/files:/config \
   -v /path/to/skyscraper_cache:/cache \
-  -v /path/to/rom_import_folder:/import \
+  -v /path/to/rom_import_folder:/input \
+  -v /path/to/rom_import_folder:/backup \
   -v /path/to/rom_output_folder:/output \
   -e PUID=1000 \
   -e PGID=1000 \
@@ -71,7 +73,8 @@ services:
     volumes:
       - /path/to/config/files:/config
       - /path/to/skyscraper_cache:/cache
-      - /path/to/rom_import_folder:/import
+      - /path/to/rom_import_folder:/input
+      - /path/to/rom_import_folder:/backup
       - /path/to/rom_output_folder:/output
     environment:
       - PUID=1000
