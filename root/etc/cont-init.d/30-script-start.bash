@@ -2,10 +2,16 @@
 
 if [ "$AutoStart" = "true" ]; then
 	echo "Automatic Start Enabled, starting..."
-	bash /scripts/import.sh
+	for (( ; ; )); do
+		let i++
+		bash /scripts/import.sh
+		bash /scripts/scrape.sh
+		sleep $ScriptInterval
+	done
 else
 	echo "Automatic Start Disabled, manually run using this command:"
 	echo "bash /scripts/import.sh"
+	echo "bash /scripts/scrape.sh"
 fi
 
 exit $?
