@@ -5,7 +5,7 @@
 [![Docker Hub](https://img.shields.io/badge/Open%20On-DockerHub-blue?style=flat-square)](https://hub.docker.com/r/randomninjaatk/hascheevos)
 [![Discord](https://img.shields.io/discord/747100476775858276.svg?style=flat-square&label=Discord&logo=discord)](https://discord.gg/JumQXDc "realtime support / chat with the community." )
 
-More details soon.... work in progress...
+[hascheevos](https://github.com/meleu/hascheevos) is a way to check if your ROM is OK for RetroAchievement and this is a docker to further automate using hascheevos.
 
 ## Supported Architectures
 
@@ -70,3 +70,10 @@ services:
       - AutoStart=true
     restart: unless-stopped
 ```
+
+<br />
+<br />
+  
+ 
+# Credits
+- [hascheevos](https://github.com/meleu/hascheevos)
