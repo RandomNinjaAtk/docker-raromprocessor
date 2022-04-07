@@ -34,6 +34,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-v /import` | Place ROMs to be processed in this directory |
 | `-v /output` | ROMs that have been processed will end up here |
 | `-e AutoStart=true` | true = Enabled :: Runs script automatically on startup |
+| `-e ScriptInterval=1h` | When AutoStart is enabled, script will loop indefinitely, this allows the script to puase between loops, via sleep command |
 | `-e ScreenscraperUsername=Username` | Username for https://screenscraper.fr/ |
 | `-e ScreenscraperPassword=Password` | Password for https://screenscraper.fr/ |
 
@@ -49,6 +50,7 @@ docker create \
   -e PUID=1000 \
   -e PGID=1000 \
   -e AutoStart=true \
+  -e ScriptInterval=1h \
   -e ScreenscraperUsername=Username \
   -e ScreenscraperPassword=Password \
   --restart unless-stopped \
@@ -75,6 +77,7 @@ services:
       - PUID=1000
       - PGID=1000
       - AutoStart=true
+      - ScriptInterval=1h
       - ScreenscraperUsername=Username
       - ScreenscraperPassword=Password
     restart: unless-stopped
