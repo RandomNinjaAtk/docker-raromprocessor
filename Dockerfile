@@ -29,8 +29,8 @@ RUN \
 	mkdir -p ${APP_PATH} && \
 	echo "************ download repo ************" && \
 	git clone --depth 1 https://github.com/meleu/hascheevos ${APP_PATH} && \
-	cd ${APP_PATH} && \
-	make && \
+	#cd ${APP_PATH} && \
+	#make && \
 	chmod -R 777 ${APP_PATH} 
 		
 # copy local files
