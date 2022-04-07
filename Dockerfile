@@ -24,7 +24,7 @@ RUN \
 		/tmp/* \
 		/var/lib/apt/lists/* \
 		/var/tmp/* && \
-	echo "************ setup SMA ************" && \
+	echo "************ setup hascheevos ************" && \
 	echo "************ setup directory ************" && \
 	mkdir -p ${APP_PATH} && \
 	echo "************ download repo ************" && \
