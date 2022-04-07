@@ -30,7 +30,8 @@ RUN \
 	echo "************ download repo ************" && \
 	git clone --depth 1 https://github.com/meleu/hascheevos ${APP_PATH} && \
 	cd ${APP_PATH} && \
-	make
+	make && \
+	chmod -R 777 ${APP_PATH} 
 		
 # copy local files
 #COPY root/ /
