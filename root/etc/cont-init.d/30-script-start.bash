@@ -6,6 +6,7 @@ if [ "$AutoStart" = "true" ]; then
 		let i++
 		bash /scripts/import.sh
 		bash /scripts/scrape.sh
+		echo "Now sleeping for $ScriptInterval..."
 		sleep $ScriptInterval
 	done
 else
