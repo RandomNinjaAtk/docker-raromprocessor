@@ -29,10 +29,13 @@ Container images are configured using parameters passed at runtime (such as thos
 | --- | --- |
 | `-e PUID=1000` | for UserID - see below for explanation |
 | `-e PGID=1000` | for GroupID - see below for explanation |
-| `-v /config` | Configuration files for AMTD. |
+| `-v /config` | Configuration files for hascheevos. |
+| `-v /cache` | cache location for skyscraper. |
 | `-v /import` | Place ROMs to be processed in this directory |
 | `-v /output` | ROMs that have been processed will end up here |
 | `-e AutoStart=true` | true = Enabled :: Runs script automatically on startup |
+| `-e ScreenscraperUsername=Username` | Username for https://screenscraper.fr/ |
+| `-e ScreenscraperPassword=Password` | Password for https://screenscraper.fr/ |
 
 ### docker
 
@@ -40,11 +43,14 @@ Container images are configured using parameters passed at runtime (such as thos
 docker create \
   --name=hascheevos \
   -v /path/to/config/files:/config \
+  -v /path/to/skyscraper_cache:/cache \
   -v /path/to/rom_import_folder:/import \
   -v /path/to/rom_output_folder:/output \
   -e PUID=1000 \
   -e PGID=1000 \
   -e AutoStart=true \
+  -e ScreenscraperUsername=Username \
+  -e ScreenscraperPassword=Password \
   --restart unless-stopped \
   randomninjaatk/hascheevos 
 ```
@@ -62,12 +68,15 @@ services:
     container_name: hascheevos
     volumes:
       - /path/to/config/files:/config
+      - /path/to/skyscraper_cache:/cache
       - /path/to/rom_import_folder:/import
       - /path/to/rom_output_folder:/output
     environment:
       - PUID=1000
       - PGID=1000
       - AutoStart=true
+      - ScreenscraperUsername=Username
+      - ScreenscraperPassword=Password
     restart: unless-stopped
 ```
 
