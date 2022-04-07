@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv bash
 # Process ROMs with hascheevos
-find /import -type f | while read LINE;
+find /input -type f | while read LINE;
 do
 	sudo -u abc bash /usr/local/hascheevos/bin/hascheevos.sh --copy-roms-to /output  "$LINE"
 done
