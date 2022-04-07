@@ -88,7 +88,21 @@ services:
 
 <br />
 <br />
-  
+ 
+## Instructions/Usage Guidelines
+
+With AutoStart enabled, all you have to do is copy/move your ROMs into the ```/input``` volume. 
+
+The script will then automatically process all of the files in the volume, by matching/validating them against the [RetroAchievements](https://retroachievements.org) using the [hascheevos](https://github.com/meleu/hascheevos) script/application.
+
+Then the files will be processed using [skyscraper](https://github.com/muldjord/skyscraper) to gather/download metadata from [screenscraper](https://screenscraper.fr/) and saved into the ```/output``` volume.
+
+Lastly ROMs that have no metadata will be removed from the final ```/output``` list/directories. This will ensure a completely clean library.
+
+FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume. This will allow you to verify the end result before deciding to remove the original data used for import/processing.
+
  
 # Credits
 - [hascheevos](https://github.com/meleu/hascheevos)
+- [skyscraper](https://github.com/muldjord/skyscraper)
+- [screenscraper](https://screenscraper.fr/)
