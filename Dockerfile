@@ -1,0 +1,33 @@
+FROM lsiobase/ubuntu:focal
+LABEL maintainer="RandomNinjaAtk"
+
+ENV TITLE="hascheevos"
+ENV VERSION="0.0.001"
+ENV APP_PATH /usr/local/hascheevos
+RUN \
+	echo "************ install dependencies ************" && \
+	echo "************ install and upgrade packages ************" && \
+	apt-get update && \
+	apt-get upgrade -y && \
+	apt-get install -y --no-install-recommends \
+		jq \
+		unzip \
+		gzip \
+		p7zip-full \
+		curl \
+		python3-pip && \
+	rm -rf \
+		/tmp/* \
+		/var/lib/apt/lists/* \
+		/var/tmp/* && \
+	echo "************ setup SMA ************" && \
+	echo "************ setup directory ************" && \
+	mkdir -p ${APP_PATH} && \
+	echo "************ download repo ************" && \
+	git clone --depth 1 https://github.com/meleu/hascheevos ${APP_PATH}
+		
+# copy local files
+#COPY root/ /
+ 
+# set work directory
+WORKDIR /config
