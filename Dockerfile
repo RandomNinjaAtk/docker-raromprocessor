@@ -23,7 +23,13 @@ RUN \
 		make \
 		gcc \
 		sudo \
+		wine \
 		python3-pip && \
+	echo "************ finish wine installation ************" && \
+	dpkg --add-architecture i386 && \
+	apt-get update && \
+	apt-get install -y wine32 && \
+	wine && \
 	echo "************ install python packages ************" && \
 	python3 -m pip install --no-cache-dir -U \
 		yq && \
