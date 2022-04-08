@@ -6,10 +6,12 @@ do
 	# Save scraped data to output folder
 	Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
 	# Remove skipped roms
-	cat /root/.skyscraper/skipped-$folder-cache.txt | while read LINE;
-	do 
-		rm "$LINE"
-	done
+	if [ -f /root/.skyscraper/skipped-$folder-cache.txt ]; then
+		cat /root/.skyscraper/skipped-$folder-cache.txt | while read LINE;
+		do 
+			rm "$LINE"
+		done
+	fi
 	# Rebuild gamelist to clean
 	Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets
 	Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
