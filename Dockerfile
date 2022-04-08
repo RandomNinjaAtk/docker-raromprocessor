@@ -24,6 +24,9 @@ RUN \
 		gcc \
 		sudo \
 		python3-pip && \
+	echo "************ install python packages ************" && \
+	python3 -m pip install --no-cache-dir -U \
+		yq && \
 	echo "************ setup hascheevos ************" && \
 	echo "************ setup directory ************" && \
 	mkdir -p ${APP_PATH} && \
