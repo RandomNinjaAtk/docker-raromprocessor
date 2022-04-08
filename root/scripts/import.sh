@@ -7,7 +7,9 @@ if find /input -type f | read; then
 		rm /scripts/no_files_to_process
 	fi
 else
+	echo "No files to process in /input ... skipping..."
 	touch /scripts/no_files_to_process
+	exit
 fi
 
 # Process ROMs with hascheevos
