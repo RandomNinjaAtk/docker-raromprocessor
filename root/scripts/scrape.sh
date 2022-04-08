@@ -1,4 +1,12 @@
 #!/usr/bin/with-contenv bash
+
+# Prevent scrape from running when nothing new to process..
+if [ -f /scripts/no_files_to_process ]; then
+	echo "No new files to scrape in /output ... skipping..."
+	rm /scripts/no_files_to_process	
+	exit
+fi
+
 for folder in $(ls /output);
 do
 	# Scrape from screenscraper
