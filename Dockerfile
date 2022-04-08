@@ -6,6 +6,7 @@ ENV VERSION="0.0.002"
 ENV APP_PATH /usr/local/hascheevos
 ENV SKYSCRAPER_PATH /usr/local/skysource
 ENV ScriptInterval=1h
+ENV DeDupe=false
 
 RUN \
 	echo "************ install dependencies ************" && \
