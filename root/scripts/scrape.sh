@@ -4,7 +4,7 @@ do
 	# Scrape from screenscraper
 	Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets
 	# Save scraped data to output folder
-	Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
+	Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
 	# Remove skipped roms
 	if [ -f /root/.skyscraper/skipped-$folder-cache.txt ]; then
 		cat /root/.skyscraper/skipped-$folder-cache.txt | while read LINE;
@@ -20,7 +20,9 @@ do
 		rm "/output/$folder/gamelist.xml"
 	fi
 	Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets
-	Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
+	Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
+	# clean cache from removed ROMs
+	Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --cache vacuum --flags relative,videos,unattend,nobrackets
 	
 	if [ "$DeDupe" = "true" ]; then
 		# verify gamelist.xml exists
@@ -127,7 +129,9 @@ do
 			rm "/output/$folder/gamelist.xml"
 		fi
 		Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets
-		Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
+		Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
+		# clean cache from removed ROMs
+		Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --cache vacuum --flags relative,videos,unattend,nobrackets
 	else
 		echo "DeDuping process disabled..."
 	fi
