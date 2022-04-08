@@ -109,6 +109,9 @@ do
 			fi
 		done
 		# Rebuild gamelist to clean
+		if [ -d "/output/$folder/media" ]; then
+			rm -rf "/output/$folder/media"
+		fi
 		Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets
 		Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
 	else
