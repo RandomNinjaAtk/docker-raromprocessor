@@ -5,6 +5,7 @@ ENV TITLE="hascheevos"
 ENV VERSION="0.0.002"
 ENV APP_PATH /usr/local/hascheevos
 ENV SKYSCRAPER_PATH /usr/local/skysource
+ENV RAHASHER_PATH /usr/local/RALibretro
 ENV ScriptInterval=1h
 ENV DeDupe=false
 
@@ -23,13 +24,8 @@ RUN \
 		make \
 		gcc \
 		sudo \
-		wine \
+		mingw-w64 \
 		python3-pip && \
-	echo "************ finish wine installation ************" && \
-	dpkg --add-architecture i386 && \
-	apt-get update && \
-	apt-get install -y wine32 && \
-	wine && \
 	echo "************ install python packages ************" && \
 	python3 -m pip install --no-cache-dir -U \
 		yq && \
@@ -56,7 +52,12 @@ RUN \
 	cd ${SKYSCRAPER_PATH} && \
 	wget https://raw.githubusercontent.com/muldjord/skyscraper/master/update_skyscraper.sh && \
 	sed -i 's/sudo //g' update_skyscraper.sh && \
-	bash update_skyscraper.sh
+	bash update_skyscraper.sh && \
+	echo "************ RAHasher installation ************" && \
+	git clone --recursive --depth 1 https://github.com/RetroAchievements/RALibretro.git ${RAHASHER_PATH} && \
+	cd ${RAHASHER_PATH} && \
+	make -f Makefile.RAHasher && \
+	chmod -R 777 ${RAHASHER_PATH}
 		
 # copy local files
 COPY root/ /
