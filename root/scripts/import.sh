@@ -1,4 +1,15 @@
 #!/usr/bin/with-contenv bash
+
+# Check for new files to skip scrape when nothing has changed...
+if find /input -type f | read; then
+	echo "New Files to Import and Process"
+	if [ -f /scripts/no_files_to_process ]; then
+		rm /scripts/no_files_to_process
+	fi
+else
+	touch /scripts/no_files_to_process
+fi
+
 # Process ROMs with hascheevos
 find /input -type f | while read LINE;
 do
