@@ -13,15 +13,26 @@ do
 		done
 	fi
 	# Rebuild gamelist to clean
+	if [ -d "/output/$folder/media" ]; then
+		rm -rf "/output/$folder/media"
+	fi
+	if [ -f "/output/$folder/gamelist.xml" ]; then
+		rm "/output/$folder/gamelist.xml"
+	fi
 	Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets
 	Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
 	
 	if [ "$DeDupe" = "true" ]; then
-		GameListData="$(cat /output/$folder/gamelist.xml | xq .gameList[] | jq .[])"
+		# verify gamelist.xml exists
+		if [ ! -f "/output/$folder/gamelist.xml" ]; then
+			continue
+		fi
+		GameListData="$(cat "/output/$folder/gamelist.xml" | xq .gameList[] | jq .[])"
 		OLDIFS="$IFS"
 		IFS=$'\n'
 		GameNames=($(echo "$GameListData" | jq -r ".name" | sort -u))
-		IFS="$OLDIFS"		
+		IFS="$OLDIFS"
+		# process each game name in the gamelist.xml
 		for Name in ${!GameNames[@]}; do
 			GameName="${GameNames[$Name]}"
 			RomCount=""
@@ -111,6 +122,9 @@ do
 		# Rebuild gamelist to clean
 		if [ -d "/output/$folder/media" ]; then
 			rm -rf "/output/$folder/media"
+		fi
+		if [ -f "/output/$folder/gamelist.xml" ]; then
+			rm "/output/$folder/gamelist.xml"
 		fi
 		Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets
 		Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
