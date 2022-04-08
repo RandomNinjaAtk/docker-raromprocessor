@@ -20,4 +20,6 @@ find /output -type d -exec chmod 777 {} \;
 find /output -type f -exec chmod 666 {} \;
 find /backup -type d -exec chmod 777 {} \;
 find /backup -type f -exec chmod 666 {} \;
+# remove empty directories
+find /input -mindepth 1 -type d -empty -exec rm -rf {} \; &>/dev/null
 exit $?
