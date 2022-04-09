@@ -1,11 +1,52 @@
-# docker-hascheevos
+# docker-raromprocessor
 [![Docker Build](https://img.shields.io/docker/cloud/automated/randomninjaatk/hascheevos?style=flat-square)](https://hub.docker.com/r/randomninjaatk/hascheevos)
 [![Docker Pulls](https://img.shields.io/docker/pulls/randomninjaatk/hascheevos?style=flat-square)](https://hub.docker.com/r/randomninjaatk/hascheevos)
 [![Docker Stars](https://img.shields.io/docker/stars/randomninjaatk/hascheevos?style=flat-square)](https://hub.docker.com/r/randomninjaatk/hascheevos)
 [![Docker Hub](https://img.shields.io/badge/Open%20On-DockerHub-blue?style=flat-square)](https://hub.docker.com/r/randomninjaatk/hascheevos)
 [![Discord](https://img.shields.io/discord/747100476775858276.svg?style=flat-square&label=Discord&logo=discord)](https://discord.gg/JumQXDc "realtime support / chat with the community." )
 
-[hascheevos](https://github.com/meleu/hascheevos) is a way to check if your ROM is OK for RetroAchievement and this is a docker to further automate using hascheevos.
+[raromprocessor](https://github.com/RandomNinjaAtk/docker-hascheevos) is a Docker container that is used to orgainze/process/verify/dedupe/scrape a ROM library in an automated method by matching ROMs to [RetroAchievement](https://retroachievements.org). This was inspired by other projects such as: [hascheevos](https://github.com/meleu/hascheevos) 
+
+## Instructions/Usage Guidelines
+
+The script must run one time to generate the platform input folders:  ```/input/<platform_rom_folder>```
+
+With AutoStart enabled, all you have to do is copy/move your ROMs into the ```/input/<platform_rom_folder>``` volume. 
+
+The script will then automatically process all of the files in the volume, by matching/validating them against the [RetroAchievements](https://retroachievements.org) DB (Hash List) using the official [RAHasher](https://github.com/RetroAchievements/RALibretro/releases) applicatoin via a automated script process.
+
+Then the files will be processed using [skyscraper](https://github.com/muldjord/skyscraper) to gather/download metadata from [screenscraper](https://screenscraper.fr/) and saved into the ```/output``` volume.
+
+Lastly, ROMs that have no metadata will be removed from the final ```/output``` list/directories. This will ensure a completely clean library.
+
+FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume. This will allow you to verify the end result before deciding to remove the original data used for import/processing.
+
+## Supported ROM Platforms
+- Sega Mega Drive (Tested)
+- Nintendo 64 (Tested)
+- Super Nintendo Entertainment System (Tested)
+- GameBoy (Tested)
+- GameBoy Advance (Tested)
+- GameBoy Color (Tested)
+- Nintendo Entertainment System (Tested)
+- PC Engine
+- Sega CD
+- Sega 32X
+- Sega Master System
+- PlayStation
+- Atari Lynx
+- NeoGeo Pocket [Color]
+- Game Gear (Tested)
+- Atari Jaguar
+- Nintendo DS
+- Pokemon Mini
+- Atari 2600 (Tested)
+- Arcade
+- VirtualBoy (Tested)
+- SG-1000
+- ColecoVision
+- Atari 7800  (Tested)
+- WonderSwan [Color]
 
 ## Supported Architectures
 
@@ -88,24 +129,10 @@ services:
       - ScreenscraperPassword=Password
     restart: unless-stopped
 ```
-
-<br />
-<br />
- 
-## Instructions/Usage Guidelines
-
-With AutoStart enabled, all you have to do is copy/move your ROMs into the ```/input``` volume. 
-
-The script will then automatically process all of the files in the volume, by matching/validating them against the [RetroAchievements](https://retroachievements.org) DB (Hash List) using the [hascheevos](https://github.com/meleu/hascheevos) script/application.
-
-Then the files will be processed using [skyscraper](https://github.com/muldjord/skyscraper) to gather/download metadata from [screenscraper](https://screenscraper.fr/) and saved into the ```/output``` volume.
-
-Lastly, ROMs that have no metadata will be removed from the final ```/output``` list/directories. This will ensure a completely clean library.
-
-FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume. This will allow you to verify the end result before deciding to remove the original data used for import/processing.
-
  
 # Credits
-- [hascheevos](https://github.com/meleu/hascheevos)
+- [RetroAchievements](https://retroachievements.org) (Used for validation)
+- [RAHasher](https://github.com/RetroAchievements/RALibretro/releases) (Used for Hashing)
+- [hascheevos](https://github.com/meleu/hascheevos) (Used for inspiration)
 - [skyscraper](https://github.com/muldjord/skyscraper)
-- [screenscraper](https://screenscraper.fr/)
+- [screenscraper](https://screenscraper.fr/) 
