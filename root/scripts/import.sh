@@ -9,7 +9,7 @@ if find /input -type f | read; then
 else
 	echo "No files to process in /input ... skipping..."
 	touch /scripts/no_files_to_process
-	#exit
+	exit
 fi
 
 for folder in $(ls /input); do
