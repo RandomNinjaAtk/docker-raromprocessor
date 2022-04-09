@@ -58,14 +58,14 @@ if [ "$AutoStart" = "true" ]; then
 	for (( ; ; )); do
 		let i++
 		bash /scripts/import.sh
-		bash /scripts/scrape.sh
+		# bash /scripts/scrape.sh
 		echo "Now sleeping for $ScriptInterval..."
 		sleep $ScriptInterval
 	done
 else
 	echo "Automatic Start Disabled, manually run using this command:"
 	echo "bash /scripts/import.sh"
-	echo "bash /scripts/scrape.sh"
+	# echo "bash /scripts/scrape.sh"
 fi
 
 exit $?
