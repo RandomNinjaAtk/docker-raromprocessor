@@ -85,7 +85,7 @@ Container images are configured using parameters passed at runtime (such as thos
 
 ```
 docker create \
-  --name=hascheevos \
+  --name=raromprocessor \
   -v /path/to/config/files:/config \
   -v /path/to/skyscraper_cache:/cache \
   -v /path/to/rom_input_folder:/input \
@@ -99,7 +99,7 @@ docker create \
   -e ScreenscraperUsername=Username \
   -e ScreenscraperPassword=Password \
   --restart unless-stopped \
-  randomninjaatk/hascheevos 
+  randomninjaatk/raromprocessor 
 ```
 
 
@@ -111,8 +111,8 @@ Compatible with docker-compose v2 schemas.
 version: "2.1"
 services:
   amtd:
-    image: randomninjaatk/hascheevos 
-    container_name: hascheevos
+    image: randomninjaatk/raromprocessor 
+    container_name: raromprocessor
     volumes:
       - /path/to/config/files:/config
       - /path/to/skyscraper_cache:/cache
