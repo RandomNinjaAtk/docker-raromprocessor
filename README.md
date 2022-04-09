@@ -77,7 +77,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-v /output` | ROMs that have been processed will end up here |
 | `-e AutoStart=true` | true = Enabled :: Runs script automatically on startup |
 | `-e ScriptInterval=1h` | When AutoStart is enabled, script will loop indefinitely, this allows the script to pause between loops, via sleep command |
-| `-e DeDupe=false` | true = Enabled :: This setting further reduces the final ROMs list per platrom, by remving duplicates witht he Priority of: USA > Europe > World > Janpan, and then by shortest filename when multiples exist |
+| `-e DeDupe=false` | true = Enabled :: This setting further reduces the final ROMs list per platrom, by removing duplicates with the priority of: USA > Europe > World > Japan, and then by shortest filename when multiples exist |
 | `-e ScreenscraperUsername=Username` | Username for https://screenscraper.fr/ |
 | `-e ScreenscraperPassword=Password` | Password for https://screenscraper.fr/ |
 
