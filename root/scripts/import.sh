@@ -310,6 +310,7 @@ for folder in $(ls /input); do
 				echo "$Files"
 				UsaRom=false
 				EuropeRom=false
+				WorldRom=false
 				JapanRom=false
 				if echo "$Files" | grep "USA" | read; then
 					echo "USA ROM Found"
@@ -319,6 +320,11 @@ for folder in $(ls /input); do
 					echo "Europe ROM Found"
 					echo "Delete Non Europe ROM"
 					EuropeRom=true
+				elif  echo "$Files" | grep "World" | read; then
+					echo "World ROM Found"
+					echo "Delete Non World ROM"
+					WorldRom=true			
+				fi
 				elif  echo "$Files" | grep "Japan" | read; then
 					echo "Japan ROM Found"
 					echo "Delete Non Japan ROM"
@@ -339,6 +345,14 @@ for folder in $(ls /input); do
 					fi
 					if [ $EuropeRom = true ]; then
 						if echo "$FileName" | grep -v "Europe" | read; then
+							echo "Delete /output/$folder/$FileName"
+							if [ -f "/output/$folder/$FileName" ]; then
+								rm "/output/$folder/$FileName"
+							fi
+						fi
+					fi
+					if [ $WorldRom = true ]; then
+						if echo "$FileName" | grep -v "World" | read; then
 							echo "Delete /output/$folder/$FileName"
 							if [ -f "/output/$folder/$FileName" ]; then
 								rm "/output/$folder/$FileName"
