@@ -1,9 +1,8 @@
 FROM lsiobase/ubuntu:focal
 LABEL maintainer="RandomNinjaAtk"
 
-ENV TITLE="hascheevos"
-ENV VERSION="0.0.002"
-ENV APP_PATH /usr/local/hascheevos
+ENV TITLE="raromprocessor"
+ENV VERSION="0.0.003"
 ENV SKYSCRAPER_PATH /usr/local/skysource
 ENV RAHASHER_PATH /usr/local/RALibretro
 ENV ScriptInterval=1h
@@ -29,14 +28,6 @@ RUN \
 	echo "************ install python packages ************" && \
 	python3 -m pip install --no-cache-dir -U \
 		yq && \
-	echo "************ setup hascheevos ************" && \
-	echo "************ setup directory ************" && \
-	mkdir -p ${APP_PATH} && \
-	echo "************ download repo ************" && \
-	git clone --depth 1 https://github.com/meleu/hascheevos ${APP_PATH} && \
-	cd ${APP_PATH} && \
-	make && \
-	chmod -R 777 ${APP_PATH} && \
 	echo "************ skyscraper ************" && \
 	echo "************ install dependencies ************" && \
 	echo "************ install packages ************" && \
