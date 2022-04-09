@@ -320,17 +320,15 @@ for folder in $(ls /input); do
 					echo "Europe ROM Found"
 					echo "Delete Non Europe ROM"
 					EuropeRom=true
-				elif  echo "$Files" | grep "World" | read; then
+				elif echo "$Files" | grep "World" | read; then
 					echo "World ROM Found"
 					echo "Delete Non World ROM"
 					WorldRom=true			
-				fi
-				elif  echo "$Files" | grep "Japan" | read; then
+				elif echo "$Files" | grep "Japan" | read; then
 					echo "Japan ROM Found"
 					echo "Delete Non Japan ROM"
 					JapanRom=true			
 				fi
-
 
 				for File in ${!FileNames[@]}; do
 					FileName="${FileNames[$File]}"
@@ -415,7 +413,4 @@ for folder in $(ls /input); do
 	find /output/$folder -type d -exec chmod 777 {} \;
 	find /output/$folder -type f -exec chmod 666 {} \;
 done
-exit
-
-
 exit $?
