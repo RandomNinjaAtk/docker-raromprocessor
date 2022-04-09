@@ -7,6 +7,8 @@
 
 [RAROMProcessor](https://github.com/RandomNinjaAtk/docker-hascheevos) is a Docker container that is used to orgainze/process/verify/dedupe/scrape a ROMs library in automatically by matching ROMs to [RetroAchievement](https://retroachievements.org). This was inspired by other projects such as: [hascheevos](https://github.com/meleu/hascheevos) 
 
+[![RandomNinjaAtk/raromprocessor](https://raw.githubusercontent.com/RandomNinjaAtk/unraid-templates/master/randomninjaatk/img/raromprocessor.png)](https://github.com/RandomNinjaAtk/docker-raromprocessor)
+
 ## Instructions/Usage Guidelines
 
 The script must run one time to generate the platform input folders:  ```/input/<platform_rom_folder>```
@@ -135,4 +137,5 @@ services:
 - [RAHasher](https://github.com/RetroAchievements/RALibretro/releases) (Used for Hashing)
 - [hascheevos](https://github.com/meleu/hascheevos) (Used for inspiration)
 - [skyscraper](https://github.com/muldjord/skyscraper)
-- [screenscraper](https://screenscraper.fr/) 
+- [screenscraper](https://screenscraper.fr/)
+- Icons made by <a href="http://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
