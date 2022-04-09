@@ -136,6 +136,6 @@ services:
 - [RetroAchievements](https://retroachievements.org) (Used for validation)
 - [RAHasher](https://github.com/RetroAchievements/RALibretro/releases) (Used for Hashing)
 - [hascheevos](https://github.com/meleu/hascheevos) (Used for inspiration)
-- [skyscraper](https://github.com/muldjord/skyscraper)
-- [screenscraper](https://screenscraper.fr/)
-- Icons made by <a href="http://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+- [skyscraper](https://github.com/muldjord/skyscraper) (Tool used for scraping ROM metadata)
+- [screenscraper](https://screenscraper.fr/) (DB used for ROM metadata)
+- [Rom icons created by phatplus - Flaticon](https://www.flaticon.com/free-icons/rom)
