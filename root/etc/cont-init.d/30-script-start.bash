@@ -50,6 +50,7 @@ mkdir -p /input/sg-1000
 mkdir -p /input/coleco
 mkdir -p /input/atari7800
 mkdir -p /input/wonderswan
+chmod 777 /input/*
 
 
 if [ "$AutoStart" = "true" ]; then
