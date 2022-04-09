@@ -15,7 +15,7 @@ fi
 # Process ROMs with hascheevos
 find /input -type f | while read LINE;
 do
-	Rom="LINE"
+	Rom="$LINE"
 	ConsoleId=""
 	ConsoleName=""
 	if echo "$Rom" | grep "^/input/megadrive" | read; then
@@ -235,7 +235,7 @@ do
 	if [ ! -f "/backup/${Rom:7}" ]; then
 		echo "$ConsoleName :: $RomFilename :: Backing up ROM to: /backup/$(dirname "${Rom:7}")"
 		cp "$Rom" "/backup/${Rom:7}"
-		chmod 666 "/backup/$(dirname "${Rom:7}")/$Rom"
+		chmod 666 "/backup/${Rom:7}"
 	fi
 	# remove ROM from input
 	echo "$ConsoleName :: $RomFilename :: Removing ROM from /input"
