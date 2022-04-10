@@ -13,7 +13,7 @@ echo "Created: /input/sega32x"
 echo "Created: /input/mastersystem"
 echo "Created: /input/psx"
 echo "Created: /input/atarilynx"
-echo "Created: /input/ngp"
+echo "Created: /input/ngpc"
 echo "Created: /input/gamegear"
 echo "Created: /input/atarijaguar"
 echo "Created: /input/nds"
@@ -24,7 +24,7 @@ echo "Created: /input/virtualboy"
 echo "Created: /input/sg-1000"
 echo "Created: /input/coleco"
 echo "Created: /input/atari7800"
-echo "Created: /input/wonderswan"
+echo "Created: /input/wonderswancolor"
 mkdir -p /input/megadrive
 mkdir -p /input/n64
 mkdir -p /input/snes
@@ -38,7 +38,7 @@ mkdir -p /input/sega32x
 mkdir -p /input/mastersystem
 mkdir -p /input/psx
 mkdir -p /input/atarilynx
-mkdir -p /input/ngp
+mkdir -p /input/ngpc
 mkdir -p /input/gamegear
 mkdir -p /input/atarijaguar
 mkdir -p /input/nds
@@ -49,7 +49,7 @@ mkdir -p /input/virtualboy
 mkdir -p /input/sg-1000
 mkdir -p /input/coleco
 mkdir -p /input/atari7800
-mkdir -p /input/wonderswan
+mkdir -p /input/wonderswancolor
 chmod 777 /input/*
 
 
