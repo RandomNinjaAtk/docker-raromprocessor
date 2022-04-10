@@ -33,22 +33,22 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - Nintendo Entertainment System (Tested)
 - PC Engine
 - Sega CD
-- Sega 32X
-- Sega Master System
+- Sega 32X (Tested)
+- Sega Master System (Tested)
 - PlayStation
-- Atari Lynx
-- NeoGeo Pocket [Color]
+- Atari Lynx (Tested)
+- NeoGeo Pocket [Color] (Tested)
 - Game Gear (Tested)
-- Atari Jaguar
+- Atari Jaguar (Tested)
 - Nintendo DS
-- Pokemon Mini
+- Pokemon Mini (Tested)
 - Atari 2600 (Tested)
 - Arcade
 - VirtualBoy (Tested)
-- SG-1000
-- ColecoVision
+- SG-1000 (Tested)
+- ColecoVision (Tested)
 - Atari 7800  (Tested)
-- WonderSwan [Color]
+- WonderSwan [Color] (Tested)
 
 ## Supported Architectures
 
