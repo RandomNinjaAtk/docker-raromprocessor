@@ -75,6 +75,9 @@ if [ "$AutoStart" = "true" ]; then
 	echo "Automatic Start Enabled, starting..."
 	for (( ; ; )); do
 		let i++
+		if [ "$AquireRomSets" = "true" ]; then
+			bash /scripts/download.sh
+		fi
 		bash /scripts/import.sh
 		# bash /scripts/scrape.sh
 		echo "Now sleeping for $ScriptInterval..."
