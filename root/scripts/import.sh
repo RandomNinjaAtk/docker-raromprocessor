@@ -14,8 +14,6 @@ fi
 
 for folder in $(ls /input); do
 
-# Check for new files to skip scrape when nothing has changed...
-	
 	ConsoleId=""
 	ConsoleName=""
 	if echo "$folder" | grep "^megadrive" | read; then
@@ -98,7 +96,7 @@ for folder in $(ls /input); do
 
 	if echo "$folder" | grep "^ngpc" | read; then
 		ConsoleId=14
-		ConsoleName="NeoGeo Pocket [Color]"
+		ConsoleName="SNK Neo Geo Pocket Color"
 		ConsoleDirectory="ngpc"
 	fi
 
@@ -167,7 +165,61 @@ for folder in $(ls /input); do
 		ConsoleName="WonderSwan [Color]"
 		ConsoleDirectory="wonderswancolor"
 	fi
-	
+
+	if echo "$folder" | grep "^intellivision" | read; then
+		ConsoleId=45
+		ConsoleName="Intellivision"
+		ConsoleDirectory="intellivision"
+	fi
+
+	if echo "$folder" | grep "^vectrex" | read; then
+		ConsoleId=46
+		ConsoleName="Vectrex"
+		ConsoleDirectory="vectrex"
+	fi
+
+	if echo "$folder" | grep "^apple2" | read; then
+		ConsoleId=38
+		ConsoleName="Apple II"
+		ConsoleDirectory="apple2"
+	fi
+
+	if echo "$folder" | grep "^saturn" | read; then
+		ConsoleId=39
+		ConsoleName="Sega Saturn"
+		ConsoleDirectory="saturn"
+	fi
+
+	if echo "$folder" | grep "^dreamcast" | read; then
+		ConsoleId=40
+		ConsoleName="Sega Dreamcast"
+		ConsoleDirectory="dreamcast"
+	fi
+
+	if echo "$folder" | grep "^psp" | read; then
+		ConsoleId=41
+		ConsoleName="PlayStation Portable"
+		ConsoleDirectory="psp"
+	fi
+
+	if echo "$folder" | grep "^msx" | read; then
+		ConsoleId=29
+		ConsoleName="MSX"
+		ConsoleDirectory="msx"
+	fi
+
+	if echo "$folder" | grep "^odyssey2" | read; then
+		ConsoleId=23
+		ConsoleName="Magnavox Odyssey 2"
+		ConsoleDirectory="odyssey2"
+	fi
+
+	if echo "$folder" | grep "^ngp" | read; then
+		ConsoleId=14
+		ConsoleName="SNK Neo Geo Pocket"
+		ConsoleDirectory="ngp"
+	fi
+
 	if find /input/$folder -type f | read; then
 		echo "Searching For ROMS in /input/$folder :: $ConsoleName :: ROMs found for processing, processing..."
 	else
