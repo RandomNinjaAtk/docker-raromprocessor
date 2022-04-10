@@ -35,7 +35,7 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - Sega CD
 - Sega 32X (Tested)
 - Sega Master System (Tested)
-- PlayStation (Tested ".chd" format)
+- PlayStation
 - Atari Lynx (Tested)
 - NeoGeo Pocket [Color] (Tested)
 - Game Gear (Tested)
