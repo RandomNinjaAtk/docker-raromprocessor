@@ -301,32 +301,31 @@ for folder in $(ls /input); do
 			RomCount=""
 			RomCount=$(echo $GameListData | jq -r .name | grep "^$GameName$" | wc -l)
 			if [ $RomCount -gt 1 ]; then
-				echo "Dupes found for: $GameName"
+				echo "$ConsoleName :: $GameName :: Dupes found!"
 				Files=$(echo "$GameListData" | jq -r "select(.name==\"$GameName\") | .path")
 				OLDIFS="$IFS"
 				IFS=$'\n'
 				FileNames=($(echo "$GameListData" | jq -r "select(.name==\"$GameName\") | .path"))
 				IFS="$OLDIFS"
-				echo "$Files"
 				UsaRom=false
 				EuropeRom=false
 				WorldRom=false
 				JapanRom=false
 				if echo "$Files" | grep "USA" | read; then
-					echo "USA ROM Found"
-					echo "Delete Non USA ROM"
+					echo "$ConsoleName :: $GameName :: USA ROM Found"
+					echo "$ConsoleName :: $GameName :: Delete Non USA ROM"
 					UsaRom=true
 				elif echo "$Files" | grep "Europe" | read; then
-					echo "Europe ROM Found"
-					echo "Delete Non Europe ROM"
+					echo "$ConsoleName :: $GameName :: Europe ROM Found"
+					echo "$ConsoleName :: $GameName :: Delete Non Europe ROM"
 					EuropeRom=true
 				elif echo "$Files" | grep "World" | read; then
-					echo "World ROM Found"
-					echo "Delete Non World ROM"
+					echo "$ConsoleName :: $GameName :: World ROM Found"
+					echo "$ConsoleName :: $GameName :: Delete Non World ROM"
 					WorldRom=true			
 				elif echo "$Files" | grep "Japan" | read; then
-					echo "Japan ROM Found"
-					echo "Delete Non Japan ROM"
+					echo "$ConsoleName :: $GameName :: Japan ROM Found"
+					echo "$ConsoleName :: $GameName :: Delete Non Japan ROM"
 					JapanRom=true			
 				fi
 
@@ -335,7 +334,7 @@ for folder in $(ls /input); do
 					FileName="${FileName:2}"
 					if [ $UsaRom = true ]; then
 						if echo "$FileName" | grep -v "USA" | read; then
-							echo "Delete /output/$folder/$FileName"
+							echo "$ConsoleName :: $GameName :: Delete /output/$folder/$FileName"
 							if [ -f "/output/$folder/$FileName" ]; then
 								rm "/output/$folder/$FileName"
 							fi
@@ -343,7 +342,7 @@ for folder in $(ls /input); do
 					fi
 					if [ $EuropeRom = true ]; then
 						if echo "$FileName" | grep -v "Europe" | read; then
-							echo "Delete /output/$folder/$FileName"
+							echo "$ConsoleName :: $GameName :: Delete /output/$folder/$FileName"
 							if [ -f "/output/$folder/$FileName" ]; then
 								rm "/output/$folder/$FileName"
 							fi
@@ -351,7 +350,7 @@ for folder in $(ls /input); do
 					fi
 					if [ $WorldRom = true ]; then
 						if echo "$FileName" | grep -v "World" | read; then
-							echo "Delete /output/$folder/$FileName"
+							echo "$ConsoleName :: $GameName :: Delete /output/$folder/$FileName"
 							if [ -f "/output/$folder/$FileName" ]; then
 								rm "/output/$folder/$FileName"
 							fi
@@ -359,7 +358,7 @@ for folder in $(ls /input); do
 					fi
 					if [ $JapanRom = true ]; then
 						if echo "$FileName" | grep -v "Japan" | read; then
-							echo "Delete /output/$folder/$FileName"
+							echo "$ConsoleName :: $GameName :: Delete /output/$folder/$FileName"
 							if [ -f "/output/$folder/$FileName" ]; then
 								rm "/output/$folder/$FileName"
 							fi
@@ -374,15 +373,15 @@ for folder in $(ls /input); do
 					FileName="${FileName:2}"
 					FileNameLength=$(echo $FileName | wc -m)
 					if [ -f "/output/$folder/$FileName" ]; then
-						echo "FileNameLength $FileNameLength :: $FileName"
+						echo "$ConsoleName :: $GameName :: FileNameLength $FileNameLength :: $FileName"
 						for ComparisonFile in ${!FileNames[@]}; do
 							ComparisonFileName="${FileNames[$ComparisonFile]}"
 							ComparisonFileName="${ComparisonFileName:2}"
 							ComparisonFileNameLength=$(echo $ComparisonFileName | wc -m)
-							echo "ComparisonFileNameLength $ComparisonFileNameLength :: $ComparisonFileName"
+							echo "$ConsoleName :: $GameName :: ComparisonFileNameLength $ComparisonFileNameLength :: $ComparisonFileName"
 							if [ $FileNameLength -gt $ComparisonFileNameLength ]; then
 								if [ -f "/output/$folder/$ComparisonFileName" ]; then
-									echo "DELETE :: /output/$folder/$FileName"
+									echo "$ConsoleName :: $GameName :: DELETE :: /output/$folder/$FileName"
 									rm "/output/$folder/$FileName"
 								fi
 							fi
@@ -391,7 +390,7 @@ for folder in $(ls /input); do
 				done	
 
 			else
-				echo "No dupes found for: $GameName"
+				echo "$ConsoleName :: $GameName :: No dupes found!"
 			fi
 		done
 		# Rebuild gamelist to clean
