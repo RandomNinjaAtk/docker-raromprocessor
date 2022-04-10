@@ -235,20 +235,35 @@ for folder in $(ls /input); do
 		ConsoleDirectory="ngp"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/SNK%20-%20Neo%20Geo%20Pocket.zip"
 	fi
+	echo "$ConsoleName :: Getting ROMs"
 	if [ ! -z "$ArchiveUrl" ]; then
-		echo "$ConsoleName ::  Getting ROMs"
-		if [ -d /input/temp ]; then
-			rm -rf /input/temp
-		fi
-		mkdir -p /input/temp
-		wget "$ArchiveUrl" -O /input/temp/roms.zip
-		if [ -f /input/temp/roms.zip ]; then
-			unzip -o -d "/input/$folder" /input/temp/roms.zip >/dev/null
-		fi
-		if [ -d /input/temp ]; then
-			rm -rf /input/temp
+		if [ -f /config/logs/downloaded/$folder ]; then
+			echo "$ConsoleName :: ROMs previously downloaded :: Skipping..."
+		else
+			if [ -d /input/temp ]; then
+				rm -rf /input/temp
+			fi
+			mkdir -p /input/temp
+			echo "$ConsoleName :: Downloading ROMs :: Please wait..."
+			wget "$ArchiveUrl" -O /input/temp/roms.zip >/dev/null
+			if [ -f /input/temp/roms.zip ]; then
+				echo "$ConsoleName :: Download Complete!"
+				echo "$ConsoleName :: Unpacking to /input/$folder"
+				unzip -o -d "/input/$folder" /input/temp/roms.zip >/dev/null
+				echo "$ConsoleName :: Done!"
+			fi
+			if [ -d /input/temp ]; then
+				rm -rf /input/temp
+			fi
+			if [ ! -d /config/logs/downloaded ]; then
+				mkdir -p /config/logs/downloaded
+			fi
+			if [ ! -f /config/logs/downloaded/$folder ]; then
+				touch /config/logs/downloaded/$folder
+			fi
 		fi
 	else
+		echo "$ConsoleName :: ERROR :: No Archive.org URL found :: Skipping..."
 		continue
 	fi
 done
