@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-echo "Setting Up ROM /ipnut directories"
+echo "Setting Up ROM /input directories"
 echo "Created: /input/megadrive"
 echo "Created: /input/n64"
 echo "Created: /input/snes"
