@@ -37,7 +37,8 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - Sega Master System (Tested)
 - PlayStation
 - Atari Lynx (Tested)
-- NeoGeo Pocket [Color] (Tested)
+- SNK Neo Geo Pocket
+- SNK Neo Geo Pocket Color (Tested)
 - Game Gear (Tested)
 - Atari Jaguar (Tested)
 - Nintendo DS
@@ -49,6 +50,14 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - ColecoVision (Tested)
 - Atari 7800  (Tested)
 - WonderSwan [Color] (Tested)
+- Intellivision
+- Vectrex
+- Apple II
+- Sega Saturn
+- Sega Dreamcast
+- PlayStation Portable
+- MSX
+- Magnavox Odyssey 2
 
 ## Supported Architectures
 
