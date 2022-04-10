@@ -96,10 +96,10 @@ for folder in $(ls /input); do
 		ConsoleDirectory="atarilynx"
 	fi
 
-	if echo "$folder" | grep "^ngp" | read; then
+	if echo "$folder" | grep "^ngpc" | read; then
 		ConsoleId=14
 		ConsoleName="NeoGeo Pocket [Color]"
-		ConsoleDirectory="ngp"
+		ConsoleDirectory="ngpc"
 	fi
 
 	if echo "$folder" | grep "^gamegear" | read; then
@@ -162,10 +162,10 @@ for folder in $(ls /input); do
 		ConsoleDirectory="atari7800"
 	fi
 
-	if echo "$folder" | grep "^wonderswan" | read; then
+	if echo "$folder" | grep "^wonderswancolor" | read; then
 		ConsoleId=53
 		ConsoleName="WonderSwan [Color]"
-		ConsoleDirectory="wonderswan"
+		ConsoleDirectory="wonderswancolor"
 	fi
 	
 	if find /input/$folder -type f | read; then
