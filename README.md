@@ -89,6 +89,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e AutoStart=true` | true = Enabled :: Runs script automatically on startup |
 | `-e ScriptInterval=1h` | When AutoStart is enabled, script will loop indefinitely, this allows the script to pause between loops, via sleep command |
 | `-e DeDupe=false` | true = Enabled :: This setting further reduces the final ROMs list per platrom, by removing duplicates with the priority of: USA > Europe > World > Japan, and then by shortest filename when multiples exist |
+| `-e AquireRomSets=false` | true = Enabled :: Enabling this will have the script attempt to pull valid ROM sets from archive.org for processing |
 | `-e ScreenscraperUsername=Username` | Username for https://screenscraper.fr/ |
 | `-e ScreenscraperPassword=Password` | Password for https://screenscraper.fr/ |
 
@@ -107,6 +108,7 @@ docker create \
   -e AutoStart=true \
   -e ScriptInterval=1h \
   -e DeDupe=false \
+  -e AquireRomSets=false \
   -e ScreenscraperUsername=Username \
   -e ScreenscraperPassword=Password \
   --restart unless-stopped \
@@ -136,6 +138,7 @@ services:
       - AutoStart=true
       - ScriptInterval=1h
       - DeDupe=false
+      - AquireRomSets=false
       - ScreenscraperUsername=Username
       - ScreenscraperPassword=Password
     restart: unless-stopped
