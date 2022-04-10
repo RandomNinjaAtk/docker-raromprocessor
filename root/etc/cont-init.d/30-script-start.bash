@@ -25,6 +25,15 @@ echo "Created: /input/sg-1000"
 echo "Created: /input/coleco"
 echo "Created: /input/atari7800"
 echo "Created: /input/wonderswancolor"
+echo "Created: /input/intellivision"
+echo "Created: /input/vectrex"
+echo "Created: /input/apple2"
+echo "Created: /input/saturn"
+echo "Created: /input/dreamcast"
+echo "Created: /input/psp"
+echo "Created: /input/msx"
+echo "Created: /input/odyssey2"
+echo "Created: /input/ngp"
 mkdir -p /input/megadrive
 mkdir -p /input/n64
 mkdir -p /input/snes
@@ -50,6 +59,15 @@ mkdir -p /input/sg-1000
 mkdir -p /input/coleco
 mkdir -p /input/atari7800
 mkdir -p /input/wonderswancolor
+mkdir -p /input/intellivision
+mkdir -p /input/vectrex
+mkdir -p /input/apple2
+mkdir -p /input/saturn
+mkdir -p /input/dreamcast
+mkdir -p /input/psp
+mkdir -p /input/msx
+mkdir -p /input/odyssey2
+mkdir -p /input/ngp
 chmod 777 /input/*
 
 
