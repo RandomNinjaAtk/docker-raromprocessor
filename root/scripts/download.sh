@@ -245,12 +245,14 @@ for folder in $(ls /input); do
 			fi
 			mkdir -p /input/temp
 			echo "$ConsoleName :: Downloading ROMs :: Please wait..."
-			wget "$ArchiveUrl" -O /input/temp/roms.zip >/dev/null
+			wget -q --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0 "$ArchiveUrl" -O /input/temp/roms.zip
 			if [ -f /input/temp/roms.zip ]; then
 				echo "$ConsoleName :: Download Complete!"
 				echo "$ConsoleName :: Unpacking to /input/$folder"
 				unzip -o -d "/input/$folder" /input/temp/roms.zip >/dev/null
 				echo "$ConsoleName :: Done!"
+			else
+				echo "$ConsoleName :: Download Failed!"
 			fi
 			if [ -d /input/temp ]; then
 				rm -rf /input/temp
