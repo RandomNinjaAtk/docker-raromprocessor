@@ -5,7 +5,7 @@
 [![Docker Hub](https://img.shields.io/badge/Open%20On-DockerHub-blue?style=flat-square)](https://hub.docker.com/r/randomninjaatk/raromprocessor)
 [![Discord](https://img.shields.io/discord/747100476775858276.svg?style=flat-square&label=Discord&logo=discord)](https://discord.gg/JumQXDc "realtime support / chat with the community." )
 
-[RA ROM Processor](https://github.com/RandomNinjaAtk/docker-raromprocesor) is a Docker container that is used to orgainze/process/verify/dedupe/scrape a ROMs library automatically by matching ROMs to the [RetroAchievement.org](https://retroachievements.org) website Hash database. This was inspired by other projects such as: [hascheevos](https://github.com/meleu/hascheevos) 
+[RA ROM Processor](https://github.com/RandomNinjaAtk/docker-raromprocessor) is a Docker container that is used to orgainze/process/verify/dedupe/scrape a ROMs library automatically by matching ROMs to the [RetroAchievement.org](https://retroachievements.org) website Hash database. This was inspired by other projects such as: [hascheevos](https://github.com/meleu/hascheevos) 
 
 [![RandomNinjaAtk/raromprocessor](https://raw.githubusercontent.com/RandomNinjaAtk/unraid-templates/master/randomninjaatk/img/raromprocessor.png)](https://github.com/RandomNinjaAtk/docker-raromprocessor)
 
