@@ -24,7 +24,7 @@ Lastly, ROMs that have no metadata will be removed from the final ```/output``` 
 FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume. This will allow you to verify the end result before deciding to remove the original data used for import/processing.
 
 ## Supported ROM Platforms
-- Amstrad CPC
+- Amstrad CPC (Tested)
 - Apple II
 - Arcade
 - Atari 2600 (Tested)
@@ -59,7 +59,7 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - PlayStation
 - PlayStation Portable
 - Vectrex
-- WonderSwan (Tested)
+- WonderSwan
 - WonderSwan [Color] (Tested)
 
 ## Supported Architectures
