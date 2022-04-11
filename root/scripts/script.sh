@@ -16,7 +16,6 @@ for folder in $(ls /input); do
 		ConsoleName="Nintendo 64"
 		ConsoleDirectory="n64"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Nintendo 64.zip"
-		
 	fi
 
 	if echo "$folder" | grep "^snes" | read; then
@@ -234,7 +233,7 @@ for folder in $(ls /input); do
 		ConsoleName="SNK Neo Geo Pocket"
 		ConsoleDirectory="ngp"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/SNK - Neo Geo Pocket.zip"
-	fi
+	fi	
 	
 	if [ "$AquireRomSets" = "true" ]; then
 		echo "$ConsoleName :: Getting ROMs"
@@ -273,8 +272,7 @@ for folder in $(ls /input); do
 		else
 			echo "$ConsoleName :: ERROR :: No Archive.org URL found :: Skipping..."
 		fi
-	fi
-	
+	fi	
 
 	if find /input/$folder -type f | read; then
 		echo "Searching For ROMS in /input/$folder :: $ConsoleName :: ROMs found for processing, processing..."
@@ -286,10 +284,7 @@ for folder in $(ls /input); do
 	# Process ROMs with hascheevos
 	find /input/$folder -type f | while read LINE;
 	do
-		Rom="$LINE"
-		
-
-
+		Rom="$LINE"		
 		TMP_DIR="/tmp/rom_storage"
 		mkdir -p "$TMP_DIR"
 		rom="$Rom"
@@ -297,15 +292,13 @@ for folder in $(ls /input); do
 		RomFilename="${rom##*/}"
 		RomExtension="${filename##*.}"
 
-		if [ ! -f "console_${ConsoleId}_hashlibrary.json" ]; then
+		if [ ! -f "/config/ra_hash_libraries/hashes.json" ]; then
 			if [ ! -d /config/ra_hash_libraries ]; then
 				mkdir -p /config/ra_hash_libraries
 			fi
 			echo "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
-			curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary&c=${ConsoleId}" | jq '.' > "/config/ra_hash_libraries/console_${folder}_${ConsoleId}_hashlibrary.json"
+			curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary" | jq '.' > "/config/ra_hash_libraries/hashes.json"
 		fi
-
-
 
 		echo "$ConsoleName :: $RomFilename :: Processing..."
 		RaHash=""
@@ -326,12 +319,12 @@ for folder in $(ls /input); do
 		    esac
 
 		    if [[ $ret -ne 0 ]]; then
-			rm -f "$uncompressed_rom"
+				rm -f "$uncompressed_rom"
 		    fi
-
+			
 		echo "$ConsoleName :: $RomFilename :: Hash Found :: $RaHash"
 		echo "$ConsoleName :: $RomFilename :: Matching To RetroAchievements.org DB"
-		if cat "/config/ra_hash_libraries/console_${folder}_${ConsoleId}_hashlibrary.json" | jq -r .[] | grep "$RaHash" | read; then
+		if cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep "\"$RaHash\"" | read; then
 			echo "$ConsoleName :: $RomFilename :: Match Found!"
 
 			if [ ! -d /output/$ConsoleDirectory ]; then
