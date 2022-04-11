@@ -253,22 +253,21 @@ for folder in $(ls /input); do
 		if [ -f /config/logs/downloaded/$folder ]; then
 			echo "$ConsoleName :: ROMs previously downloaded :: Skipping..."
 		else
-			if [ -d /input/temp ]; then
-				rm -rf /input/temp
+			if [ ! -d /input/$folder/temp ]; then
+				mkdir -p /input/$folder/temp
 			fi
-			mkdir -p /input/temp
 			echo "$ConsoleName :: Downloading ROMs :: Please wait..."
 			wget -q --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0 "$ArchiveUrl" -O /input/temp/roms.zip
 			if [ -f /input/temp/roms.zip ]; then
 				echo "$ConsoleName :: Download Complete!"
 				echo "$ConsoleName :: Unpacking to /input/$folder"
-				unzip -o -d "/input/$folder" /input/temp/roms.zip >/dev/null
+				unzip -o -d "/input/$folder" /input/$folder/temp/roms.zip >/dev/null
 				echo "$ConsoleName :: Done!"
 			else
 				echo "$ConsoleName :: Download Failed!"
 			fi
-			if [ -d /input/temp ]; then
-				rm -rf /input/temp
+			if [ -d /input/$folder/temp ]; then
+				rm -rf /input/$folder/temp
 			fi
 			if [ ! -d /config/logs/downloaded ]; then
 				mkdir -p /config/logs/downloaded
