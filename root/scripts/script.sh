@@ -4,6 +4,13 @@ for folder in $(ls /input); do
 	ConsoleId=""
 	ConsoleName=""
 	ArchiveUrl=""
+	if echo "$folder" | grep "^amstradcpc" | read; then
+		ConsoleId=37
+		ConsoleName="Amstrad CPC"
+		ConsoleDirectory="amstradcpc"
+		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Amstrad - CPC.zip"
+	fi
+	
 	if echo "$folder" | grep "^megadrive" | read; then
 		ConsoleId=1
 		ConsoleName="Sega Mega Drive"
