@@ -176,9 +176,17 @@ for folder in $(ls /input); do
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - 7800.zip"
 	fi
 
+	if echo "$folder" | grep "^wonderswan" | read; then
+		ConsoleId=53
+		ConsoleName="WonderSwan"
+		ConsoleDirectory="wonderswan"
+		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Bandai - WonderSwan.zip"
+	fi
+	
+	
 	if echo "$folder" | grep "^wonderswancolor" | read; then
 		ConsoleId=53
-		ConsoleName="WonderSwan [Color]"
+		ConsoleName="WonderSwan"
 		ConsoleDirectory="wonderswancolor"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Bandai - WonderSwan Color.zip"
 	fi
