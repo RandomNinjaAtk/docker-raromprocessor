@@ -1,17 +1,5 @@
 #!/usr/bin/with-contenv bash
 
-# Check for new files to skip scrape when nothing has changed...
-if find /input -type f | read; then
-	echo "New Files to Import and Process"
-	if [ -f /scripts/no_files_to_process ]; then
-		rm /scripts/no_files_to_process
-	fi
-else
-	echo "No files to process in /input ... skipping..."
-	touch /scripts/no_files_to_process
-	exit
-fi
-
 for folder in $(ls /input); do
 	ConsoleId=""
 	ConsoleName=""
@@ -250,32 +238,32 @@ for folder in $(ls /input); do
 	if [ "$AquireRomSets" = "true" ]; then
 		echo "$ConsoleName :: Getting ROMs"
 		if [ ! -z "$ArchiveUrl" ]; then
-		if [ -f /config/logs/downloaded/$folder ]; then
-			echo "$ConsoleName :: ROMs previously downloaded :: Skipping..."
-		else
-			if [ ! -d /input/$folder/temp ]; then
-				mkdir -p /input/$folder/temp
-			fi
-			echo "$ConsoleName :: Downloading ROMs :: Please wait..."
-			wget -q --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0 "$ArchiveUrl" -O /input/temp/roms.zip
-			if [ -f /input/temp/roms.zip ]; then
-				echo "$ConsoleName :: Download Complete!"
-				echo "$ConsoleName :: Unpacking to /input/$folder"
-				unzip -o -d "/input/$folder" /input/$folder/temp/roms.zip >/dev/null
-				echo "$ConsoleName :: Done!"
+			if [ -f /config/logs/downloaded/$folder ]; then
+				echo "$ConsoleName :: ROMs previously downloaded :: Skipping..."
 			else
-				echo "$ConsoleName :: Download Failed!"
+				if [ ! -d /input/$folder/temp ]; then
+					mkdir -p /input/$folder/temp
+				fi
+				echo "$ConsoleName :: Downloading ROMs :: Please wait..."
+				wget -q --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0 "$ArchiveUrl" -O /input/$folder/temp/roms.zip
+				if [ -f /input/temp/roms.zip ]; then
+					echo "$ConsoleName :: Download Complete!"
+					echo "$ConsoleName :: Unpacking to /input/$folder"
+					unzip -o -d "/input/$folder" /input/$folder/temp/roms.zip >/dev/null
+					echo "$ConsoleName :: Done!"
+				else
+					echo "$ConsoleName :: Download Failed!"
+				fi
+				if [ -d /input/$folder/temp ]; then
+					rm -rf /input/$folder/temp
+				fi
+				if [ ! -d /config/logs/downloaded ]; then
+					mkdir -p /config/logs/downloaded
+				fi
+				if [ ! -f /config/logs/downloaded/$folder ]; then
+					touch /config/logs/downloaded/$folder
+				fi
 			fi
-			if [ -d /input/$folder/temp ]; then
-				rm -rf /input/$folder/temp
-			fi
-			if [ ! -d /config/logs/downloaded ]; then
-				mkdir -p /config/logs/downloaded
-			fi
-			if [ ! -f /config/logs/downloaded/$folder ]; then
-				touch /config/logs/downloaded/$folder
-			fi
-		fi
 		else
 			echo "$ConsoleName :: ERROR :: No Archive.org URL found :: Skipping..."
 		fi
