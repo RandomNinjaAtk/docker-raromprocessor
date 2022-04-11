@@ -8,6 +8,7 @@ ENV RAHASHER_PATH /usr/local/RALibretro
 ENV ScriptInterval=1h
 ENV DeDupe=false
 ENV AquireRomSets=false
+ENV ConccurentDownloadThreads=1
 
 RUN \
 	echo "************ install dependencies ************" && \
