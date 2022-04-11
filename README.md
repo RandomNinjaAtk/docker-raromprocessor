@@ -58,6 +58,7 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - PlayStation
 - PlayStation Portable
 - Vectrex
+- WonderSwan (Tested)
 - WonderSwan [Color] (Tested)
 
 ## Supported Architectures
