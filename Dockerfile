@@ -24,6 +24,7 @@ RUN \
 		make \
 		gcc \
 		sudo \
+		axel \
 		mingw-w64 \
 		python3-pip && \
 	echo "************ install python packages ************" && \
