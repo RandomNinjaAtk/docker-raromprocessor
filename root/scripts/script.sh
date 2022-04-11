@@ -271,7 +271,7 @@ for folder in $(ls /input); do
 				ArchiveColletion="$(echo "$ArchiveUrl" | cut -d "/" -f 5)"
 				ArchiveColletionFile="$(echo "$ArchiveUrl" | cut -d "/" -f 6)/$(echo "$ArchiveUrl" | cut -d "/" -f 7)"
 				ArchiveColletionFileName="$(echo "$ArchiveUrl" | cut -d "/" -f 7)"
-				axel -a -n $ConccurentDownloadThreads --output="/input/$folder/temp" "$ArchiveUrl"
+				axel -a -n $ConcurrentDownloadThreads --output="/input/$folder/temp" "$ArchiveUrl"
 				#ia download $ArchiveColletion "$ArchiveColletionFile" --no-directories --destdir="/input/$folder/temp"
 				# wget -q --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0 "$ArchiveUrl" -O /input/$folder/temp/roms.zip
 				if [ -f "/input/$folder/temp/$ArchiveColletionFileName" ]; then
