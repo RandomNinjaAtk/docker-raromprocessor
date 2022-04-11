@@ -268,18 +268,18 @@ for folder in $(ls /input); do
 				fi
 				mkdir -p /input/$folder/temp
 				echo "$ConsoleName :: Downloading ROMs :: Please wait..."
-				ArchiveColletion="$(echo "$ArchiveUrl" | cut -d "/" -f 5)"
-				ArchiveColletionFile="$(echo "$ArchiveUrl" | cut -d "/" -f 6)/$(echo "$ArchiveUrl" | cut -d "/" -f 7)"
-				ArchiveColletionFileName="$(echo "$ArchiveUrl" | cut -d "/" -f 7)"
-				axel -a -n $ConcurrentDownloadThreads --output="/input/$folder/temp" "$ArchiveUrl"
+				#ArchiveColletion="$(echo "$ArchiveUrl" | cut -d "/" -f 5)"
+				#ArchiveColletionFile="$(echo "$ArchiveUrl" | cut -d "/" -f 6)/$(echo "$ArchiveUrl" | cut -d "/" -f 7)"
+				#ArchiveColletionFileName="$(echo "$ArchiveUrl" | cut -d "/" -f 7)"
+				axel -q -n $ConcurrentDownloadThreads --output="/input/$folder/temp/roms.zip" "$ArchiveUrl"
 				#ia download $ArchiveColletion "$ArchiveColletionFile" --no-directories --destdir="/input/$folder/temp"
 				# wget -q --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0 "$ArchiveUrl" -O /input/$folder/temp/roms.zip
-				if [ -f "/input/$folder/temp/$ArchiveColletionFileName" ]; then
-					DownloadVerification="$(unzip -t "/input/$folder/temp/$ArchiveColletionFileName" &>/dev/null; echo $?)"
+				if [ -f "/input/$folder/temp/roms.zip" ]; then
+					DownloadVerification="$(unzip -t "/input/$folder/temp/roms.zip" &>/dev/null; echo $?)"
 					if [ "$DownloadVerification" = "0" ]; then
 						echo "$ConsoleName :: Download Complete!"
 						echo "$ConsoleName :: Unpacking to /input/$folder"
-						unzip -o -d "/input/$folder" "/input/$folder/temp/$ArchiveColletionFileName" >/dev/null
+						unzip -o -d "/input/$folder" "/input/$folder/temp/roms.zip" >/dev/null
 						echo "$ConsoleName :: Done!"
 						if [ ! -d /config/logs/downloaded ]; then
 							mkdir -p /config/logs/downloaded
