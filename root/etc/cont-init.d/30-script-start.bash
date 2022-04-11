@@ -36,6 +36,7 @@ echo "Created: /input/odyssey2"
 echo "Created: /input/ngp"
 echo "Created: /input/amstradcpc"
 echo "Created: /input/wonderswan"
+echo "Created: /input/tg16"
 mkdir -p /input/megadrive
 mkdir -p /input/n64
 mkdir -p /input/snes
@@ -72,6 +73,7 @@ mkdir -p /input/odyssey2
 mkdir -p /input/ngp
 mkdir -p /input/amstradcpc
 mkdir -p /input/wonderswan
+mkdir -p /input/tg16
 chmod 777 /input/*
 
 if [ "$AutoStart" = "true" ]; then
