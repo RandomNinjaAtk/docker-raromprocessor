@@ -262,6 +262,7 @@ for folder in $(ls /input); do
 					fi
 				else
 					echo "$ConsoleName :: Download Failed!"
+					continue
 				fi
 			fi
 		else
