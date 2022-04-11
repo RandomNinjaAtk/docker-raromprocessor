@@ -93,7 +93,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e ScriptInterval=1h` | When AutoStart is enabled, script will loop indefinitely, this allows the script to pause between loops, via sleep command |
 | `-e DeDupe=false` | true = Enabled :: This setting further reduces the final ROMs list per platrom, by removing duplicates with the priority of: USA > Europe > World > Japan, and then by shortest filename when multiples exist |
 | `-e AquireRomSets=false` | true = Enabled :: Enabling this will have the script attempt to pull valid ROM sets from archive.org for processing :: Not all systems supported... |
-| `-e ConcurrentDownloadThreads=5` | Number of concurrent threads to increase download speed... only aplicable for AquireRomSets=true setting |
+| `-e ConcurrentDownloadThreads=5` | Number of concurrent threads to increase download speed... only aplicable if AquireRomSets is enabled (true) |
 | `-e ScreenscraperUsername=Username` | Username for https://screenscraper.fr/ |
 | `-e ScreenscraperPassword=Password` | Password for https://screenscraper.fr/ |
 
