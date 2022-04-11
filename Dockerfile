@@ -28,7 +28,8 @@ RUN \
 		python3-pip && \
 	echo "************ install python packages ************" && \
 	python3 -m pip install --no-cache-dir -U \
-		yq && \
+		yq \
+		internetarchive && \
 	echo "************ skyscraper ************" && \
 	echo "************ install dependencies ************" && \
 	echo "************ install packages ************" && \
