@@ -251,17 +251,17 @@ for folder in $(ls /input); do
 					echo "$ConsoleName :: Unpacking to /input/$folder"
 					unzip -o -d "/input/$folder" /input/$folder/temp/roms.zip >/dev/null
 					echo "$ConsoleName :: Done!"
+					if [ ! -d /config/logs/downloaded ]; then
+						mkdir -p /config/logs/downloaded
+					fi
+					if [ ! -f /config/logs/downloaded/$folder ]; then
+						touch /config/logs/downloaded/$folder
+					fi
+					if [ -d /input/$folder/temp ]; then
+						rm -rf /input/$folder/temp
+					fi
 				else
 					echo "$ConsoleName :: Download Failed!"
-				fi
-				if [ -d /input/$folder/temp ]; then
-					rm -rf /input/$folder/temp
-				fi
-				if [ ! -d /config/logs/downloaded ]; then
-					mkdir -p /config/logs/downloaded
-				fi
-				if [ ! -f /config/logs/downloaded/$folder ]; then
-					touch /config/logs/downloaded/$folder
 				fi
 			fi
 		else
