@@ -34,6 +34,8 @@ echo "Created: /input/psp"
 echo "Created: /input/msx"
 echo "Created: /input/odyssey2"
 echo "Created: /input/ngp"
+echo "Created: /input/amstradcpc"
+echo "Created: /input/wonderswan"
 mkdir -p /input/megadrive
 mkdir -p /input/n64
 mkdir -p /input/snes
@@ -69,7 +71,9 @@ mkdir -p /input/msx
 mkdir -p /input/odyssey2
 mkdir -p /input/ngp
 mkdir -p /input/amstradcpc
+mkdir -p /input/wonderswan
 chmod 777 /input/*
+
 if [ "$AutoStart" = "true" ]; then
 	echo "Automatic Start Enabled, starting..."
 	for (( ; ; )); do
