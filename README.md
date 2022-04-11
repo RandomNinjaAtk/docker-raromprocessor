@@ -33,6 +33,7 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - Atari Lynx (Tested)
 - ColecoVision (Tested)
 - Intellivision
+- NEC TurboGrafx-16
 - Nintendo: 64 (Tested)
 - Nintendo: DS
 - Nintendo: GameBoy (Tested)
