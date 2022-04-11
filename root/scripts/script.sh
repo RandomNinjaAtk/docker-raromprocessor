@@ -292,8 +292,11 @@ for folder in $(ls /input); do
 		RomExtension="${filename##*.}"
 
 		if [ ! -f "console_${ConsoleId}_hashlibrary.json" ]; then
-			echo "--- getting the console hash library for \"$ConsoleName\"..."
-			curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary&c=${ConsoleId}" | jq '.' > "console_${ConsoleId}_hashlibrary.json"
+			if [ ! -d /config/ra_hash_libraries ]; then
+				mkdir -p /config/ra_hash_libraries
+			fi
+			echo "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
+			curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary&c=${ConsoleId}" | jq '.' > "/config/ra_hash_libraries/console_${folder}_${ConsoleId}_hashlibrary.json"
 		fi
 
 
@@ -322,7 +325,7 @@ for folder in $(ls /input); do
 
 		echo "$ConsoleName :: $RomFilename :: Hash Found :: $RaHash"
 		echo "$ConsoleName :: $RomFilename :: Matching To RetroAchievements.org DB"
-		if cat "console_${ConsoleId}_hashlibrary.json" | jq -r .[] | grep "$RaHash" | read; then
+		if cat "/config/ra_hash_libraries/console_${folder}_${ConsoleId}_hashlibrary.json" | jq -r .[] | grep "$RaHash" | read; then
 			echo "$ConsoleName :: $RomFilename :: Match Found!"
 
 			if [ ! -d /output/$ConsoleDirectory ]; then
