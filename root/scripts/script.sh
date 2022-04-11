@@ -236,8 +236,6 @@ for folder in $(ls /input); do
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/SNK - Neo Geo Pocket.zip"
 	fi
 	
-	AquireRomSets=true
-	
 	if [ "$AquireRomSets" = "true" ]; then
 		echo "$ConsoleName :: Getting ROMs"
 		if [ ! -z "$ArchiveUrl" ]; then
