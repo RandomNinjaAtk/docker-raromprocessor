@@ -250,6 +250,13 @@ for folder in $(ls /input); do
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/SNK - Neo Geo Pocket.zip"
 	fi	
 	
+	if echo "$folder" | grep "^tg16" | read; then
+		ConsoleId=8
+		ConsoleName="NEC TurboGrafx-16"
+		ConsoleDirectory="tg16"
+		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/NEC - PC Engine - TurboGrafx 16.zip"
+	fi	
+	
 	if [ "$AquireRomSets" = "true" ]; then
 		echo "$ConsoleName :: Getting ROMs"
 		if [ ! -z "$ArchiveUrl" ]; then
