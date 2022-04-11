@@ -68,9 +68,8 @@ mkdir -p /input/psp
 mkdir -p /input/msx
 mkdir -p /input/odyssey2
 mkdir -p /input/ngp
+mkdir -p /input/amstradcpc
 chmod 777 /input/*
-
-
 if [ "$AutoStart" = "true" ]; then
 	echo "Automatic Start Enabled, starting..."
 	for (( ; ; )); do
