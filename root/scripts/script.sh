@@ -377,18 +377,7 @@ for folder in $(ls /input); do
 			rm "$LINE"
 		done
 	fi
-	# Rebuild gamelist to clean
-	if [ -d "/output/$folder/media" ]; then
-		rm -rf "/output/$folder/media"
-	fi
-	if [ -f "/output/$folder/gamelist.xml" ]; then
-		rm "/output/$folder/gamelist.xml"
-	fi
-	Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets
-	Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
-	# clean cache from removed ROMs
-	Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --cache vacuum --flags relative,videos,unattend,nobrackets
-	
+		
 	if [ "$DeDupe" = "true" ]; then
 		# verify gamelist.xml exists
 		if [ ! -f "/output/$folder/gamelist.xml" ]; then
@@ -497,20 +486,21 @@ for folder in $(ls /input); do
 				echo "$ConsoleName :: $GameName :: No dupes found!"
 			fi
 		done
-		# Rebuild gamelist to clean
-		if [ -d "/output/$folder/media" ]; then
-			rm -rf "/output/$folder/media"
-		fi
-		if [ -f "/output/$folder/gamelist.xml" ]; then
-			rm "/output/$folder/gamelist.xml"
-		fi
-		Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets
-		Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
-		# clean cache from removed ROMs
-		Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --cache vacuum --flags relative,videos,unattend,nobrackets
 	else
 		echo "DeDuping process disabled..."
 	fi
+	
+	# Rebuild gamelist to clean
+	if [ -d "/output/$folder/media" ]; then
+		rm -rf "/output/$folder/media"
+	fi
+	if [ -f "/output/$folder/gamelist.xml" ]; then
+		rm "/output/$folder/gamelist.xml"
+	fi
+	Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets
+	Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
+	# clean cache from removed ROMs
+	Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --cache vacuum --flags relative,videos,unattend,nobrackets
 	
 	# set permissions
 	find /output/$folder -type d -exec chmod 777 {} \;
