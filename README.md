@@ -24,40 +24,41 @@ Lastly, ROMs that have no metadata will be removed from the final ```/output``` 
 FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume. This will allow you to verify the end result before deciding to remove the original data used for import/processing.
 
 ## Supported ROM Platforms
-- Sega Mega Drive (Tested)
-- Nintendo 64 (Tested)
-- Super Nintendo Entertainment System (Tested)
-- GameBoy (Tested)
-- GameBoy Advance (Tested)
-- GameBoy Color (Tested)
-- Nintendo Entertainment System (Tested)
-- PC Engine
-- Sega CD
-- Sega 32X (Tested)
-- Sega Master System (Tested)
-- PlayStation
+- Amstrad CPC
+- Apple II
+- Arcade
+- Atari 2600 (Tested)
+- Atari 7800  (Tested)
+- Atari Jaguar (Tested)
 - Atari Lynx (Tested)
+- ColecoVision (Tested)
+- Intellivision
+- Nintendo: 64 (Tested)
+- Nintendo: DS
+- Nintendo: GameBoy (Tested)
+- Nintendo: GameBoy Advance (Tested)
+- Nintendo: GameBoy Color (Tested)
+- Nintendo: Nintendo Entertainment System (Tested)
+- Nintendo: Pokemon Mini (Tested)
+- Nintendo: Super Nintendo Entertainment System (Tested)
+- Nintendo: VirtualBoy (Tested)
+- Sega 32X (Tested)
+- Sega Dreamcast
+- Sega CD
+- Sega Game Gear (Tested)
+- Sega Mega Drive (Tested)
+- Sega Master System (Tested)
+- Sega Saturn
+- SG-1000 (Tested)
 - SNK Neo Geo Pocket
 - SNK Neo Geo Pocket Color (Tested)
-- Game Gear (Tested)
-- Atari Jaguar (Tested)
-- Nintendo DS
-- Pokemon Mini (Tested)
-- Atari 2600 (Tested)
-- Arcade
-- VirtualBoy (Tested)
-- SG-1000 (Tested)
-- ColecoVision (Tested)
-- Atari 7800  (Tested)
-- WonderSwan [Color] (Tested)
-- Intellivision
-- Vectrex
-- Apple II
-- Sega Saturn
-- Sega Dreamcast
-- PlayStation Portable
-- MSX
 - Magnavox Odyssey 2
+- MSX
+- PC Engine
+- PlayStation
+- PlayStation Portable
+- Vectrex
+- WonderSwan [Color] (Tested)
 
 ## Supported Architectures
 
