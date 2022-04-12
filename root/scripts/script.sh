@@ -50,8 +50,8 @@ Process_Roms () {
 			
 		echo "$ConsoleName :: $RomFilename :: Hash Found :: $RaHash"
 		echo "$ConsoleName :: $RomFilename :: Matching To RetroAchievements.org DB"
-		if cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep "\"$RaHash\"" | read; then
-			GameId=$(cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep "\"$RaHash\"" | cut -d ":" -f 2 | sed "s/\ //g" | sed "s/,//g")
+		if cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | read; then
+			GameId=$(cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | cut -d ":" -f 2 | sed "s/\ //g" | sed "s/,//g")
 			echo "$ConsoleName :: $RomFilename :: Match Found :: Game ID :: $GameId"
 			Skip="false"
 			if [ "$DeDupe" = "true" ]; then
