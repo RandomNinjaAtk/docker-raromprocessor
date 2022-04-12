@@ -8,7 +8,7 @@ Process_Roms () {
 	if [ "$Region" = "Other" ]; then
 		RegionGrep="."
 	fi
-	find /input/$folder -type f | grep "$RegionGrep" | sort -r | while read LINE;
+	find /input/$folder -type f | grep -i "$RegionGrep" | sort -r | while read LINE;
 	do
 		Rom="$LINE"		
 		TMP_DIR="/tmp/rom_storage"
