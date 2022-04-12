@@ -32,8 +32,8 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - Atari Jaguar (Tested)
 - Atari Lynx (Tested)
 - ColecoVision (Tested)
-- Intellivision
-- NEC TurboGrafx-16
+- Intellivision (Tested)
+- NEC TurboGrafx-16 (Tested)
 - Nintendo: 64 (Tested)
 - Nintendo: DS
 - Nintendo: GameBoy (Tested)
@@ -51,15 +51,15 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - Sega Master System (Tested)
 - Sega Saturn
 - SG-1000 (Tested)
-- SNK Neo Geo Pocket
+- SNK Neo Geo Pocket (Tested)
 - SNK Neo Geo Pocket Color (Tested)
-- Magnavox Odyssey 2
-- MSX
+- Magnavox Odyssey 2 (Tested)
+- MSX (Tested)
 - PC Engine
 - PlayStation
 - PlayStation Portable
-- Vectrex
-- WonderSwan
+- Vectrex (Tested)
+- WonderSwan (Tested)
 - WonderSwan [Color] (Tested)
 
 ## Supported Architectures
