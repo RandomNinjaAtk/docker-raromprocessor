@@ -5,7 +5,7 @@
 [![Docker Hub](https://img.shields.io/badge/Open%20On-DockerHub-blue?style=flat-square)](https://hub.docker.com/r/randomninjaatk/raromprocessor)
 [![Discord](https://img.shields.io/discord/747100476775858276.svg?style=flat-square&label=Discord&logo=discord)](https://discord.gg/JumQXDc "realtime support / chat with the community." )
 
-[RA ROM Processor](https://github.com/RandomNinjaAtk/docker-raromprocessor) is a Docker container that is used to orgainze/process/verify/dedupe/scrape a ROMs library automatically by matching ROMs to the [RetroAchievement.org](https://retroachievements.org) website Hash database. This was inspired by other projects such as: [hascheevos](https://github.com/meleu/hascheevos) 
+[RA ROM Processor](https://github.com/RandomNinjaAtk/docker-raromprocessor) is a Docker container that is used to aquire/orgainze/process/verify/dedupe/scrape a ROMs library automatically by matching ROMs to the [RetroAchievement.org](https://retroachievements.org) website Hash database. This was inspired by other projects such as: [hascheevos](https://github.com/meleu/hascheevos) 
 
 [![RandomNinjaAtk/raromprocessor](https://raw.githubusercontent.com/RandomNinjaAtk/unraid-templates/master/randomninjaatk/img/raromprocessor.png)](https://github.com/RandomNinjaAtk/docker-raromprocessor)
 
@@ -94,6 +94,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e DeDupe=false` | true = Enabled :: This setting further reduces the final ROMs list per platrom, by removing duplicates with the priority of: USA > Europe > World > Japan, and then by shortest filename when multiples exist |
 | `-e AquireRomSets=false` | true = Enabled :: Enabling this will have the script attempt to pull valid ROM sets from archive.org for processing :: Not all systems supported... |
 | `-e ConcurrentDownloadThreads=5` | Number of concurrent threads to increase download speed... only aplicable if AquireRomSets is enabled (true) |
+| `-e ScrapeMetadata=false` | true = Enabled :: Enabling this will allow the script to process the ROMs with [skyscraper](https://github.com/muldjord/skyscraper) |
 | `-e ScreenscraperUsername=Username` | Username for https://screenscraper.fr/ |
 | `-e ScreenscraperPassword=Password` | Password for https://screenscraper.fr/ |
 
@@ -114,6 +115,7 @@ docker create \
   -e DeDupe=false \
   -e AquireRomSets=false \
   -e ConcurrentDownloadThreads=5 \
+  -e ScrapeMetadata=false \
   -e ScreenscraperUsername=Username \
   -e ScreenscraperPassword=Password \
   --restart unless-stopped \
@@ -145,6 +147,7 @@ services:
       - DeDupe=false
       - AquireRomSets=false
       - ConcurrentDownloadThreads=5
+      - ScrapeMetadata=false
       - ScreenscraperUsername=Username
       - ScreenscraperPassword=Password
     restart: unless-stopped
