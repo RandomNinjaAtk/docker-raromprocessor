@@ -362,7 +362,11 @@ for folder in $(ls /input); do
 		echo "$ConsoleName :: $RomFilename :: Matching To RetroAchievements.org DB"
 		if cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep "\"$RaHash\"" | read; then
 			echo "$ConsoleName :: $RomFilename :: Match Found!"
-
+			GameId=$(cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep "\"$RaHash\"" | cut -d ":" -f 2 | sed "s/\ //g" | sed "s/,//g")
+			if [ ! -d /logs/matched_games/$ConsoleDirectory ]; then 
+				mkdir -p /logs/matched_games/$ConsoleDirectory
+			fi
+			touch /logs/matched_games/$ConsoleDirectory/$GameId
 			if [ ! -d /output/$ConsoleDirectory ]; then
 				echo "$ConsoleName :: $RomFilename :: Creating Console Directory \"/output/$ConsoleDirectory\""
 				mkdir -p /output/$ConsoleDirectory
