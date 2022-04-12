@@ -1,5 +1,111 @@
 #!/usr/bin/with-contenv bash
 
+
+Process_Roms () {
+	Region="$1"
+	RegionGrep="$1"
+	# Process ROMs with RAHasher
+	if [ "$Region" = "Other" ]; then
+		RegionGrep="."
+	fi
+	find /input/$folder -type f | grep "$RegionGrep" | sort -r | while read LINE;
+	do
+		Rom="$LINE"		
+		TMP_DIR="/tmp/rom_storage"
+		mkdir -p "$TMP_DIR"
+		rom="$Rom"
+
+		RomFilename="${rom##*/}"
+		RomExtension="${filename##*.}"
+
+		if [ ! -f "/config/ra_hash_libraries/hashes.json" ]; then
+			if [ ! -d /config/ra_hash_libraries ]; then
+				mkdir -p /config/ra_hash_libraries
+			fi
+			echo "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
+			curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary" | jq '.' > "/config/ra_hash_libraries/hashes.json"
+		fi
+
+		echo "$ConsoleName :: $RomFilename :: $Region :: Processing..."
+		RaHash=""
+		case "$rom" in
+			*.zip|*.ZIP)
+			    uncompressed_rom="$TMP_DIR/$(unzip -Z1 "$rom" | head -1)"
+			    unzip -o -d "$TMP_DIR" "$rom" >/dev/null
+			    RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$uncompressed_rom") || ret=1
+			    ;;
+			*.7z|*.7Z)
+			    uncompressed_rom="$TMP_DIR/$(7z l -slt "$rom" | sed -n 's/^Path = //p' | sed '2q;d')"
+			    7z e -y -bd -o"$TMP_DIR" "$rom" >/dev/null
+			    RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$uncompressed_rom") || ret=1
+			    ;;
+			*)
+			    RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$rom") || ret=1
+			    ;;
+		    esac
+
+		    if [[ $ret -ne 0 ]]; then
+				rm -f "$uncompressed_rom"
+		    fi
+			
+		echo "$ConsoleName :: $RomFilename :: Hash Found :: $RaHash"
+		echo "$ConsoleName :: $RomFilename :: Matching To RetroAchievements.org DB"
+		if cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep "\"$RaHash\"" | read; then
+			GameId=$(cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep "\"$RaHash\"" | cut -d ":" -f 2 | sed "s/\ //g" | sed "s/,//g")
+			echo "$ConsoleName :: $RomFilename :: Match Found :: Game ID :: $GameId"
+			Skip="false"
+			if [ "$DeDupe" = "true" ]; then
+				if [ -f "/output/$ConsoleDirectory/$RomFilename" ]; then
+					echo "$ConsoleName :: $RomFilename :: Previously Imported, skipping..."
+					Skip="true"
+				elif [ -f "/config/logs/matched_games/$ConsoleDirectory/$GameId" ]; then
+					echo "$ConsoleName :: $RomFilename :: Duplicate Found, skipping..."
+					Skip="true"
+				fi
+			else
+				echo "DeDuping process disabled..."
+			fi
+			if [ "$Skip" = "false" ]; then
+				if [ ! -d /output/$ConsoleDirectory ]; then
+					echo "$ConsoleName :: $RomFilename :: Creating Console Directory \"/output/$ConsoleDirectory\""
+					mkdir -p /output/$ConsoleDirectory
+					chmod 777 /output/$ConsoleDirectory
+				fi
+				if [ ! -f "/output/$ConsoleDirectory/$RomFilename" ]; then
+					echo "$ConsoleName :: $RomFilename :: Copying ROM to \"/output/$ConsoleDirectory\""
+					cp "$rom" "/output/$ConsoleDirectory"/
+				else
+					echo "$ConsoleName :: $RomFilename :: Previously Imported, skipping..."
+				fi
+			fi
+			if [ ! -d "/config/logs/matched_games/$ConsoleDirectory" ]; then 
+				mkdir -p "/config/logs/matched_games/$ConsoleDirectory"
+			fi
+			touch "/config/logs/matched_games/$ConsoleDirectory/$GameId"
+		else
+			echo "$ConsoleName :: $RomFilename :: ERROR :: Not Found on RetroAchievements.org DB"
+		fi	
+		
+		# backup processed ROM to /backup
+		# create backup directories/path that matches input path
+		if [ ! -d "/backup/$(dirname "${Rom:7}")" ]; then
+			echo "$ConsoleName :: $RomFilename :: Creating Missing Backup Folder :: /backup/$(dirname "${Rom:7}")"
+			mkdir -p "/backup/$(dirname "${Rom:7}")"
+			chmod 777 "/backup/$(dirname "${Rom:7}")"
+		fi
+		# copy ROM from /input to /backup
+		if [ ! -f "/backup/${Rom:7}" ]; then
+			echo "$ConsoleName :: $RomFilename :: Backing up ROM to: /backup/$(dirname "${Rom:7}")"
+			cp "$Rom" "/backup/${Rom:7}"
+			chmod 666 "/backup/${Rom:7}"
+		fi
+		# remove ROM from input
+		echo "$ConsoleName :: $RomFilename :: Removing ROM from /input"
+		rm "$Rom"
+		
+	done
+}
+
 for folder in $(ls /input); do
 	ConsoleId=""
 	ConsoleName=""
@@ -317,91 +423,11 @@ for folder in $(ls /input); do
 		continue
 	fi
 
-	# Process ROMs with hascheevos
-	find /input/$folder -type f | while read LINE;
-	do
-		Rom="$LINE"		
-		TMP_DIR="/tmp/rom_storage"
-		mkdir -p "$TMP_DIR"
-		rom="$Rom"
-
-		RomFilename="${rom##*/}"
-		RomExtension="${filename##*.}"
-
-		if [ ! -f "/config/ra_hash_libraries/hashes.json" ]; then
-			if [ ! -d /config/ra_hash_libraries ]; then
-				mkdir -p /config/ra_hash_libraries
-			fi
-			echo "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
-			curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary" | jq '.' > "/config/ra_hash_libraries/hashes.json"
-		fi
-
-		echo "$ConsoleName :: $RomFilename :: Processing..."
-		RaHash=""
-		case "$rom" in
-			*.zip|*.ZIP)
-			    uncompressed_rom="$TMP_DIR/$(unzip -Z1 "$rom" | head -1)"
-			    unzip -o -d "$TMP_DIR" "$rom" >/dev/null
-			    RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$uncompressed_rom") || ret=1
-			    ;;
-			*.7z|*.7Z)
-			    uncompressed_rom="$TMP_DIR/$(7z l -slt "$rom" | sed -n 's/^Path = //p' | sed '2q;d')"
-			    7z e -y -bd -o"$TMP_DIR" "$rom" >/dev/null
-			    RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$uncompressed_rom") || ret=1
-			    ;;
-			*)
-			    RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$rom") || ret=1
-			    ;;
-		    esac
-
-		    if [[ $ret -ne 0 ]]; then
-				rm -f "$uncompressed_rom"
-		    fi
-			
-		echo "$ConsoleName :: $RomFilename :: Hash Found :: $RaHash"
-		echo "$ConsoleName :: $RomFilename :: Matching To RetroAchievements.org DB"
-		if cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep "\"$RaHash\"" | read; then
-			echo "$ConsoleName :: $RomFilename :: Match Found!"
-			GameId=$(cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep "\"$RaHash\"" | cut -d ":" -f 2 | sed "s/\ //g" | sed "s/,//g")
-			if [ ! -d /logs/matched_games/$ConsoleDirectory ]; then 
-				mkdir -p /logs/matched_games/$ConsoleDirectory
-			fi
-			touch /logs/matched_games/$ConsoleDirectory/$GameId
-			if [ ! -d /output/$ConsoleDirectory ]; then
-				echo "$ConsoleName :: $RomFilename :: Creating Console Directory \"/output/$ConsoleDirectory\""
-				mkdir -p /output/$ConsoleDirectory
-				chmod 777 /output/$ConsoleDirectory
-			fi
-			if [ ! -f "/output/$ConsoleDirectory/$RomFilename" ]; then
-				echo "$ConsoleName :: $RomFilename :: Copying ROM to \"/output/$ConsoleDirectory\""
-				cp "$rom" "/output/$ConsoleDirectory"/
-			else
-				echo "$ConsoleName :: $RomFilename :: ROM previously imported, skipping..."
-			fi
-		else
-			echo "$ConsoleName :: $RomFilename :: ERROR :: Not Found on RetroAchievements.org DB"
-		fi
-
-		
-		
-		# backup processed ROM to /backup
-		# create backup directories/path that matches input path
-		if [ ! -d "/backup/$(dirname "${Rom:7}")" ]; then
-			echo "$ConsoleName :: $RomFilename :: Creating Missing Backup Folder :: /backup/$(dirname "${Rom:7}")"
-			mkdir -p "/backup/$(dirname "${Rom:7}")"
-			chmod 777 "/backup/$(dirname "${Rom:7}")"
-		fi
-		# copy ROM from /input to /backup
-		if [ ! -f "/backup/${Rom:7}" ]; then
-			echo "$ConsoleName :: $RomFilename :: Backing up ROM to: /backup/$(dirname "${Rom:7}")"
-			cp "$Rom" "/backup/${Rom:7}"
-			chmod 666 "/backup/${Rom:7}"
-		fi
-		# remove ROM from input
-		echo "$ConsoleName :: $RomFilename :: Removing ROM from /input"
-		rm "$Rom"
-		
-	done
+	Process_Roms USA
+	Process_Roms Europe
+	Process_Roms World
+	Process_Roms Japan
+	Process_Roms Other
 	
 	# remove empty directories
 	find /input/$folder -mindepth 1 -type d -empty -exec rm -rf {} \; &>/dev/null
@@ -416,131 +442,7 @@ for folder in $(ls /input); do
 		do 
 			rm "$LINE"
 		done
-	fi
-		
-	if [ "$DeDupe" = "true" ]; then
-		# verify gamelist.xml exists
-		if [ ! -f "/output/$folder/gamelist.xml" ]; then
-			continue
-		fi
-		GameListData="$(cat "/output/$folder/gamelist.xml" | xq .gameList[] | jq .[])"
-		OLDIFS="$IFS"
-		IFS=$'\n'
-		GameNames=($(echo "$GameListData" | jq -r ".name" | sort -u))
-		IFS="$OLDIFS"
-		# process each game name in the gamelist.xml
-		for Name in ${!GameNames[@]}; do
-			GameName="${GameNames[$Name]}"
-			RomCount=""
-			RomCount=$(echo $GameListData | jq -r .name | grep "^$GameName$" | wc -l)
-			if [ $RomCount -gt 1 ]; then
-				echo "$ConsoleName :: $GameName :: Dupes found!"
-				Files=$(echo "$GameListData" | jq -r "select(.name==\"$GameName\") | .path")
-				OLDIFS="$IFS"
-				IFS=$'\n'
-				FileNames=($(echo "$GameListData" | jq -r "select(.name==\"$GameName\") | .path"))
-				IFS="$OLDIFS"
-				UsaRom=false
-				EuropeRom=false
-				WorldRom=false
-				JapanRom=false
-				if echo "$Files" | grep "USA" | read; then
-					echo "$ConsoleName :: $GameName :: USA ROM Found"
-					echo "$ConsoleName :: $GameName :: Delete Non USA ROM"
-					UsaRom=true
-				elif echo "$Files" | grep "Europe" | read; then
-					echo "$ConsoleName :: $GameName :: Europe ROM Found"
-					echo "$ConsoleName :: $GameName :: Delete Non Europe ROM"
-					EuropeRom=true
-				elif echo "$Files" | grep "World" | read; then
-					echo "$ConsoleName :: $GameName :: World ROM Found"
-					echo "$ConsoleName :: $GameName :: Delete Non World ROM"
-					WorldRom=true			
-				elif echo "$Files" | grep "Japan" | read; then
-					echo "$ConsoleName :: $GameName :: Japan ROM Found"
-					echo "$ConsoleName :: $GameName :: Delete Non Japan ROM"
-					JapanRom=true			
-				fi
-
-				for File in ${!FileNames[@]}; do
-					FileName="${FileNames[$File]}"
-					FileName="${FileName:2}"
-					if [ $UsaRom = true ]; then
-						if echo "$FileName" | grep -v "USA" | read; then
-							echo "$ConsoleName :: $GameName :: Delete /output/$folder/$FileName"
-							if [ -f "/output/$folder/$FileName" ]; then
-								rm "/output/$folder/$FileName"
-							fi
-						fi
-					fi
-					if [ $EuropeRom = true ]; then
-						if echo "$FileName" | grep -v "Europe" | read; then
-							echo "$ConsoleName :: $GameName :: Delete /output/$folder/$FileName"
-							if [ -f "/output/$folder/$FileName" ]; then
-								rm "/output/$folder/$FileName"
-							fi
-						fi
-					fi
-					if [ $WorldRom = true ]; then
-						if echo "$FileName" | grep -v "World" | read; then
-							echo "$ConsoleName :: $GameName :: Delete /output/$folder/$FileName"
-							if [ -f "/output/$folder/$FileName" ]; then
-								rm "/output/$folder/$FileName"
-							fi
-						fi
-					fi
-					if [ $JapanRom = true ]; then
-						if echo "$FileName" | grep -v "Japan" | read; then
-							echo "$ConsoleName :: $GameName :: Delete /output/$folder/$FileName"
-							if [ -f "/output/$folder/$FileName" ]; then
-								rm "/output/$folder/$FileName"
-							fi
-						fi
-					fi
-
-
-				done
-
-				for File in ${!FileNames[@]}; do
-					FileName="${FileNames[$File]}"
-					FileName="${FileName:2}"
-					FileNameLength=$(echo $FileName | wc -m)
-					if [ -f "/output/$folder/$FileName" ]; then
-						echo "$ConsoleName :: $GameName :: FileNameLength $FileNameLength :: $FileName"
-						for ComparisonFile in ${!FileNames[@]}; do
-							ComparisonFileName="${FileNames[$ComparisonFile]}"
-							ComparisonFileName="${ComparisonFileName:2}"
-							ComparisonFileNameLength=$(echo $ComparisonFileName | wc -m)
-							echo "$ConsoleName :: $GameName :: ComparisonFileNameLength $ComparisonFileNameLength :: $ComparisonFileName"
-							if [ $FileNameLength -gt $ComparisonFileNameLength ]; then
-								if [ -f "/output/$folder/$ComparisonFileName" ]; then
-									echo "$ConsoleName :: $GameName :: DELETE :: /output/$folder/$FileName"
-									rm "/output/$folder/$FileName"
-								fi
-							fi
-						done
-					fi
-				done	
-
-			else
-				echo "$ConsoleName :: $GameName :: No dupes found!"
-			fi
-		done
-	else
-		echo "DeDuping process disabled..."
-	fi
-	
-	# Rebuild gamelist to clean
-	if [ -d "/output/$folder/media" ]; then
-		rm -rf "/output/$folder/media"
-	fi
-	if [ -f "/output/$folder/gamelist.xml" ]; then
-		rm "/output/$folder/gamelist.xml"
-	fi
-	Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets
-	Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
-	# clean cache from removed ROMs
-	Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --cache vacuum --flags relative,videos,unattend,nobrackets
+	fi	
 	
 	# set permissions
 	find /output/$folder -type d -exec chmod 777 {} \;
