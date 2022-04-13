@@ -379,7 +379,14 @@ for folder in $(ls /input); do
 		ConsoleName="NEC TurboGrafx-16"
 		ConsoleDirectory="tg16"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/NEC - PC Engine - TurboGrafx 16.zip"
-	fi	
+	fi
+	
+	if echo "$folder" | grep "^x68000$" | read; then
+		ConsoleId=52
+		ConsoleName="Sharp X68000"
+		ConsoleDirectory="x68000"
+		ArchiveUrl="https://ia804509.us.archive.org/7/items/hearto-1g1r-collection/hearto_1g1r_collection/Sharp%20-%20X68000.zip"
+	fi
 	
 	if [ ! -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
 		if [ ! -d /config/ra_hash_libraries ]; then
