@@ -42,6 +42,9 @@ echo "Created: /input/x68000"
 echo "Created: /input/zxspectrum"
 echo "Created: /input/c64"
 echo "Created: /input/amiga"
+echo "Created: /input/atarist"
+echo "Created: /input/msx2"
+echo "Created: input/channelf"
 mkdir -p /input/megadrive
 mkdir -p /input/n64
 mkdir -p /input/snes
@@ -84,6 +87,9 @@ mkdir -p /input/x68000
 mkdir -p /input/zxspectrum
 mkdir -p /input/c64
 mkdir -p /input/amiga
+mkdir -p /input/atarist
+mkdir -p /input/msx2
+mkdir -p /input/channelf
 chmod 777 /input/*
 
 if [ "$AutoStart" = "true" ]; then
