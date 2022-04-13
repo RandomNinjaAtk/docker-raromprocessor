@@ -433,18 +433,22 @@ for folder in $(ls /input); do
 	find /input/$folder -mindepth 1 -type d -empty -exec rm -rf {} \; &>/dev/null
 	
 	if [ "$ScrapeMetadata" = "true" ]; then
-		echo "$ConsoleName :: Begin Skyscraper Process..."
-		# Scrape from screenscraper
-		Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets,unpack
-		# Save scraped data to output folder
-		Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
-		# Remove skipped roms
-		if [ -f /root/.skyscraper/skipped-$folder-cache.txt ]; then
-			cat /root/.skyscraper/skipped-$folder-cache.txt | while read LINE;
-			do 
-				rm "$LINE"
-			done
-		fi
+		if Skyscraper | grep -w "$folder" | read; then
+			echo "$ConsoleName :: Begin Skyscraper Process..."
+			# Scrape from screenscraper
+			Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets,unpack
+			# Save scraped data to output folder
+			Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
+			# Remove skipped roms
+			if [ -f /root/.skyscraper/skipped-$folder-cache.txt ]; then
+				cat /root/.skyscraper/skipped-$folder-cache.txt | while read LINE;
+				do 
+					rm "$LINE"
+				done
+			fi
+		else 
+			echo "$ConsoleName :: Metadata Scraping :: ERROR :: Platform not supported, skipping..."
+		fi 
 	else
 		echo "$ConsoleName :: Metadata Scraping disabled..."
 		echo "$ConsoleName :: Enable by setting \"ScrapeMetadata=true\""
