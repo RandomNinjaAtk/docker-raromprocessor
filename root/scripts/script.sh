@@ -176,7 +176,7 @@ for folder in $(ls /input); do
 		ConsoleId=9
 		ConsoleName="Sega CD"
 		ConsoleDirectory="segacd"
-		ArchiveUrl="https://archive.org/compress/SEGACD_CHD_PLUS"
+		#ArchiveUrl="https://archive.org/compress/SEGACD_CHD_PLUS"
 	fi
 
 	if echo "$folder" | grep "^sega32x$" | read; then
@@ -338,7 +338,7 @@ for folder in $(ls /input); do
 	if echo "$folder" | grep "^msx$" | read; then
 		ConsoleId=29
 		ConsoleName="MSX"
-		ConsoleDirectory="msx$"
+		ConsoleDirectory="msx"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Microsoft - MSX.zip"
 	fi
 
