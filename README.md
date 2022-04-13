@@ -28,12 +28,13 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - Apple II
 - Arcade
 - Atari 2600 (Tested)
+- Atari 5200 (Tested - RA Unsupported Platform)
 - Atari 7800  (Tested)
 - Atari Jaguar (Tested)
 - Atari Lynx (Tested)
 - ColecoVision (Tested)
 - Intellivision (Tested)
-- NEC TurboGrafx-16 (Tested)
+- NEC TurboGrafx-16 (Tested - Unsupported by Skyscraper)
 - Nintendo: 64 (Tested)
 - Nintendo: DS
 - Nintendo: GameBoy (Tested)
@@ -53,7 +54,7 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - SG-1000 (Tested)
 - SNK Neo Geo Pocket (Tested)
 - SNK Neo Geo Pocket Color (Tested)
-- Magnavox Odyssey 2 (Tested)
+- Magnavox Odyssey 2 (Tested - Unsupported by Skyscraper)
 - MSX (Tested)
 - PC Engine
 - PlayStation
@@ -94,8 +95,8 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e DeDupe=false` | true = Enabled :: This setting further reduces the final ROMs list per platrom, by removing duplicates with the priority of: USA > Europe > World > Japan, and then by shortest filename when multiples exist |
 | `-e AquireRomSets=false` | true = Enabled :: Enabling this will have the script attempt to pull valid ROM sets from archive.org for processing :: Not all systems supported... |
 | `-e ConcurrentDownloadThreads=5` | Number of concurrent threads to increase download speed... only aplicable if AquireRomSets is enabled (true) |
-| `-e ScrapeMetadata=false` | true = Enabled :: Enabling this will allow the script to process the ROMs with [skyscraper](https://github.com/muldjord/skyscraper) |
 | `-e EnableUnsupportedPlatforms=true` | true = Enabled :: Enabling this will allow the script to import and scrape ROMs for platforms without RA hashes, no deduping/validation is performed |
+| `-e ScrapeMetadata=false` | true = Enabled :: Enabling this will allow the script to process the ROMs with [skyscraper](https://github.com/muldjord/skyscraper) |
 | `-e ScreenscraperUsername=Username` | Username for https://screenscraper.fr/ |
 | `-e ScreenscraperPassword=Password` | Password for https://screenscraper.fr/ |
 
@@ -116,8 +117,8 @@ docker create \
   -e DeDupe=false \
   -e AquireRomSets=false \
   -e ConcurrentDownloadThreads=5 \
-  -e ScrapeMetadata=false \
   -e EnableUnsupportedPlatforms=true \
+  -e ScrapeMetadata=false \
   -e ScreenscraperUsername=Username \
   -e ScreenscraperPassword=Password \
   --restart unless-stopped \
@@ -149,8 +150,8 @@ services:
       - DeDupe=false
       - AquireRomSets=false
       - ConcurrentDownloadThreads=5
-      - ScrapeMetadata=false
       - EnableUnsupportedPlatforms=true
+      - ScrapeMetadata=false
       - ScreenscraperUsername=Username
       - ScreenscraperPassword=Password
     restart: unless-stopped
