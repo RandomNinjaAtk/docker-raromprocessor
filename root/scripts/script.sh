@@ -429,7 +429,15 @@ for folder in $(ls /input); do
 		ConsoleDirectory="channelf"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Fairchild%20-%20Channel%20F.zip"
 	fi
-	
+
+	if echo "$folder" | grep "^neogeocd$" | read; then
+		ConsoleId=56
+		ConsoleName="Neo Geo CD"
+		ConsoleDirectory="neogeocd"
+		ArchiveUrl="https://archive.org/download/perfectromcollection/NEOGEO.rar"
+	fi
+
+
 	if [ ! -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
 		if [ ! -d /config/ra_hash_libraries ]; then
 			mkdir -p /config/ra_hash_libraries
@@ -461,18 +469,33 @@ for folder in $(ls /input); do
 				fi
 				mkdir -p /input/$folder/temp
 				echo "$ConsoleName :: Downloading ROMs :: Please wait..."
-				#ArchiveColletion="$(echo "$ArchiveUrl" | cut -d "/" -f 5)"
-				#ArchiveColletionFile="$(echo "$ArchiveUrl" | cut -d "/" -f 6)/$(echo "$ArchiveUrl" | cut -d "/" -f 7)"
-				#ArchiveColletionFileName="$(echo "$ArchiveUrl" | cut -d "/" -f 7)"
-				axel -q -n $ConcurrentDownloadThreads --output="/input/$folder/temp/roms.zip" "$ArchiveUrl"
-				#ia download $ArchiveColletion "$ArchiveColletionFile" --no-directories --destdir="/input/$folder/temp"
-				# wget -q --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0 "$ArchiveUrl" -O /input/$folder/temp/roms.zip
-				if [ -f "/input/$folder/temp/roms.zip" ]; then
-					DownloadVerification="$(unzip -t "/input/$folder/temp/roms.zip" &>/dev/null; echo $?)"
+
+				case "$ArchiveUrl" in
+					*.zip|*.ZIP)
+						DownloadOutput="/input/$folder/temp/roms.zip"
+						Type=zip
+						;;
+					*.rar|*.RAR)
+						DownloadOutput="/input/$folder/temp/roms.rar"
+						Type=rar
+						;;
+				esac
+
+				axel -q -n $ConcurrentDownloadThreads --output="$DownloadOutput" "$ArchiveUrl"
+				if [ -f "$DownloadOutput" ]; then
+					if [ "$Type" = "zip" ]; then
+						DownloadVerification="$(unzip -t "$DownloadOutput" &>/dev/null; echo $?)"
+					elif [ "$Type" = "rar" ]; then
+						DownloadVerification="$(unrar t "$DownloadOutput" &>/dev/null; echo $?)"
+					fi
 					if [ "$DownloadVerification" = "0" ]; then
 						echo "$ConsoleName :: Download Complete!"
 						echo "$ConsoleName :: Unpacking to /input/$folder"
-						unzip -o -d "/input/$folder" "/input/$folder/temp/roms.zip" >/dev/null
+						if [ "$Type" = "zip" ]; then
+							unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
+						elif [ "$Type" = "rar" ]; then
+							unrar x "$DownloadOutput" "/input/$folder" &>/dev/null
+						fi
 						echo "$ConsoleName :: Done!"
 						if [ ! -d /config/logs/downloaded ]; then
 							mkdir -p /config/logs/downloaded
