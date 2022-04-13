@@ -18,14 +18,6 @@ Process_Roms () {
 		RomFilename="${rom##*/}"
 		RomExtension="${filename##*.}"
 
-		if [ ! -f "/config/ra_hash_libraries/hashes.json" ]; then
-			if [ ! -d /config/ra_hash_libraries ]; then
-				mkdir -p /config/ra_hash_libraries
-			fi
-			echo "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
-			curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary" | jq '.' > "/config/ra_hash_libraries/hashes.json"
-		fi
-
 		echo "$ConsoleName :: $RomFilename :: $Region :: Processing..."
 		RaHash=""
 		case "$rom" in
@@ -51,7 +43,7 @@ Process_Roms () {
 		echo "$ConsoleName :: $RomFilename :: Hash Found :: $RaHash"
 		echo "$ConsoleName :: $RomFilename :: Matching To RetroAchievements.org DB"
 		if cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | read; then
-			GameId=$(cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | cut -d ":" -f 2 | sed "s/\ //g" | sed "s/,//g")
+			GameId=$(cat "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | cut -d ":" -f 2 | sed "s/\ //g" | sed "s/,//g")
 			echo "$ConsoleName :: $RomFilename :: Match Found :: Game ID :: $GameId"
 			Skip="false"
 			if [ "$DeDupe" = "true" ]; then
@@ -363,6 +355,14 @@ for folder in $(ls /input); do
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/NEC - PC Engine - TurboGrafx 16.zip"
 	fi	
 	
+	if [ ! -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
+		if [ ! -d /config/ra_hash_libraries ]; then
+			mkdir -p /config/ra_hash_libraries
+		fi
+		echo "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
+		curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary&c=$ConsoleId" | jq '.' > "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json"
+	fi
+
 	if [ "$AquireRomSets" = "true" ]; then
 		echo "$ConsoleName :: Getting ROMs"
 		if [ ! -z "$ArchiveUrl" ]; then
