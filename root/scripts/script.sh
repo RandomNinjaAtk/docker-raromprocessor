@@ -385,7 +385,28 @@ for folder in $(ls /input); do
 		ConsoleId=52
 		ConsoleName="Sharp X68000"
 		ConsoleDirectory="x68000"
-		ArchiveUrl="https://ia804509.us.archive.org/7/items/hearto-1g1r-collection/hearto_1g1r_collection/Sharp%20-%20X68000.zip"
+		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sharp%20-%20X68000.zip"
+	fi
+
+	if echo "$folder" | grep "^zxspectrum$" | read; then
+		ConsoleId=59
+		ConsoleName="ZX Spectrum"
+		ConsoleDirectory="zxspectrum"
+		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sinclair%20-%20ZX%20Spectrum.zip"
+	fi
+
+	if echo "$folder" | grep "^c64$" | read; then
+		ConsoleId=30
+		ConsoleName="Commodore 64"
+		ConsoleDirectory="c64"
+		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%2064.zip"
+	fi
+
+	if echo "$folder" | grep "^amiga$" | read; then
+		ConsoleId=35
+		ConsoleName="Amiga"
+		ConsoleDirectory="amiga"
+		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%20Amiga.zip"
 	fi
 	
 	if [ ! -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
