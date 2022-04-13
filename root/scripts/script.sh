@@ -437,11 +437,18 @@ for folder in $(ls /input); do
 		ArchiveUrl="https://archive.org/download/perfectromcollection/NEOGEO.rar"
 	fi
 
+	# create hash library folder
+	if [ ! -d /config/ra_hash_libraries ]; then
+		mkdir -p /config/ra_hash_libraries
+	fi
 
+	# delete existing console hash library
+	if [ -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
+		rm "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json"
+	fi
+	
+	# aquire console hash library
 	if [ ! -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
-		if [ ! -d /config/ra_hash_libraries ]; then
-			mkdir -p /config/ra_hash_libraries
-		fi
 		echo "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
 		curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary&c=$ConsoleId" | jq '.' > "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json"
 	fi
