@@ -19,6 +19,7 @@ echo "Created: /input/atarijaguar"
 echo "Created: /input/nds"
 echo "Created: /input/pokemini"
 echo "Created: /input/atari2600"
+echo "Created: /input/atari5200"
 echo "Created: /input/arcade"
 echo "Created: /input/virtualboy"
 echo "Created: /input/sg-1000"
@@ -61,6 +62,7 @@ mkdir -p /input/virtualboy
 mkdir -p /input/sg-1000
 mkdir -p /input/coleco
 mkdir -p /input/atari7800
+mkdir -p /input/atari5200
 mkdir -p /input/wonderswancolor
 mkdir -p /input/intellivision
 mkdir -p /input/vectrex
