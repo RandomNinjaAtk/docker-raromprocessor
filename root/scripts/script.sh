@@ -409,6 +409,27 @@ for folder in $(ls /input); do
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%20Amiga.zip"
 	fi
 	
+	if echo "$folder" | grep "^atarist$" | read; then
+		ConsoleId=36
+		ConsoleName="Atari ST"
+		ConsoleDirectory="atarist"
+		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari%20-%20ST.zip"
+	fi
+
+	if echo "$folder" | grep "^msx2$" | read; then
+		ConsoleId=29
+		ConsoleName="MSX2"
+		ConsoleDirectory="msx2"
+		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Microsoft%20-%20MSX2.zip"
+	fi
+
+	if echo "$folder" | grep "^channelf$" | read; then
+		ConsoleId=57
+		ConsoleName="Fairchild Channel F"
+		ConsoleDirectory="channelf"
+		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Fairchild%20-%20Channel%20F.zip"
+	fi
+	
 	if [ ! -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
 		if [ ! -d /config/ra_hash_libraries ]; then
 			mkdir -p /config/ra_hash_libraries
