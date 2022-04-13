@@ -10,6 +10,7 @@ ENV DeDupe=false
 ENV AquireRomSets=false
 ENV ConcurrentDownloadThreads=1
 ENV ScrapeMetadata=false
+ENV EnableUnsupportedPlatforms=true
 
 RUN \
 	echo "************ install dependencies ************" && \
