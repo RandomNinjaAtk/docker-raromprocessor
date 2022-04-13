@@ -24,60 +24,79 @@ Process_Roms () {
 			*.zip|*.ZIP)
 			    uncompressed_rom="$TMP_DIR/$(unzip -Z1 "$rom" | head -1)"
 			    unzip -o -d "$TMP_DIR" "$rom" >/dev/null
-			    RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$uncompressed_rom") || ret=1
+				if [ "$SkipRahasher" = "false" ]; then
+			    	RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$uncompressed_rom") || ret=1
+				fi
 			    ;;
 			*.7z|*.7Z)
 			    uncompressed_rom="$TMP_DIR/$(7z l -slt "$rom" | sed -n 's/^Path = //p' | sed '2q;d')"
 			    7z e -y -bd -o"$TMP_DIR" "$rom" >/dev/null
-			    RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$uncompressed_rom") || ret=1
+				if [ "$SkipRahasher" = "false" ]; then
+			    	RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$uncompressed_rom") || ret=1
+				fi
 			    ;;
 			*)
-			    RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$rom") || ret=1
+				if [ "$SkipRahasher" = "false" ]; then
+			    	RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$rom") || ret=1
+				fi
 			    ;;
 		    esac
 
 		    if [[ $ret -ne 0 ]]; then
 				rm -f "$uncompressed_rom"
 		    fi
-			
-		echo "$ConsoleName :: $RomFilename :: Hash Found :: $RaHash"
-		echo "$ConsoleName :: $RomFilename :: Matching To RetroAchievements.org DB"
-		if cat "/config/ra_hash_libraries/hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | read; then
-			GameId=$(cat "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | cut -d ":" -f 2 | sed "s/\ //g" | sed "s/,//g")
-			echo "$ConsoleName :: $RomFilename :: Match Found :: Game ID :: $GameId"
-			Skip="false"
-			if [ "$DeDupe" = "true" ]; then
-				if [ -f "/output/$ConsoleDirectory/$RomFilename" ]; then
-					echo "$ConsoleName :: $RomFilename :: Previously Imported, skipping..."
-					Skip="true"
-				elif [ -f "/config/logs/matched_games/$ConsoleDirectory/$GameId" ]; then
-					echo "$ConsoleName :: $RomFilename :: Duplicate Found, skipping..."
-					Skip="true"
-				fi
-			else
-				echo "DeDuping process disabled..."
-			fi
-			if [ "$Skip" = "false" ]; then
-				if [ ! -d /output/$ConsoleDirectory ]; then
-					echo "$ConsoleName :: $RomFilename :: Creating Console Directory \"/output/$ConsoleDirectory\""
-					mkdir -p /output/$ConsoleDirectory
-					chmod 777 /output/$ConsoleDirectory
-				fi
-				if [ ! -f "/output/$ConsoleDirectory/$RomFilename" ]; then
-					echo "$ConsoleName :: $RomFilename :: Copying ROM to \"/output/$ConsoleDirectory\""
-					cp "$rom" "/output/$ConsoleDirectory"/
-				else
-					echo "$ConsoleName :: $RomFilename :: Previously Imported, skipping..."
-				fi
-			fi
-			if [ ! -d "/config/logs/matched_games/$ConsoleDirectory" ]; then 
-				mkdir -p "/config/logs/matched_games/$ConsoleDirectory"
-			fi
-			touch "/config/logs/matched_games/$ConsoleDirectory/$GameId"
-		else
-			echo "$ConsoleName :: $RomFilename :: ERROR :: Not Found on RetroAchievements.org DB"
-		fi	
 		
+		if [ "$SkipRahasher" = "false" ]; then
+			echo "$ConsoleName :: $RomFilename :: Hash Found :: $RaHash"
+			echo "$ConsoleName :: $RomFilename :: Matching To RetroAchievements.org DB"
+			if cat "config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | read; then
+				GameId=$(cat "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | cut -d ":" -f 2 | sed "s/\ //g" | sed "s/,//g")
+				echo "$ConsoleName :: $RomFilename :: Match Found :: Game ID :: $GameId"
+				Skip="false"
+				if [ "$DeDupe" = "true" ]; then
+					if [ -f "/output/$ConsoleDirectory/$RomFilename" ]; then
+						echo "$ConsoleName :: $RomFilename :: Previously Imported, skipping..."
+						Skip="true"
+					elif [ -f "/config/logs/matched_games/$ConsoleDirectory/$GameId" ]; then
+						echo "$ConsoleName :: $RomFilename :: Duplicate Found, skipping..."
+						Skip="true"
+					fi
+				else
+					echo "DeDuping process disabled..."
+				fi
+				if [ "$Skip" = "false" ]; then
+					if [ ! -d /output/$ConsoleDirectory ]; then
+						echo "$ConsoleName :: $RomFilename :: Creating Console Directory \"/output/$ConsoleDirectory\""
+						mkdir -p /output/$ConsoleDirectory
+						chmod 777 /output/$ConsoleDirectory
+					fi
+					if [ ! -f "/output/$ConsoleDirectory/$RomFilename" ]; then
+						echo "$ConsoleName :: $RomFilename :: Copying ROM to \"/output/$ConsoleDirectory\""
+						cp "$rom" "/output/$ConsoleDirectory"/
+					else
+						echo "$ConsoleName :: $RomFilename :: Previously Imported, skipping..."
+					fi
+				fi
+				if [ ! -d "/config/logs/matched_games/$ConsoleDirectory" ]; then 
+					mkdir -p "/config/logs/matched_games/$ConsoleDirectory"
+				fi
+				touch "/config/logs/matched_games/$ConsoleDirectory/$GameId"
+			else
+				echo "$ConsoleName :: $RomFilename :: ERROR :: Not Found on RetroAchievements.org DB"
+			fi
+		else
+			if [ ! -d /output/$ConsoleDirectory ]; then
+				echo "$ConsoleName :: $RomFilename :: Creating Console Directory \"/output/$ConsoleDirectory\""
+				mkdir -p /output/$ConsoleDirectory
+				chmod 777 /output/$ConsoleDirectory
+			fi
+			if [ ! -f "/output/$ConsoleDirectory/$RomFilename" ]; then
+				echo "$ConsoleName :: $RomFilename :: Copying ROM to \"/output/$ConsoleDirectory\""
+				cp "$rom" "/output/$ConsoleDirectory"/
+			else
+				echo "$ConsoleName :: $RomFilename :: Previously Imported, skipping..."
+			fi
+		fi
 		# backup processed ROM to /backup
 		# create backup directories/path that matches input path
 		if [ ! -d "/backup/$(dirname "${Rom:7}")" ]; then
@@ -239,6 +258,13 @@ for folder in $(ls /input); do
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - 2600.zip"
 	fi
 
+	if echo "$folder" | grep "^atari5200$" | read; then
+		ConsoleId=50
+		ConsoleName="Atari 5200"
+		ConsoleDirectory="atari5200"
+		ArchiveUrl="https://ia804509.us.archive.org/7/items/hearto-1g1r-collection/hearto_1g1r_collection/Atari%20-%205200.zip"
+	fi
+
 	if echo "$folder" | grep "^arcade$" | read; then
 		ConsoleId=27
 		ConsoleName="Arcade"
@@ -361,6 +387,18 @@ for folder in $(ls /input); do
 		fi
 		echo "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
 		curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary&c=$ConsoleId" | jq '.' > "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json"
+	fi
+
+	SkipRahasher=false
+	if cat "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | grep -i '"MD5List": \[\]' | read; then
+		echo "$ConsoleName :: Unsupported RA platform detected"
+		if [ "$EnableUnsupportedPlatforms" = "false" ]; then
+			echo "$ConsoleName :: Enable Unsupported RA platforms disalbed :: Skipping... "
+			continue
+		else
+			echo "$ConsoleName :: Begin Processing Unsupported RA platform..."
+			SkipRahasher=true
+		fi
 	fi
 
 	if [ "$AquireRomSets" = "true" ]; then
