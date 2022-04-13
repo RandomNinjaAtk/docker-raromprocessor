@@ -24,6 +24,7 @@ Lastly, ROMs that have no metadata will be removed from the final ```/output``` 
 FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume. This will allow you to verify the end result before deciding to remove the original data used for import/processing.
 
 ## Supported ROM Platforms
+- Amiga (Tested - RA Unsupported Platform)
 - Amstrad CPC (Tested)
 - Apple II
 - Arcade
@@ -32,9 +33,13 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - Atari 7800  (Tested)
 - Atari Jaguar (Tested)
 - Atari Lynx (Tested)
+- Atari ST (Tested - RA Unsupported Platform)
 - ColecoVision (Tested)
+- Commodore 64 (RA Unsupported Platform)
+- Fairchild Channel F (RA Unsupported Platform)
 - Intellivision (Tested)
 - NEC TurboGrafx-16 (Tested - Unsupported by Skyscraper)
+- Neo Geo CD (Tested - RA Unsupported Platform)
 - Nintendo: 64 (Tested)
 - Nintendo: DS
 - Nintendo: GameBoy (Tested)
@@ -52,16 +57,19 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - Sega Master System (Tested)
 - Sega Saturn
 - SG-1000 (Tested)
+- Sharp X68000 (Tested - RA Unsupported Platform)
 - SNK Neo Geo Pocket (Tested)
 - SNK Neo Geo Pocket Color (Tested)
 - Magnavox Odyssey 2 (Tested - Unsupported by Skyscraper)
 - MSX (Tested)
+- MSX2 (RA Unsupported Platform)
 - PC Engine
 - PlayStation
 - PlayStation Portable
 - Vectrex (Tested)
 - WonderSwan (Tested)
 - WonderSwan [Color] (Tested)
+- ZX Spectrum (RA Unsupported Platform)
 
 ## Supported Architectures
 
