@@ -95,6 +95,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e AquireRomSets=false` | true = Enabled :: Enabling this will have the script attempt to pull valid ROM sets from archive.org for processing :: Not all systems supported... |
 | `-e ConcurrentDownloadThreads=5` | Number of concurrent threads to increase download speed... only aplicable if AquireRomSets is enabled (true) |
 | `-e ScrapeMetadata=false` | true = Enabled :: Enabling this will allow the script to process the ROMs with [skyscraper](https://github.com/muldjord/skyscraper) |
+| `-e EnableUnsupportedPlatforms=true` | true = Enabled :: Enabling this will allow the script to import and scrape ROMs for platforms without RA hashes, no deduping/validation is performed |
 | `-e ScreenscraperUsername=Username` | Username for https://screenscraper.fr/ |
 | `-e ScreenscraperPassword=Password` | Password for https://screenscraper.fr/ |
 
@@ -116,6 +117,7 @@ docker create \
   -e AquireRomSets=false \
   -e ConcurrentDownloadThreads=5 \
   -e ScrapeMetadata=false \
+  -e EnableUnsupportedPlatforms=true \
   -e ScreenscraperUsername=Username \
   -e ScreenscraperPassword=Password \
   --restart unless-stopped \
@@ -148,6 +150,7 @@ services:
       - AquireRomSets=false
       - ConcurrentDownloadThreads=5
       - ScrapeMetadata=false
+      - EnableUnsupportedPlatforms=true
       - ScreenscraperUsername=Username
       - ScreenscraperPassword=Password
     restart: unless-stopped
