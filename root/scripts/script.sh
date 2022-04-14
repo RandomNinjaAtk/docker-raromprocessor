@@ -247,6 +247,7 @@ for folder in $(ls /input); do
 		ConsoleId=18
 		ConsoleName="Nintendo DS"
 		ConsoleDirectory="nds"
+		ArchiveUrl="$(curl -s "https://archive.org/download/noIntroNintendoDsDecrypted2020Jan20" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/noIntroNintendoDsDecrypted2020Jan20/|')"
 	fi
 
 	if echo "$folder" | grep "^pokemini" | read; then
@@ -267,7 +268,7 @@ for folder in $(ls /input); do
 		ConsoleId=50
 		ConsoleName="Atari 5200"
 		ConsoleDirectory="atari5200"
-		ArchiveUrl="https://ia804509.us.archive.org/7/items/hearto-1g1r-collection/hearto_1g1r_collection/Atari%20-%205200.zip"
+		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari%20-%205200.zip"
 	fi
 
 	if echo "$folder" | grep "^arcade$" | read; then
@@ -441,7 +442,6 @@ for folder in $(ls /input); do
 		ConsoleDirectory="neogeocd"
 		ArchiveUrl="https://archive.org/download/perfectromcollection/NEOGEO.rar"
 	fi
-
 	
 	if [ "$AquireRomSets" = "true" ]; then
 		echo "$ConsoleName :: Getting ROMs"
@@ -449,64 +449,77 @@ for folder in $(ls /input); do
 			if [ -f /config/logs/downloaded/$folder ]; then
 				echo "$ConsoleName :: ROMs previously downloaded :: Skipping..."
 			else
-				if [ -d /input/$folder/temp ]; then
-					rm -rf /input/$folder/temp
-				fi
-				mkdir -p /input/$folder/temp
+				
 				echo "$ConsoleName :: Downloading ROMs :: Please wait..."
 
 				case "$ArchiveUrl" in
 					*.zip|*.ZIP)
-						DownloadOutput="/input/$folder/temp/roms.zip"
+						DownloadOutput="/input/$folder/temp/rom.zip"
 						Type=zip
 						;;
 					*.rar|*.RAR)
-						DownloadOutput="/input/$folder/temp/roms.rar"
+						DownloadOutput="/input/$folder/temp/rom.rar"
 						Type=rar
 						;;
 				esac
-
-				axel -q -n $ConcurrentDownloadThreads --output="$DownloadOutput" "$ArchiveUrl"
-				if [ -f "$DownloadOutput" ]; then
-					if [ "$Type" = "zip" ]; then
-						DownloadVerification="$(unzip -t "$DownloadOutput" &>/dev/null; echo $?)"
-					elif [ "$Type" = "rar" ]; then
-						DownloadVerification="$(unrar t "$DownloadOutput" &>/dev/null; echo $?)"
+				DlCount="$(echo "$ArchiveUrl" | wc -l)"
+				OLDIFS="$IFS"
+				IFS=$'\n'
+				ArchiveUrls=($(echo "$ArchiveUrl"))
+				IFS="$OLDIFS"
+				for Url in ${!ArchiveUrls[@]}; do
+					currentsubprocessid=$(( $Url + 1 ))
+					
+					DlUrl="${ArchiveUrls[$Url]}"
+					echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Downloading..."
+				
+					if [ -d /input/$folder/temp ]; then
+						rm -rf /input/$folder/temp
 					fi
-					if [ "$DownloadVerification" = "0" ]; then
-						echo "$ConsoleName :: Download Complete!"
-						echo "$ConsoleName :: Unpacking to /input/$folder"
+					mkdir -p /input/$folder/temp
+					axel -q -n $ConcurrentDownloadThreads --output="$DownloadOutput" "$DlUrl"
+				
+					if [ -f "$DownloadOutput" ]; then
 						if [ "$Type" = "zip" ]; then
-							unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
+							DownloadVerification="$(unzip -t "$DownloadOutput" &>/dev/null; echo $?)"
 						elif [ "$Type" = "rar" ]; then
-							unrar x "$DownloadOutput" "/input/$folder" &>/dev/null
+							DownloadVerification="$(unrar t "$DownloadOutput" &>/dev/null; echo $?)"
 						fi
-						echo "$ConsoleName :: Done!"
-						if [ ! -d /config/logs/downloaded ]; then
-							mkdir -p /config/logs/downloaded
-							chown abc:abc /config/logs/downloaded
-						fi
-						if [ ! -f /config/logs/downloaded/$folder ]; then
-							touch /config/logs/downloaded/$folder
-							chown abc:abc /config/logs/downloaded/$folder
-						fi
-						if [ -d /input/$folder/temp ]; then
-							rm -rf /input/$folder/temp
+						if [ "$DownloadVerification" = "0" ]; then
+							echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Download Complete!"
+							echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Unpacking to /input/$folder"
+							if [ "$Type" = "zip" ]; then
+								unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
+							elif [ "$Type" = "rar" ]; then
+								unrar x "$DownloadOutput" "/input/$folder" &>/dev/null
+							fi
+							echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Done!"
+							if [ ! -d /config/logs/downloaded ]; then
+								mkdir -p /config/logs/downloaded
+								chown abc:abc /config/logs/downloaded
+							fi
+							if [ ! -f /config/logs/downloaded/$folder ]; then
+								touch /config/logs/downloaded/$folder
+								chown abc:abc /config/logs/downloaded/$folder
+							fi
+							if [ -d /input/$folder/temp ]; then
+								rm -rf /input/$folder/temp
+							fi
+						else
+							echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Download Failed!"
+							if [ -d /input/$folder/temp ]; then
+								rm -rf /input/$folder/temp
+							fi
+							continue
 						fi
 					else
-						echo "$ConsoleName :: Download Failed!"
+						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Download Failed!"
 						if [ -d /input/$folder/temp ]; then
 							rm -rf /input/$folder/temp
 						fi
 						continue
 					fi
-				else
-					echo "$ConsoleName :: Download Failed!"
-					if [ -d /input/$folder/temp ]; then
-						rm -rf /input/$folder/temp
-					fi
-					continue
-				fi
+				done
 			fi
 		else
 			echo "$ConsoleName :: ERROR :: No Archive.org URL found :: Skipping..."
