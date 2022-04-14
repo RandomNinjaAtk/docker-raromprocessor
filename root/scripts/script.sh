@@ -69,6 +69,7 @@ Process_Roms () {
 						echo "$ConsoleName :: $RomFilename :: Creating Console Directory \"/output/$ConsoleDirectory\""
 						mkdir -p /output/$ConsoleDirectory
 						chmod 777 /output/$ConsoleDirectory
+						chown abc:abc /output/$ConsoleDirectory
 					fi
 					if [ ! -f "/output/$ConsoleDirectory/$RomFilename" ]; then
 						echo "$ConsoleName :: $RomFilename :: Copying ROM to \"/output/$ConsoleDirectory\""
@@ -79,6 +80,7 @@ Process_Roms () {
 				fi
 				if [ ! -d "/config/logs/matched_games/$ConsoleDirectory" ]; then 
 					mkdir -p "/config/logs/matched_games/$ConsoleDirectory"
+					chown abc:abc "/config/logs/matched_games/$ConsoleDirectory"
 				fi
 				touch "/config/logs/matched_games/$ConsoleDirectory/$GameId"
 			else
@@ -89,6 +91,7 @@ Process_Roms () {
 				echo "$ConsoleName :: $RomFilename :: Creating Console Directory \"/output/$ConsoleDirectory\""
 				mkdir -p /output/$ConsoleDirectory
 				chmod 777 /output/$ConsoleDirectory
+				chown abc:abc /output/$ConsoleDirectory
 			fi
 			if [ ! -f "/output/$ConsoleDirectory/$RomFilename" ]; then
 				echo "$ConsoleName :: $RomFilename :: Copying ROM to \"/output/$ConsoleDirectory\""
@@ -103,12 +106,14 @@ Process_Roms () {
 			echo "$ConsoleName :: $RomFilename :: Creating Missing Backup Folder :: /backup/$(dirname "${Rom:7}")"
 			mkdir -p "/backup/$(dirname "${Rom:7}")"
 			chmod 777 "/backup/$(dirname "${Rom:7}")"
+			chown abc:abc "/backup/$(dirname "${Rom:7}")"
 		fi
 		# copy ROM from /input to /backup
 		if [ ! -f "/backup/${Rom:7}" ]; then
 			echo "$ConsoleName :: $RomFilename :: Backing up ROM to: /backup/$(dirname "${Rom:7}")"
 			cp "$Rom" "/backup/${Rom:7}"
 			chmod 666 "/backup/${Rom:7}"
+			chown abc:abc "/backup/${Rom:7}"
 		fi
 		# remove ROM from input
 		echo "$ConsoleName :: $RomFilename :: Removing ROM from /input"
@@ -506,9 +511,11 @@ for folder in $(ls /input); do
 						echo "$ConsoleName :: Done!"
 						if [ ! -d /config/logs/downloaded ]; then
 							mkdir -p /config/logs/downloaded
+							chown abc:abc /config/logs/downloaded
 						fi
 						if [ ! -f /config/logs/downloaded/$folder ]; then
 							touch /config/logs/downloaded/$folder
+							chown abc:abc /config/logs/downloaded/$folder
 						fi
 						if [ -d /input/$folder/temp ]; then
 							rm -rf /input/$folder/temp
@@ -571,5 +578,14 @@ for folder in $(ls /input); do
 		echo "$ConsoleName :: Enable by setting \"ScrapeMetadata=true\""
 	fi
 	
+	# set permissions
+	find /output/$folder -type d -exec chmod 777 {} \;
+	find /output/$folder -type d -exec chown abc:abc 777 {} \;
+	find /output/$folder -type f -exec chmod 666 {} \;
+	find /output/$folder -type f -exec chown abc:abc 666 {} \;
+	find /backup/$folder -type d -exec chmod 777 {} \;
+	find /backup/$folder -type d -exec chown abc:abc 777 {} \;
+	find /backup/$folder -type f -exec chmod 666 {} \;
+	find /backup/$folder -type f -exec chown abc:abc 666 {} \;
 done
 exit $?
