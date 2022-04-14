@@ -247,7 +247,9 @@ for folder in $(ls /input); do
 		ConsoleId=18
 		ConsoleName="Nintendo DS"
 		ConsoleDirectory="nds"
-		ArchiveUrl="$(curl -s "https://archive.org/download/noIntroNintendoDsDecrypted2020Jan20" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/noIntroNintendoDsDecrypted2020Jan20/|')"
+		if [ ! -f /config/logs/downloaded/$folder ]; then
+			ArchiveUrl="$(curl -s "https://archive.org/download/noIntroNintendoDsDecrypted2020Jan20" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/noIntroNintendoDsDecrypted2020Jan20/|')"
+		fi
 	fi
 
 	if echo "$folder" | grep "^pokemini" | read; then
