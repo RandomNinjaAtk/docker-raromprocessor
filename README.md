@@ -35,8 +35,8 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - Atari Lynx (Tested)
 - Atari ST (Tested - RA Unsupported Platform)
 - ColecoVision (Tested)
-- Commodore 64 (RA Unsupported Platform)
-- Fairchild Channel F (RA Unsupported Platform)
+- Commodore 64 (Tested - RA Unsupported Platform)
+- Fairchild Channel F (Tested - RA Unsupported Platform)
 - Intellivision (Tested)
 - NEC TurboGrafx-16 (Tested - Unsupported by Skyscraper)
 - Neo Geo CD (Tested - RA Unsupported Platform)
@@ -62,14 +62,14 @@ FEAR NOT, all ROMs that are processed are backed up to the ```/backup``` volume.
 - SNK Neo Geo Pocket Color (Tested)
 - Magnavox Odyssey 2 (Tested - Unsupported by Skyscraper)
 - MSX (Tested)
-- MSX2 (RA Unsupported Platform)
+- MSX2 (Tested)
 - PC Engine
 - PlayStation
 - PlayStation Portable
 - Vectrex (Tested)
 - WonderSwan (Tested)
 - WonderSwan [Color] (Tested)
-- ZX Spectrum (RA Unsupported Platform)
+- ZX Spectrum (Tested - RA Unsupported Platform)
 
 ## Supported Architectures
 
