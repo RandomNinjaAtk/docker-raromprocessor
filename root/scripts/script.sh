@@ -442,34 +442,7 @@ for folder in $(ls /input); do
 		ArchiveUrl="https://archive.org/download/perfectromcollection/NEOGEO.rar"
 	fi
 
-	# create hash library folder
-	if [ ! -d /config/ra_hash_libraries ]; then
-		mkdir -p /config/ra_hash_libraries
-	fi
-
-	# delete existing console hash library
-	if [ -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
-		rm "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json"
-	fi
 	
-	# aquire console hash library
-	if [ ! -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
-		echo "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
-		curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary&c=$ConsoleId" | jq '.' > "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json"
-	fi
-
-	SkipRahasher=false
-	if cat "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | grep -i '"MD5List": \[\]' | read; then
-		echo "$ConsoleName :: Unsupported RA platform detected"
-		if [ "$EnableUnsupportedPlatforms" = "false" ]; then
-			echo "$ConsoleName :: Enable Unsupported RA platforms disalbed :: Skipping... "
-			continue
-		else
-			echo "$ConsoleName :: Begin Processing Unsupported RA platform..."
-			SkipRahasher=true
-		fi
-	fi
-
 	if [ "$AquireRomSets" = "true" ]; then
 		echo "$ConsoleName :: Getting ROMs"
 		if [ ! -z "$ArchiveUrl" ]; then
@@ -545,6 +518,34 @@ for folder in $(ls /input); do
 	else
 		echo "$ConsoleName :: Checking For ROMS in /input/$folder :: No ROMs found, skipping..."
 		continue
+	fi
+	
+	# create hash library folder
+	if [ ! -d /config/ra_hash_libraries ]; then
+		mkdir -p /config/ra_hash_libraries
+	fi	
+	
+	# delete existing console hash library
+	if [ -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
+		rm "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json"
+	fi
+	
+	# aquire console hash library
+	if [ ! -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
+		echo "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
+		curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary&c=$ConsoleId" | jq '.' > "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json"
+	fi
+
+	SkipRahasher=false
+	if cat "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | grep -i '"MD5List": \[\]' | read; then
+		echo "$ConsoleName :: Unsupported RA platform detected"
+		if [ "$EnableUnsupportedPlatforms" = "false" ]; then
+			echo "$ConsoleName :: Enable Unsupported RA platforms disalbed :: Skipping... "
+			continue
+		else
+			echo "$ConsoleName :: Begin Processing Unsupported RA platform..."
+			SkipRahasher=true
+		fi
 	fi
 
 	Process_Roms USA
