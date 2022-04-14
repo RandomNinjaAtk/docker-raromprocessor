@@ -541,9 +541,9 @@ for folder in $(ls /input); do
 	fi	
 
 	if find /input/$folder -type f | read; then
-		echo "Searching For ROMS in /input/$folder :: $ConsoleName :: ROMs found for processing, processing..."
+		echo "$ConsoleName :: Checking For ROMS in /input/$folder :: ROMs found, processing..."
 	else
-		echo "Searching For ROMS in /input/$folder :: $ConsoleName :: No ROMs found skipping..."
+		echo "$ConsoleName :: Checking For ROMS in /input/$folder :: No ROMs found skipping..."
 		continue
 	fi
 
