@@ -49,7 +49,7 @@ Process_Roms () {
 		if [ "$SkipRahasher" = "false" ]; then
 			echo "$ConsoleName :: $RomFilename :: Hash Found :: $RaHash"
 			echo "$ConsoleName :: $RomFilename :: Matching To RetroAchievements.org DB"
-			if cat "config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | read; then
+			if cat "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | read; then
 				GameId=$(cat "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | cut -d ":" -f 2 | sed "s/\ //g" | sed "s/,//g")
 				echo "$ConsoleName :: $RomFilename :: Match Found :: Game ID :: $GameId"
 				Skip="false"
