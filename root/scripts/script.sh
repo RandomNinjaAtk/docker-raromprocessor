@@ -543,7 +543,7 @@ for folder in $(ls /input); do
 	if find /input/$folder -type f | read; then
 		echo "$ConsoleName :: Checking For ROMS in /input/$folder :: ROMs found, processing..."
 	else
-		echo "$ConsoleName :: Checking For ROMS in /input/$folder :: No ROMs found skipping..."
+		echo "$ConsoleName :: Checking For ROMS in /input/$folder :: No ROMs found, skipping..."
 		continue
 	fi
 
@@ -559,6 +559,12 @@ for folder in $(ls /input); do
 	if [ "$ScrapeMetadata" = "true" ]; then
 		if Skyscraper | grep -w "$folder" | read; then
 			echo "$ConsoleName :: Begin Skyscraper Process..."
+			if find /output/$folder -type f | read; then
+				echo "$ConsoleName :: Checking For ROMS in /ouput/$folder :: ROMs found, processing..."
+			else
+				echo "$ConsoleName :: Checking For ROMS in /output/$folder :: No ROMs found, skipping..."
+				continue
+			fi
 			# Scrape from screenscraper
 			Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets,unpack
 			# Save scraped data to output folder
