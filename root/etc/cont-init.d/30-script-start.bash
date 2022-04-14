@@ -93,6 +93,7 @@ mkdir -p /input/msx2
 mkdir -p /input/channelf
 mkdir -p /input/neogeocd
 chmod 777 /input/*
+chown abc:abc /input/*
 
 if [ "$AutoStart" = "true" ]; then
 	echo "Automatic Start Enabled, starting..."
