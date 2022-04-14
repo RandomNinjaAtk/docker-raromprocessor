@@ -580,12 +580,12 @@ for folder in $(ls /input); do
 	
 	# set permissions
 	find /output/$folder -type d -exec chmod 777 {} \;
-	find /output/$folder -type d -exec chown abc:abc 777 {} \;
+	find /output/$folder -type d -exec chown abc:abc {} \;
 	find /output/$folder -type f -exec chmod 666 {} \;
-	find /output/$folder -type f -exec chown abc:abc 666 {} \;
+	find /output/$folder -type f -exec chown abc:abc {} \;
 	find /backup/$folder -type d -exec chmod 777 {} \;
-	find /backup/$folder -type d -exec chown abc:abc 777 {} \;
+	find /backup/$folder -type d -exec chown abc:abc {} \;
 	find /backup/$folder -type f -exec chmod 666 {} \;
-	find /backup/$folder -type f -exec chown abc:abc 666 {} \;
+	find /backup/$folder -type f -exec chown abc:abc {} \;
 done
 exit $?
