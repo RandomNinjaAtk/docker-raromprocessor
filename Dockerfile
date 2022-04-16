@@ -2,7 +2,7 @@ FROM lsiobase/ubuntu:focal
 LABEL maintainer="RandomNinjaAtk"
 
 ENV TITLE="raromprocessor"
-ENV VERSION="0.0.006"
+ENV VERSION="0.0.007"
 ENV SKYSCRAPER_PATH /usr/local/skysource
 ENV RAHASHER_PATH /usr/local/RALibretro
 ENV ScriptInterval=1h
@@ -28,6 +28,7 @@ RUN \
 		gcc \
 		unrar \
 		axel \
+		mame-tools \
 		mingw-w64 \
 		python3-pip && \
 	echo "************ install python packages ************" && \
