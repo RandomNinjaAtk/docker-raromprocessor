@@ -20,31 +20,36 @@ Process_Roms () {
 
 		echo "$ConsoleName :: $RomFilename :: $Region :: Processing..."
 		RaHash=""
-		case "$rom" in
-			*.zip|*.ZIP)
-			    uncompressed_rom="$TMP_DIR/$(unzip -Z1 "$rom" | head -1)"
-			    unzip -o -d "$TMP_DIR" "$rom" >/dev/null
-				if [ "$SkipRahasher" = "false" ]; then
-			    	RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$uncompressed_rom") || ret=1
-				fi
-			    ;;
-			*.7z|*.7Z)
-			    uncompressed_rom="$TMP_DIR/$(7z l -slt "$rom" | sed -n 's/^Path = //p' | sed '2q;d')"
-			    7z e -y -bd -o"$TMP_DIR" "$rom" >/dev/null
-				if [ "$SkipRahasher" = "false" ]; then
-			    	RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$uncompressed_rom") || ret=1
-				fi
-			    ;;
-			*)
-				if [ "$SkipRahasher" = "false" ]; then
-			    	RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$rom") || ret=1
-				fi
-			    ;;
-		    esac
+		if [ "$SkipUnpackForHash" = "false" ]; then
+			case "$rom" in
+				*.zip|*.ZIP)
+					uncompressed_rom="$TMP_DIR/$(unzip -Z1 "$rom" | head -1)"
+					unzip -o -d "$TMP_DIR" "$rom" >/dev/null
+					if [ "$SkipRahasher" = "false" ]; then
+						RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$uncompressed_rom") || ret=1
+					fi
+					;;
+				*.7z|*.7Z)
+					uncompressed_rom="$TMP_DIR/$(7z l -slt "$rom" | sed -n 's/^Path = //p' | sed '2q;d')"
+					7z e -y -bd -o"$TMP_DIR" "$rom" >/dev/null
+					if [ "$SkipRahasher" = "false" ]; then
+						RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$uncompressed_rom") || ret=1
+					fi
+					;;
+				*)
+					if [ "$SkipRahasher" = "false" ]; then
+						RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$rom") || ret=1
+					fi
+					;;
+			esac
 
 		    if [[ $ret -ne 0 ]]; then
 				rm -f "$uncompressed_rom"
 		    fi
+		else
+			RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$rom")
+		fi
+
 		
 		if [ "$SkipRahasher" = "false" ]; then
 			echo "$ConsoleName :: $RomFilename :: Hash Found :: $RaHash"
@@ -126,6 +131,7 @@ for folder in $(ls /input); do
 	ConsoleId=""
 	ConsoleName=""
 	ArchiveUrl=""
+	SkipUnpackForHash="false"
 	if echo "$folder" | grep "^amstradcpc$" | read; then
 		ConsoleId=37
 		ConsoleName="Amstrad CPC"
@@ -277,6 +283,8 @@ for folder in $(ls /input); do
 		ConsoleId=27
 		ConsoleName="Arcade"
 		ConsoleDirectory="arcade"
+		ArchiveUrl="https://archive.org/download/2020_01_06_fbn/roms/arcade.zip"
+		SkipUnpackForHash="true"
 	fi
 
 	if echo "$folder" | grep "^virtualboy$" | read; then
@@ -582,7 +590,11 @@ for folder in $(ls /input); do
 				continue
 			fi
 			# Scrape from screenscraper
-			Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets,unpack
+			if [ "$SkipUnpackForHash" = "false" ]; then
+				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets,unpack
+			else
+				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets
+			fi
 			# Save scraped data to output folder
 			Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
 			# Remove skipped roms
