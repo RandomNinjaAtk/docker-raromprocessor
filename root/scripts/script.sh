@@ -10,7 +10,10 @@ Process_Roms () {
 	fi
 	find /input/$folder -type f | grep -i "$RegionGrep" | sort | while read LINE;
 	do
-		Rom="$LINE"		
+		Rom="$LINE"
+		if [ -d "/tmp/rom_storage" ]; then
+			rm -rf "/tmp/rom_storage"
+		fi
 		TMP_DIR="/tmp/rom_storage"
 		mkdir -p "$TMP_DIR"
 		rom="$Rom"
@@ -34,6 +37,21 @@ Process_Roms () {
 					7z e -y -bd -o"$TMP_DIR" "$rom" >/dev/null
 					if [ "$SkipRahasher" = "false" ]; then
 						RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$uncompressed_rom") || ret=1
+					fi
+					;;
+				*.chd|*.CHD)
+					if [ "$SkipRahasher" = "false" ]; then
+						if [ "$folder" = "dreamcast" ]; then
+							ExtractedExtension=gdi
+						elif [ "$folder" = "segacd" ]; then
+							ExtractedExtension=gdi
+						else
+							ExtractedExtension=cue
+						fi
+						echo "$ConsoleName :: $RomFilename :: CHD Detected"
+						echo "$ConsoleName :: $RomFilename :: Extracting CHD for Hashing"
+						chdman extractcd -i "$rom" -o "$TMP_DIR/game.$ExtractedExtension"
+						RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$TMP_DIR/game.$ExtractedExtension") || ret=1
 					fi
 					;;
 				*)
@@ -198,7 +216,7 @@ for folder in $(ls /input); do
 		ConsoleId=9
 		ConsoleName="Sega CD"
 		ConsoleDirectory="segacd"
-		#ArchiveUrl="https://archive.org/compress/SEGACD_CHD_PLUS"
+		ArchiveUrl="https://archive.org/compress/SEGACD_CHD_PLUS"
 	fi
 
 	if echo "$folder" | grep "^sega32x$" | read; then
@@ -542,7 +560,7 @@ for folder in $(ls /input); do
 		echo "$ConsoleName :: Checking For ROMS in /input/$folder :: No ROMs found, skipping..."
 		continue
 	fi
-	
+
 	# create hash library folder
 	if [ ! -d /config/ra_hash_libraries ]; then
 		mkdir -p /config/ra_hash_libraries
