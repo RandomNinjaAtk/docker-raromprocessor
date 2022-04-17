@@ -145,11 +145,11 @@ services:
     image: randomninjaatk/raromprocessor 
     container_name: raromprocessor
     volumes:
-      - /path/to/config/files:/config
-      - /path/to/skyscraper_cache:/cache
-      - /path/to/rom_input_folder:/input
-      - /path/to/rom_backup_folder:/backup
-      - /path/to/rom_output_folder:/output
+      - /path/to/config/files:/config:rw
+      - /path/to/skyscraper_cache:/cache:rw
+      - /path/to/rom_input_folder:/input:rw
+      - /path/to/rom_backup_folder:/backup:rw
+      - /path/to/rom_output_folder:/output:rw
     environment:
       - PUID=1000
       - PGID=1000
