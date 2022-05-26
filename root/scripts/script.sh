@@ -216,7 +216,7 @@ for folder in $(ls /input); do
 		ConsoleId=9
 		ConsoleName="Sega CD"
 		ConsoleDirectory="segacd"
-		ArchiveUrl="https://archive.org/compress/SEGACD_CHD_PLUS"
+		# ArchiveUrl="https://archive.org/compress/SEGACD_CHD_PLUS"
 	fi
 
 	if echo "$folder" | grep "^sega32x$" | read; then
