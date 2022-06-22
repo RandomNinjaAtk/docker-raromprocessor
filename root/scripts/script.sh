@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-version="1.0.0.0008"
+version="1.0.0.0009"
 
 Process_Roms () {
 	Region="$1"
@@ -154,7 +154,7 @@ for folder in $(ls /input); do
 		ConsoleId=37
 		ConsoleName="Amstrad CPC"
 		ConsoleDirectory="amstradcpc"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Amstrad - CPC.zip"
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Amstrad%20-%20CPC.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
 	fi
 	
 	if echo "$folder" | grep "^megadrive$" | read; then
