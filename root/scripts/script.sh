@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-version="1.0.0.0004"
+version="1.0.0.0005"
 
 Process_Roms () {
 	Region="$1"
@@ -501,7 +501,7 @@ for folder in $(ls /input); do
 							Type=rar
 							;;
 						*.chd|*.CHD)
-							romFile="$(echo $(basename "$ArchiveUrl") | sed -e "s/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g" | xargs -0 echo -e)"
+							romFile="$(echo $(basename "$DlUrl") | sed -e "s/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g" | xargs -0 echo -e)"
 							DownloadOutput="/input/$folder/temp/$romFile"
 							Type=chd
 							;;
