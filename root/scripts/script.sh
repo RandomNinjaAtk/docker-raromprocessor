@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-version="1.0.0.0009"
+version="1.0.0.0010"
 
 Process_Roms () {
 	Region="$1"
@@ -454,7 +454,8 @@ for folder in $(ls /input); do
 		ConsoleId=35
 		ConsoleName="Amiga"
 		ConsoleDirectory="amiga"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%20Amiga.zip"
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%20Amiga.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		#ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%20Amiga.zip"
 	fi
 	
 	if echo "$folder" | grep "^atarist$" | read; then
@@ -500,11 +501,12 @@ for folder in $(ls /input); do
 				currentsubprocessid=$(( $Url + 1 ))
 				DlUrl="${ArchiveUrls[$Url]}"
 				romFile="$(echo $(basename "$DlUrl") | sed -e "s/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g" | xargs -0 echo -e)"
+				romFile="$(echo $(basename "$romFile"))"
 				romFileNoExt="$(echo "${romFile%.*}")"
 				DownloadOutput="/input/$folder/temp/$romFile"
 					
 				if [ -f "/config/logs/downloaded/$folder/$romFileNoExt" ]; then
-					echo "$ConsoleName :: ROMs previously downloaded :: Skipping..."
+					echo "$ConsoleName :: $romFile :: ROM previously downloaded :: Skipping..."
 					continue
 				fi
 					
@@ -520,7 +522,7 @@ for folder in $(ls /input); do
 						;;
 				esac
 				
-				echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Downloading..."
+				echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: $romFile :: Downloading..."
 			
 				if [ -d /input/$folder/temp ]; then
 					rm -rf /input/$folder/temp
@@ -537,8 +539,8 @@ for folder in $(ls /input); do
 						DownloadVerification="$(chdman verify -i "$DownloadOutput" &>/dev/null; echo $?)"
 					fi
 					if [ "$DownloadVerification" = "0" ]; then
-						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Download Complete!"
-						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Unpacking to /input/$folder"
+						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: $romFile :: Download Complete!"
+						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: $romFile :: Unpacking to /input/$folder"
 						if [ "$Type" = "zip" ]; then
 							unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
 						elif [ "$Type" = "rar" ]; then
@@ -546,7 +548,7 @@ for folder in $(ls /input); do
 						elif [ "$Type" = "chd" ]; then
 							mv "$DownloadOutput" "/input/$folder"
 						fi
-						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Done!"
+						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: $romFile :: Done!"
 						if [ ! -d /config/logs/downloaded ]; then
 							mkdir -p /config/logs/downloaded
 							chown abc:abc /config/logs/downloaded
@@ -566,14 +568,14 @@ for folder in $(ls /input); do
 						chmod 666 "/config/logs/downloaded/$folder/$romFileNoExt"
 						chown abc:abc "/config/logs/downloaded/$folder/$romFileNoExt"
 					else
-						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Download Failed!"
+						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: $romFile :: Download Failed!"
 						if [ -d /input/$folder/temp ]; then
 							rm -rf /input/$folder/temp
 						fi
 						continue
 					fi
 				else
-					echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Download Failed!"
+					echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: $romFile :: Download Failed!"
 					if [ -d /input/$folder/temp ]; then
 						rm -rf /input/$folder/temp
 					fi
