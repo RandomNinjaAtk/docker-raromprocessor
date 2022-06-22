@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-
+version="1.0.0.0001"
 
 Process_Roms () {
 	Region="$1"
@@ -489,6 +489,10 @@ for folder in $(ls /input); do
 						DownloadOutput="/input/$folder/temp/rom.rar"
 						Type=rar
 						;;
+					*.chd|*.CHD)
+						DownloadOutput="/input/$folder/temp/rom.chd"
+						Type=chd
+						;;
 				esac
 				DlCount="$(echo "$ArchiveUrl" | wc -l)"
 				OLDIFS="$IFS"
@@ -512,6 +516,8 @@ for folder in $(ls /input); do
 							DownloadVerification="$(unzip -t "$DownloadOutput" &>/dev/null; echo $?)"
 						elif [ "$Type" = "rar" ]; then
 							DownloadVerification="$(unrar t "$DownloadOutput" &>/dev/null; echo $?)"
+						elif [ "$Type" = "chd" ]; then
+							DownloadVerification="$(chdman verify -i "$DownloadOutput" &>/dev/null; echo $?)"
 						fi
 						if [ "$DownloadVerification" = "0" ]; then
 							echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Download Complete!"
