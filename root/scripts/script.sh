@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-version="1.0.0.0011"
+version="1.0.0.0012"
 
 Process_Roms () {
 	Region="$1"
@@ -508,7 +508,7 @@ for folder in $(ls /input); do
 				DownloadOutput="/input/$folder/temp/$romFile"
 					
 				if [ -f "/config/logs/downloaded/$folder/$romFileNoExt" ]; then
-					echo "$ConsoleName :: $romFile :: ROM previously downloaded :: Skipping..."
+					echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: ROM previously downloaded :: Skipping..."
 					continue
 				fi
 					
@@ -524,7 +524,7 @@ for folder in $(ls /input); do
 						;;
 				esac
 				
-				echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: $romFile :: Downloading..."
+				echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Downloading..."
 			
 				if [ -d /input/$folder/temp ]; then
 					rm -rf /input/$folder/temp
@@ -541,8 +541,8 @@ for folder in $(ls /input); do
 						DownloadVerification="$(chdman verify -i "$DownloadOutput" &>/dev/null; echo $?)"
 					fi
 					if [ "$DownloadVerification" = "0" ]; then
-						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: $romFile :: Download Complete!"
-						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: $romFile :: Unpacking to /input/$folder"
+						echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Download Complete!"
+						echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Unpacking to /input/$folder"
 						if [ "$Type" = "zip" ]; then
 							unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
 						elif [ "$Type" = "rar" ]; then
@@ -550,7 +550,7 @@ for folder in $(ls /input); do
 						elif [ "$Type" = "chd" ]; then
 							mv "$DownloadOutput" "/input/$folder"
 						fi
-						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: $romFile :: Done!"
+						echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Done!"
 						if [ ! -d /config/logs/downloaded ]; then
 							mkdir -p /config/logs/downloaded
 							chown abc:abc /config/logs/downloaded
@@ -570,14 +570,14 @@ for folder in $(ls /input); do
 						chmod 666 "/config/logs/downloaded/$folder/$romFileNoExt"
 						chown abc:abc "/config/logs/downloaded/$folder/$romFileNoExt"
 					else
-						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: $romFile :: Download Failed!"
+						echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Download Failed!"
 						if [ -d /input/$folder/temp ]; then
 							rm -rf /input/$folder/temp
 						fi
 						continue
 					fi
 				else
-					echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: $romFile :: Download Failed!"
+					echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Download Failed!"
 					if [ -d /input/$folder/temp ]; then
 						rm -rf /input/$folder/temp
 					fi
