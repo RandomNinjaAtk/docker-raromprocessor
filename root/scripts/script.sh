@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-version="1.0.0.0003"
+version="1.0.0.0004"
 
 Process_Roms () {
 	Region="$1"
@@ -480,21 +480,7 @@ for folder in $(ls /input); do
 				
 				echo "$ConsoleName :: Downloading ROMs :: Please wait..."
 
-				case "$ArchiveUrl" in
-					*.zip|*.ZIP)
-						DownloadOutput="/input/$folder/temp/rom.zip"
-						Type=zip
-						;;
-					*.rar|*.RAR)
-						DownloadOutput="/input/$folder/temp/rom.rar"
-						Type=rar
-						;;
-					*.chd|*.CHD)
-						romFile="$(echo $(basename "$ArchiveUrl") | sed -e "s/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g" | xargs -0 echo -e)"
-						DownloadOutput="/input/$folder/temp/$romFile"
-						Type=chd
-						;;
-				esac
+				
 				DlCount="$(echo "$ArchiveUrl" | wc -l)"
 				OLDIFS="$IFS"
 				IFS=$'\n'
@@ -504,6 +490,23 @@ for folder in $(ls /input); do
 					currentsubprocessid=$(( $Url + 1 ))
 					
 					DlUrl="${ArchiveUrls[$Url]}"
+					
+					case "$DlUrl" in
+						*.zip|*.ZIP)
+							DownloadOutput="/input/$folder/temp/rom.zip"
+							Type=zip
+							;;
+						*.rar|*.RAR)
+							DownloadOutput="/input/$folder/temp/rom.rar"
+							Type=rar
+							;;
+						*.chd|*.CHD)
+							romFile="$(echo $(basename "$ArchiveUrl") | sed -e "s/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g" | xargs -0 echo -e)"
+							DownloadOutput="/input/$folder/temp/$romFile"
+							Type=chd
+							;;
+					esac
+					
 					echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Downloading..."
 				
 					if [ -d /input/$folder/temp ]; then
