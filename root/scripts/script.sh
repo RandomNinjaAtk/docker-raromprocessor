@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-version="1.0.0.0001"
+version="1.0.0.0002"
 
 Process_Roms () {
 	Region="$1"
@@ -490,7 +490,8 @@ for folder in $(ls /input); do
 						Type=rar
 						;;
 					*.chd|*.CHD)
-						DownloadOutput="/input/$folder/temp/rom.chd"
+						romFile="$(echo $(basename "$ArchiveUrl") | sed -e "s/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g" | xargs -0 echo -e")"
+						DownloadOutput="/input/$folder/temp/$romFile"
 						Type=chd
 						;;
 				esac
@@ -526,6 +527,8 @@ for folder in $(ls /input); do
 								unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
 							elif [ "$Type" = "rar" ]; then
 								unrar x "$DownloadOutput" "/input/$folder" &>/dev/null
+							elif [ "$Type" = "chd" ]; then
+								mv "$DownloadOutput" "/input/$folder"
 							fi
 							echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Done!"
 							if [ ! -d /config/logs/downloaded ]; then
