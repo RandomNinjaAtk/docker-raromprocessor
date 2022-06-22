@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-version="1.0.0.0012"
+version="1.0.0.0013"
 
 Process_Roms () {
 	Region="$1"
@@ -155,6 +155,7 @@ for folder in $(ls /input); do
 		ConsoleName="Amstrad CPC"
 		ConsoleDirectory="amstradcpc"
 		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Amstrad%20-%20CPC.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 	
 	if echo "$folder" | grep "^megadrive$" | read; then
@@ -162,6 +163,7 @@ for folder in $(ls /input); do
 		ConsoleName="Sega Mega Drive"
 		ConsoleDirectory="megadrive"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - Mega Drive - Genesis.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^n64$" | read; then
@@ -169,6 +171,7 @@ for folder in $(ls /input); do
 		ConsoleName="Nintendo 64"
 		ConsoleDirectory="n64"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Nintendo 64.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^snes$" | read; then
@@ -176,6 +179,7 @@ for folder in $(ls /input); do
 		ConsoleName="Super Nintendo Entertainment System"
 		ConsoleDirectory="snes"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Super Nintendo Entertainment System.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^gb$" | read; then
@@ -183,6 +187,7 @@ for folder in $(ls /input); do
 		ConsoleName="GameBoy"
 		ConsoleDirectory="gb"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Game Boy.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^gba$" | read; then
@@ -190,6 +195,7 @@ for folder in $(ls /input); do
 		ConsoleName="GameBoy Advance"
 		ConsoleDirectory="gba"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Game Boy Advance.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^gbc$" | read; then
@@ -197,6 +203,7 @@ for folder in $(ls /input); do
 		ConsoleName="GameBoy Color"
 		ConsoleDirectory="gbc"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Game Boy Color.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^nes$" | read; then
@@ -204,6 +211,7 @@ for folder in $(ls /input); do
 		ConsoleName="Nintendo Entertainment System"
 		ConsoleDirectory="nes"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Nintendo Entertainment System.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^pcengine$" | read; then
@@ -216,9 +224,8 @@ for folder in $(ls /input); do
 		ConsoleId=9
 		ConsoleName="Sega CD"
 		ConsoleDirectory="segacd"
-		if [ ! -f /config/logs/downloaded/$folder ]; then
-			ArchiveUrl="$(curl -s "https://archive.org/download/chd_segacd/CHD-SegaCD-NTSC/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/chd_segacd/CHD-SegaCD-NTSC/|')"
-		fi
+		ArchiveUrl="$(curl -s "https://archive.org/download/chd_segacd/CHD-SegaCD-NTSC/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/chd_segacd/CHD-SegaCD-NTSC/|')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^sega32x$" | read; then
@@ -226,6 +233,7 @@ for folder in $(ls /input); do
 		ConsoleName="Sega 32X"
 		ConsoleDirectory="sega32x"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - 32X.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^mastersystem$" | read; then
@@ -233,15 +241,15 @@ for folder in $(ls /input); do
 		ConsoleName="Sega Master System"
 		ConsoleDirectory="mastersystem"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - Master System - Mark III.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^psx$" | read; then
 		ConsoleId=12
 		ConsoleName="PlayStation"
 		ConsoleDirectory="psx"
-		if [ ! -f /config/logs/downloaded/$folder ]; then
-			ArchiveUrl="$(curl -s "https://archive.org/download/chd_psx/CHD-PSX-USA/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/chd_psx/CHD-PSX-USA/|')"
-		fi
+		ArchiveUrl="$(curl -s "https://archive.org/download/chd_psx/CHD-PSX-USA/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/chd_psx/CHD-PSX-USA/|')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^atarilynx$" | read; then
@@ -249,6 +257,7 @@ for folder in $(ls /input); do
 		ConsoleName="Atari Lynx"
 		ConsoleDirectory="atarilynx"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - Lynx.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^ngpc$" | read; then
@@ -256,6 +265,7 @@ for folder in $(ls /input); do
 		ConsoleName="SNK Neo Geo Pocket Color"
 		ConsoleDirectory="ngpc"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/SNK - Neo Geo Pocket Color.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^gamegear$" | read; then
@@ -263,6 +273,7 @@ for folder in $(ls /input); do
 		ConsoleName="Game Gear"
 		ConsoleDirectory="gamegear"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - Game Gear.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^atarijaguar$" | read; then
@@ -270,15 +281,15 @@ for folder in $(ls /input); do
 		ConsoleName="Atari Jaguar"
 		ConsoleDirectory="atarijaguar"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - Jaguar.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^nds" | read; then
 		ConsoleId=18
 		ConsoleName="Nintendo DS"
 		ConsoleDirectory="nds"
-		if [ ! -f /config/logs/downloaded/$folder ]; then
-			ArchiveUrl="$(curl -s "https://archive.org/download/noIntroNintendoDsDecrypted2020Jan20" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/noIntroNintendoDsDecrypted2020Jan20/|')"
-		fi
+		ArchiveUrl="$(curl -s "https://archive.org/download/noIntroNintendoDsDecrypted2020Jan20" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/noIntroNintendoDsDecrypted2020Jan20/|')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^pokemini" | read; then
@@ -286,6 +297,7 @@ for folder in $(ls /input); do
 		ConsoleName="Pokemon Mini"
 		ConsoleDirectory="pokemini"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Pokemon Mini.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^atari2600$" | read; then
@@ -293,6 +305,7 @@ for folder in $(ls /input); do
 		ConsoleName="Atari 2600"
 		ConsoleDirectory="atari2600"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - 2600.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^atari5200$" | read; then
@@ -300,6 +313,7 @@ for folder in $(ls /input); do
 		ConsoleName="Atari 5200"
 		ConsoleDirectory="atari5200"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari%20-%205200.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^arcade$" | read; then
@@ -308,6 +322,7 @@ for folder in $(ls /input); do
 		ConsoleDirectory="arcade"
 		ArchiveUrl="https://archive.org/download/2020_01_06_fbn/roms/arcade.zip"
 		SkipUnpackForHash="true"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^virtualboy$" | read; then
@@ -315,7 +330,7 @@ for folder in $(ls /input); do
 		ConsoleName="VirtualBoy"
 		ConsoleDirectory="virtualboy"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Virtual Boy.zip"
-
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^sg-1000$" | read; then
@@ -323,6 +338,7 @@ for folder in $(ls /input); do
 		ConsoleName="SG-1000"
 		ConsoleDirectory="sg-1000"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - SG-1000.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^coleco$" | read; then
@@ -330,6 +346,7 @@ for folder in $(ls /input); do
 		ConsoleName="ColecoVision"
 		ConsoleDirectory="coleco"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Coleco - ColecoVision.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^atari7800$" | read; then
@@ -337,6 +354,7 @@ for folder in $(ls /input); do
 		ConsoleName="Atari 7800"
 		ConsoleDirectory="atari7800"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - 7800.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^wonderswan$" | read; then
@@ -344,6 +362,7 @@ for folder in $(ls /input); do
 		ConsoleName="WonderSwan"
 		ConsoleDirectory="wonderswan"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Bandai - WonderSwan.zip"
+		keepCompressed=false
 	fi
 	
 	
@@ -352,6 +371,7 @@ for folder in $(ls /input); do
 		ConsoleName="WonderSwan"
 		ConsoleDirectory="wonderswancolor"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Bandai - WonderSwan Color.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^intellivision$" | read; then
@@ -359,6 +379,7 @@ for folder in $(ls /input); do
 		ConsoleName="Intellivision"
 		ConsoleDirectory="intellivision"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Mattel - Intellivision.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^vectrex$" | read; then
@@ -366,6 +387,7 @@ for folder in $(ls /input); do
 		ConsoleName="Vectrex"
 		ConsoleDirectory="vectrex"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/GCE - Vectrex.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^apple2$" | read; then
@@ -378,27 +400,24 @@ for folder in $(ls /input); do
 		ConsoleId=39
 		ConsoleName="Sega Saturn"
 		ConsoleDirectory="saturn"
-		if [ ! -f /config/logs/downloaded/$folder ]; then
-			ArchiveUrl="$(curl -s "https://archive.org/download/chd_saturn/CHD-Saturn/USA/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/chd_saturn/CHD-Saturn/USA/|')"
-		fi
+		ArchiveUrl="$(curl -s "https://archive.org/download/chd_saturn/CHD-Saturn/USA/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/chd_saturn/CHD-Saturn/USA/|')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^dreamcast$" | read; then
 		ConsoleId=40
 		ConsoleName="Sega Dreamcast"
 		ConsoleDirectory="dreamcast"
-		if [ ! -f /config/logs/downloaded/$folder ]; then
-			ArchiveUrl="$(curl -s "https://archive.org/download/chd_dc/CHD-DC/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/chd_dc/CHD-DC/|')"
-		fi
+		ArchiveUrl="$(curl -s "https://archive.org/download/chd_dc/CHD-DC/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/chd_dc/CHD-DC/|')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^psp$" | read; then
 		ConsoleId=41
 		ConsoleName="PlayStation Portable"
 		ConsoleDirectory="psp"
-		if [ ! -f /config/logs/downloaded/$folder ]; then
-			ArchiveUrl="$(curl -s "https://archive.org/download/PSP_US_Arquivista" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/PSP_US_Arquivista|')"
-		fi
+		ArchiveUrl="$(curl -s "https://archive.org/download/PSP_US_Arquivista" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/PSP_US_Arquivista|')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^msx$" | read; then
@@ -406,6 +425,7 @@ for folder in $(ls /input); do
 		ConsoleName="MSX"
 		ConsoleDirectory="msx"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Microsoft - MSX.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^odyssey2$" | read; then
@@ -413,6 +433,7 @@ for folder in $(ls /input); do
 		ConsoleName="Magnavox Odyssey 2"
 		ConsoleDirectory="odyssey2"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Magnavox - Odyssey2.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^ngp$" | read; then
@@ -420,6 +441,7 @@ for folder in $(ls /input); do
 		ConsoleName="SNK Neo Geo Pocket"
 		ConsoleDirectory="ngp"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/SNK - Neo Geo Pocket.zip"
+		keepCompressed=false
 	fi	
 	
 	if echo "$folder" | grep "^tg16$" | read; then
@@ -427,6 +449,7 @@ for folder in $(ls /input); do
 		ConsoleName="NEC TurboGrafx-16"
 		ConsoleDirectory="tg16"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/NEC - PC Engine - TurboGrafx 16.zip"
+		keepCompressed=false
 	fi
 	
 	if echo "$folder" | grep "^x68000$" | read; then
@@ -434,6 +457,7 @@ for folder in $(ls /input); do
 		ConsoleName="Sharp X68000"
 		ConsoleDirectory="x68000"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sharp%20-%20X68000.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^zxspectrum$" | read; then
@@ -442,6 +466,7 @@ for folder in $(ls /input); do
 		ConsoleDirectory="zxspectrum"
 		#ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sinclair%20-%20ZX%20Spectrum.zip"
 		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sinclair%20-%20ZX%20Spectrum.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^c64$" | read; then
@@ -450,6 +475,7 @@ for folder in $(ls /input); do
 		ConsoleDirectory="c64"
 		#ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%2064.zip"
 		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%2064.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^amiga$" | read; then
@@ -457,6 +483,7 @@ for folder in $(ls /input); do
 		ConsoleName="Amiga"
 		ConsoleDirectory="amiga"
 		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%20Amiga.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 	
 	if echo "$folder" | grep "^atarist$" | read; then
@@ -464,7 +491,7 @@ for folder in $(ls /input); do
 		ConsoleName="Atari ST"
 		ConsoleDirectory="atarist"
 		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari%20-%20ST.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
-		#ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari%20-%20ST.zip"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^msx2$" | read; then
@@ -472,6 +499,7 @@ for folder in $(ls /input); do
 		ConsoleName="MSX2"
 		ConsoleDirectory="msx2"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Microsoft%20-%20MSX2.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^channelf$" | read; then
@@ -479,6 +507,7 @@ for folder in $(ls /input); do
 		ConsoleName="Fairchild Channel F"
 		ConsoleDirectory="channelf"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Fairchild%20-%20Channel%20F.zip"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^neogeocd$" | read; then
@@ -486,6 +515,7 @@ for folder in $(ls /input); do
 		ConsoleName="Neo Geo CD"
 		ConsoleDirectory="neogeocd"
 		ArchiveUrl="https://archive.org/download/perfectromcollection/NEOGEO.rar"
+		keepCompressed=false
 	fi
 	
 	if [ "$AquireRomSets" = "true" ]; then
@@ -544,9 +574,17 @@ for folder in $(ls /input); do
 						echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Download Complete!"
 						echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Unpacking to /input/$folder"
 						if [ "$Type" = "zip" ]; then
-							unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
+							if [ $keepCompressed = false ]; then
+								unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
+							else
+								mv "$DownloadOutput" "/input/$folder"
+							fi
 						elif [ "$Type" = "rar" ]; then
-							unrar x "$DownloadOutput" "/input/$folder" &>/dev/null
+							if [ $keepCompressed = false ]; then
+								unrar x "$DownloadOutput" "/input/$folder" &>/dev/null
+							else
+								mv "$DownloadOutput" "/input/$folder"
+							fi
 						elif [ "$Type" = "chd" ]; then
 							mv "$DownloadOutput" "/input/$folder"
 						fi
