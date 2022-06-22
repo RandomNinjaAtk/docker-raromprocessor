@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-version="1.0.0.0010"
+version="1.0.0.0011"
 
 Process_Roms () {
 	Region="$1"
@@ -440,14 +440,16 @@ for folder in $(ls /input); do
 		ConsoleId=59
 		ConsoleName="ZX Spectrum"
 		ConsoleDirectory="zxspectrum"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sinclair%20-%20ZX%20Spectrum.zip"
+		#ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sinclair%20-%20ZX%20Spectrum.zip"
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sinclair%20-%20ZX%20Spectrum.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
 	fi
 
 	if echo "$folder" | grep "^c64$" | read; then
 		ConsoleId=30
 		ConsoleName="Commodore 64"
 		ConsoleDirectory="c64"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%2064.zip"
+		#ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%2064.zip"
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%2064.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
 	fi
 
 	if echo "$folder" | grep "^amiga$" | read; then
@@ -455,14 +457,14 @@ for folder in $(ls /input); do
 		ConsoleName="Amiga"
 		ConsoleDirectory="amiga"
 		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%20Amiga.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
-		#ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%20Amiga.zip"
 	fi
 	
 	if echo "$folder" | grep "^atarist$" | read; then
 		ConsoleId=36
 		ConsoleName="Atari ST"
 		ConsoleDirectory="atarist"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari%20-%20ST.zip"
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari%20-%20ST.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		#ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari%20-%20ST.zip"
 	fi
 
 	if echo "$folder" | grep "^msx2$" | read; then
