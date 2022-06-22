@@ -216,7 +216,9 @@ for folder in $(ls /input); do
 		ConsoleId=9
 		ConsoleName="Sega CD"
 		ConsoleDirectory="segacd"
-		# ArchiveUrl="https://archive.org/compress/SEGACD_CHD_PLUS"
+		if [ ! -f /config/logs/downloaded/$folder ]; then
+			ArchiveUrl="$(curl -s "https://archive.org/download/chd_segacd/CHD-SegaCD-NTSC/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/chd_segacd/CHD-SegaCD-NTSC/|')"
+		fi
 	fi
 
 	if echo "$folder" | grep "^sega32x$" | read; then
@@ -237,6 +239,9 @@ for folder in $(ls /input); do
 		ConsoleId=12
 		ConsoleName="PlayStation"
 		ConsoleDirectory="psx"
+		if [ ! -f /config/logs/downloaded/$folder ]; then
+			ArchiveUrl="$(curl -s "https://archive.org/download/chd_psx/CHD-PSX-USA/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/chd_psx/CHD-PSX-USA/|')"
+		fi
 	fi
 
 	if echo "$folder" | grep "^atarilynx$" | read; then
@@ -373,18 +378,27 @@ for folder in $(ls /input); do
 		ConsoleId=39
 		ConsoleName="Sega Saturn"
 		ConsoleDirectory="saturn"
+		if [ ! -f /config/logs/downloaded/$folder ]; then
+			ArchiveUrl="$(curl -s "https://archive.org/download/chd_saturn/CHD-Saturn/USA/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/chd_saturn/CHD-Saturn/USA/|')"
+		fi
 	fi
 
 	if echo "$folder" | grep "^dreamcast$" | read; then
 		ConsoleId=40
 		ConsoleName="Sega Dreamcast"
 		ConsoleDirectory="dreamcast"
+		if [ ! -f /config/logs/downloaded/$folder ]; then
+			ArchiveUrl="$(curl -s "https://archive.org/download/chd_dc/CHD-DC/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/chd_dc/CHD-DC/|')"
+		fi
 	fi
 
 	if echo "$folder" | grep "^psp$" | read; then
 		ConsoleId=41
 		ConsoleName="PlayStation Portable"
 		ConsoleDirectory="psp"
+		if [ ! -f /config/logs/downloaded/$folder ]; then
+			ArchiveUrl="$(curl -s "https://archive.org/download/PSP_US_Arquivista" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/PSP_US_Arquivista|')"
+		fi
 	fi
 
 	if echo "$folder" | grep "^msx$" | read; then
