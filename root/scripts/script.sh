@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-version="1.0.0.0005"
+version="1.0.0.0006"
 
 Process_Roms () {
 	Region="$1"
