@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-version="1.0.0.0006"
+version="1.0.0.0007"
 
 Process_Roms () {
 	Region="$1"
@@ -504,19 +504,17 @@ for folder in $(ls /input); do
 					currentsubprocessid=$(( $Url + 1 ))
 					
 					DlUrl="${ArchiveUrls[$Url]}"
+					romFile="$(echo $(basename "$DlUrl") | sed -e "s/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g" | xargs -0 echo -e)"
+					DownloadOutput="/input/$folder/temp/$romFile"
 					
 					case "$DlUrl" in
 						*.zip|*.ZIP)
-							DownloadOutput="/input/$folder/temp/rom.zip"
 							Type=zip
 							;;
 						*.rar|*.RAR)
-							DownloadOutput="/input/$folder/temp/rom.rar"
 							Type=rar
 							;;
 						*.chd|*.CHD)
-							romFile="$(echo $(basename "$DlUrl") | sed -e "s/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g" | xargs -0 echo -e)"
-							DownloadOutput="/input/$folder/temp/$romFile"
 							Type=chd
 							;;
 					esac
