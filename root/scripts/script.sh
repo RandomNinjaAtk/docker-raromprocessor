@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-version="1.0.0.0007"
+version="1.0.0.0008"
 
 Process_Roms () {
 	Region="$1"
@@ -488,82 +488,83 @@ for folder in $(ls /input); do
 	if [ "$AquireRomSets" = "true" ]; then
 		echo "$ConsoleName :: Getting ROMs"
 		if [ ! -z "$ArchiveUrl" ]; then
-			if [ -f /config/logs/downloaded/$folder ]; then
-				echo "$ConsoleName :: ROMs previously downloaded :: Skipping..."
-			else
-				
-				echo "$ConsoleName :: Downloading ROMs :: Please wait..."
-
-				
-				DlCount="$(echo "$ArchiveUrl" | wc -l)"
-				OLDIFS="$IFS"
-				IFS=$'\n'
-				ArchiveUrls=($(echo "$ArchiveUrl"))
-				IFS="$OLDIFS"
-				for Url in ${!ArchiveUrls[@]}; do
-					currentsubprocessid=$(( $Url + 1 ))
+			
+			echo "$ConsoleName :: Downloading ROMs :: Please wait..."
+			
+			DlCount="$(echo "$ArchiveUrl" | wc -l)"
+			OLDIFS="$IFS"
+			IFS=$'\n'
+			ArchiveUrls=($(echo "$ArchiveUrl"))
+			IFS="$OLDIFS"
+			for Url in ${!ArchiveUrls[@]}; do
+				currentsubprocessid=$(( $Url + 1 ))
+				DlUrl="${ArchiveUrls[$Url]}"
+				romFile="$(echo $(basename "$DlUrl") | sed -e "s/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g" | xargs -0 echo -e)"
+				romFileNoExt="$(echo "${romFile%.*}")"
+				DownloadOutput="/input/$folder/temp/$romFile"
 					
-					DlUrl="${ArchiveUrls[$Url]}"
-					romFile="$(echo $(basename "$DlUrl") | sed -e "s/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g" | xargs -0 echo -e)"
-					DownloadOutput="/input/$folder/temp/$romFile"
+				if [ -f "/config/logs/downloaded/$folder/$romFileNoExt" ]; then
+					echo "$ConsoleName :: ROMs previously downloaded :: Skipping..."
+					continue
+				fi
 					
-					case "$DlUrl" in
-						*.zip|*.ZIP)
-							Type=zip
-							;;
-						*.rar|*.RAR)
-							Type=rar
-							;;
-						*.chd|*.CHD)
-							Type=chd
-							;;
-					esac
-					
-					echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Downloading..."
+				case "$DlUrl" in
+					*.zip|*.ZIP)
+						Type=zip
+						;;
+					*.rar|*.RAR)
+						Type=rar
+						;;
+					*.chd|*.CHD)
+						Type=chd
+						;;
+				esac
 				
-					if [ -d /input/$folder/temp ]; then
-						rm -rf /input/$folder/temp
+				echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Downloading..."
+			
+				if [ -d /input/$folder/temp ]; then
+					rm -rf /input/$folder/temp
+				fi
+				mkdir -p /input/$folder/temp
+				axel -q -n $ConcurrentDownloadThreads --output="$DownloadOutput" "$DlUrl"
+			
+				if [ -f "$DownloadOutput" ]; then
+					if [ "$Type" = "zip" ]; then
+						DownloadVerification="$(unzip -t "$DownloadOutput" &>/dev/null; echo $?)"
+					elif [ "$Type" = "rar" ]; then
+						DownloadVerification="$(unrar t "$DownloadOutput" &>/dev/null; echo $?)"
+					elif [ "$Type" = "chd" ]; then
+						DownloadVerification="$(chdman verify -i "$DownloadOutput" &>/dev/null; echo $?)"
 					fi
-					mkdir -p /input/$folder/temp
-					axel -q -n $ConcurrentDownloadThreads --output="$DownloadOutput" "$DlUrl"
-				
-					if [ -f "$DownloadOutput" ]; then
+					if [ "$DownloadVerification" = "0" ]; then
+						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Download Complete!"
+						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Unpacking to /input/$folder"
 						if [ "$Type" = "zip" ]; then
-							DownloadVerification="$(unzip -t "$DownloadOutput" &>/dev/null; echo $?)"
+							unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
 						elif [ "$Type" = "rar" ]; then
-							DownloadVerification="$(unrar t "$DownloadOutput" &>/dev/null; echo $?)"
+							unrar x "$DownloadOutput" "/input/$folder" &>/dev/null
 						elif [ "$Type" = "chd" ]; then
-							DownloadVerification="$(chdman verify -i "$DownloadOutput" &>/dev/null; echo $?)"
+							mv "$DownloadOutput" "/input/$folder"
 						fi
-						if [ "$DownloadVerification" = "0" ]; then
-							echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Download Complete!"
-							echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Unpacking to /input/$folder"
-							if [ "$Type" = "zip" ]; then
-								unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
-							elif [ "$Type" = "rar" ]; then
-								unrar x "$DownloadOutput" "/input/$folder" &>/dev/null
-							elif [ "$Type" = "chd" ]; then
-								mv "$DownloadOutput" "/input/$folder"
-							fi
-							echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Done!"
-							if [ ! -d /config/logs/downloaded ]; then
-								mkdir -p /config/logs/downloaded
-								chown abc:abc /config/logs/downloaded
-							fi
-							if [ ! -f /config/logs/downloaded/$folder ]; then
-								touch /config/logs/downloaded/$folder
-								chown abc:abc /config/logs/downloaded/$folder
-							fi
-							if [ -d /input/$folder/temp ]; then
-								rm -rf /input/$folder/temp
-							fi
-						else
-							echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Download Failed!"
-							if [ -d /input/$folder/temp ]; then
-								rm -rf /input/$folder/temp
-							fi
-							continue
+						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Done!"
+						if [ ! -d /config/logs/downloaded ]; then
+							mkdir -p /config/logs/downloaded
+							chown abc:abc /config/logs/downloaded
 						fi
+						if [ -f /config/logs/downloaded/$folder ]; then
+							rm /config/logs/downloaded/$folder
+						fi
+						if [ ! -d /config/logs/downloaded/$folder ]; then
+							mkdir /config/logs/downloaded/$folder
+							chmod 777 /config/logs/downloaded/$folder
+							chown abc:abc /config/logs/downloaded/$folder
+						fi
+						if [ -d /input/$folder/temp ]; then
+							rm -rf /input/$folder/temp
+						fi
+						touch "/config/logs/downloaded/$folder/$romFileNoExt"
+						chmod 666 "/config/logs/downloaded/$folder/$romFileNoExt"
+						chown abc:abc "/config/logs/downloaded/$folder/$romFileNoExt"
 					else
 						echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Download Failed!"
 						if [ -d /input/$folder/temp ]; then
@@ -571,12 +572,19 @@ for folder in $(ls /input); do
 						fi
 						continue
 					fi
-				done
-			fi
-		else
-			echo "$ConsoleName :: ERROR :: No Archive.org URL found :: Skipping..."
+				else
+					echo "$ConsoleName :: Downloading URL :: $currentsubprocessid of $DlCount :: Download Failed!"
+					if [ -d /input/$folder/temp ]; then
+						rm -rf /input/$folder/temp
+					fi
+					continue
+				fi
+			done
 		fi
-	fi	
+	else
+		echo "$ConsoleName :: ERROR :: No Archive.org URL found :: Skipping..."
+	fi
+
 
 	if find /input/$folder -type f | read; then
 		echo "$ConsoleName :: Checking For ROMS in /input/$folder :: ROMs found, processing..."
