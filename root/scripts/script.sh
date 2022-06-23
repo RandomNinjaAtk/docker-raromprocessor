@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.0.0021"
+version="1.0.0.0022"
 echo "----------------------------------------------------------------"
 echo "           |~) _ ._  _| _ ._ _ |\ |o._  o _ |~|_|_|"
 echo "           |~\(_|| |(_|(_)| | || \||| |_|(_||~| | |<"
@@ -562,11 +562,17 @@ for folder in $(ls /input); do
 				if [ -f "/config/logs/downloaded/$folder/$romFileNoExt" ]; then
 					log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: ROM previously downloaded (/config/logs/downloaded/$folder/$romFileNoExt) :: Skipping..."
 					continue
+				elif [ -f "/input/$folder/temp/$romFile" ]; then
+					log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: ROM previously downloaded (/input/$folder/temp/$romFile) :: Skipping..."
+					continue
 				elif [ -f "/output/$folder/$romFile" ]; then
 					log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: ROM previously downloaded (/output/$folder/$romFile) :: Skipping..."
 					continue
-				fi
-					
+				elif [ -f "/backup/$folder/$romFile" ]; then
+					log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: ROM previously downloaded (/backup/$folder/$romFile) :: Skipping..."
+					continue
+				fi 
+				
 				case "$DlUrl" in
 					*.zip|*.ZIP)
 						Type=zip
