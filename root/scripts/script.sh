@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.0.0019"
+version="1.0.0.0020"
 echo "----------------------------------------------------------------"
 echo "           |~) _ ._  _| _ ._ _ |\ |o._  o _ |~|_|_|"
 echo "           |~\(_|| |(_|(_)| | || \||| |_|(_||~| | |<"
@@ -594,20 +594,24 @@ for folder in $(ls /input); do
 					fi
 					if [ "$DownloadVerification" = "0" ]; then
 						log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Download Complete!"
-						log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Unpacking to /input/$folder"
 						if [ "$Type" = "zip" ]; then
 							if [ $keepCompressed = false ]; then
+								log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Unpacking to /input/$folder"
 								unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
 							else
+								log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
 								mv "$DownloadOutput" "/input/$folder"
 							fi
 						elif [ "$Type" = "rar" ]; then
 							if [ $keepCompressed = false ]; then
+								log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Unpacking to /input/$folder"
 								unrar x "$DownloadOutput" "/input/$folder" &>/dev/null
 							else
+								log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
 								mv "$DownloadOutput" "/input/$folder"
 							fi
 						elif [ "$Type" = "chd" ]; then
+							log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
 							mv "$DownloadOutput" "/input/$folder"
 						fi
 						log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Done!"
