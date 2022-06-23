@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.0.0014"
+version="1.0.0.0015"
 
 Process_Roms () {
 	Region="$1"
@@ -629,47 +629,48 @@ for folder in $(ls /input); do
 
 	if find /input/$folder -type f | read; then
 		echo "$ConsoleName :: Checking For ROMS in /input/$folder :: ROMs found, processing..."
+
+		# create hash library folder
+		if [ ! -d /config/ra_hash_libraries ]; then
+			mkdir -p /config/ra_hash_libraries
+		fi	
+		
+		# delete existing console hash library
+		if [ -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
+			rm "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json"
+		fi
+		
+		# aquire console hash library
+		if [ ! -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
+			echo "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
+			curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary&c=$ConsoleId" | jq '.' > "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json"
+		fi
+
+		SkipRahasher=false
+		if cat "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | grep -i '"MD5List": \[\]' | read; then
+			echo "$ConsoleName :: Unsupported RA platform detected"
+			if [ "$EnableUnsupportedPlatforms" = "false" ]; then
+				echo "$ConsoleName :: Enable Unsupported RA platforms disalbed :: Skipping... "
+				continue
+			else
+				echo "$ConsoleName :: Begin Processing Unsupported RA platform..."
+				SkipRahasher=true
+			fi
+		fi
+
+		Process_Roms USA
+		Process_Roms Europe
+		Process_Roms World
+		Process_Roms Japan
+		Process_Roms Other
+		
+		# remove empty directories
+		find /input/$folder -mindepth 1 -type d -empty -exec rm -rf {} \; &>/dev/null
+
 	else
 		echo "$ConsoleName :: Checking For ROMS in /input/$folder :: No ROMs found, skipping..."
-		continue
 	fi
 
-	# create hash library folder
-	if [ ! -d /config/ra_hash_libraries ]; then
-		mkdir -p /config/ra_hash_libraries
-	fi	
-	
-	# delete existing console hash library
-	if [ -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
-		rm "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json"
-	fi
-	
-	# aquire console hash library
-	if [ ! -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
-		echo "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
-		curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary&c=$ConsoleId" | jq '.' > "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json"
-	fi
-
-	SkipRahasher=false
-	if cat "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | grep -i '"MD5List": \[\]' | read; then
-		echo "$ConsoleName :: Unsupported RA platform detected"
-		if [ "$EnableUnsupportedPlatforms" = "false" ]; then
-			echo "$ConsoleName :: Enable Unsupported RA platforms disalbed :: Skipping... "
-			continue
-		else
-			echo "$ConsoleName :: Begin Processing Unsupported RA platform..."
-			SkipRahasher=true
-		fi
-	fi
-
-	Process_Roms USA
-	Process_Roms Europe
-	Process_Roms World
-	Process_Roms Japan
-	Process_Roms Other
-	
-	# remove empty directories
-	find /input/$folder -mindepth 1 -type d -empty -exec rm -rf {} \; &>/dev/null
 	
 	if [ "$ScrapeMetadata" = "true" ]; then
 		if Skyscraper | grep -w "$folder" | read; then
