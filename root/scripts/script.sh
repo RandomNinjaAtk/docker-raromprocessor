@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.0.0024"
+version="1.0.0.0025"
 echo "----------------------------------------------------------------"
 echo "           |~) _ ._  _| _ ._ _ |\ |o._  o _ |~|_|_|"
 echo "           |~\(_|| |(_|(_)| | || \||| |_|(_||~| | |<"
@@ -714,6 +714,10 @@ for folder in $(ls /input); do
 	if [ "$ScrapeMetadata" = "true" ]; then
 		if Skyscraper | grep -w "$folder" | read; then
 			log "$ConsoleName :: Begin Skyscraper Process..."
+			if [ ! -d /output/$folder ]; then
+				log "$ConsoleName :: Checking For ROMS in /output/$folder :: No ROMs found, skipping..."
+				continue
+			fi
 			if find /output/$folder -type f | read; then
 				log "$ConsoleName :: Checking For ROMS in /ouput/$folder :: ROMs found, processing..."
 			else
