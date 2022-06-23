@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.0.0015"
+version="1.0.0.0016"
 
 Process_Roms () {
 	Region="$1"
@@ -683,9 +683,9 @@ for folder in $(ls /input); do
 			fi
 			# Scrape from screenscraper
 			if [ "$SkipUnpackForHash" = "false" ]; then
-				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets,unpack
+				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper --lang $skyscraperLanguagePreference -i /output/$folder --flags relative,videos,unattend,nobrackets,unpack
 			else
-				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper -i /output/$folder --flags relative,videos,unattend,nobrackets
+				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $folder -d /cache/$folder -s screenscraper --lang $skyscraperLanguagePreference -i /output/$folder --flags relative,videos,unattend,nobrackets
 			fi
 			# Save scraped data to output folder
 			Skyscraper -f emulationstation -p $folder -d /cache/$folder -i /output/$folder --flags relative,videos,unattend,nobrackets
