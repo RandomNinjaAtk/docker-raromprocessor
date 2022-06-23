@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.0.0022"
+version="1.0.0.0023"
 echo "----------------------------------------------------------------"
 echo "           |~) _ ._  _| _ ._ _ |\ |o._  o _ |~|_|_|"
 echo "           |~\(_|| |(_|(_)| | || \||| |_|(_||~| | |<"
@@ -387,8 +387,7 @@ for folder in $(ls /input); do
 		ConsoleDirectory="wonderswan"
 		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Bandai - WonderSwan.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
 		keepCompressed=true
-	fi
-	
+	fi	
 	
 	if echo "$folder" | grep "^wonderswancolor$" | read; then
 		ConsoleId=53
@@ -558,6 +557,10 @@ for folder in $(ls /input); do
 				romFile="$(echo $(basename "$romFile"))"
 				romFileNoExt="$(echo "${romFile%.*}")"
 				DownloadOutput="/input/$folder/temp/$romFile"
+				
+				if [ -d "/input/$folder/temp/" ]; then
+					rm -rf "/input/$folder/temp/"
+				fi				
 												
 				if [ -f "/config/logs/downloaded/$folder/$romFileNoExt" ]; then
 					log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: ROM previously downloaded (/config/logs/downloaded/$folder/$romFileNoExt) :: Skipping..."
