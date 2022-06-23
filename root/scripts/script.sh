@@ -12,7 +12,7 @@ echo "Support: https://discord.gg/JumQXDc"
 echo "----------------------------------------------------------------"
 sleep 5
 echo ""
-echo "Starting in..."; sleep 0.5
+echo "Lift off in..."; sleep 0.5
 echo "5"; sleep 1
 echo "4"; sleep 1
 echo "3"; sleep 1
