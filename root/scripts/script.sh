@@ -1,5 +1,20 @@
 #!/usr/bin/env bash
-version="1.0.0.0017"
+version="1.0.0.0018"
+echo "----------------------------------------------------------------"
+echo "           |~) _ ._  _| _ ._ _ |\ |o._  o _ |~|_|_|"
+echo "           |~\(_|| |(_|(_)| | || \||| |_|(_||~| | |<"
+echo "            Presenets: RA ROM Processor ($version)"
+echo "                May the cheevos be with you!"
+echo "----------------------------------------------------------------"
+echo "Donate: https://github.com/sponsors/RandomNinjaAtk"
+echo "Project: https://github.com/RandomNinjaAtk/docker-raromprocessor"
+echo "Support: https://discord.gg/JumQXDc"
+echo "----------------------------------------------------------------"
+
+log () {
+    m_time=`date "+%F %T"`
+    echo $m_time" :: "$1
+}
 
 Process_Roms () {
 	Region="$1"
@@ -21,7 +36,7 @@ Process_Roms () {
 		RomFilename="${rom##*/}"
 		RomExtension="${filename##*.}"
 
-		echo "$ConsoleName :: $RomFilename :: $Region :: Processing..."
+		log "$ConsoleName :: $RomFilename :: $Region :: Processing..."
 		RaHash=""
 		if [ "$SkipUnpackForHash" = "false" ]; then
 			case "$rom" in
@@ -48,8 +63,8 @@ Process_Roms () {
 						else
 							ExtractedExtension=cue
 						fi
-						echo "$ConsoleName :: $RomFilename :: CHD Detected"
-						echo "$ConsoleName :: $RomFilename :: Extracting CHD for Hashing"
+						log "$ConsoleName :: $RomFilename :: CHD Detected"
+						log "$ConsoleName :: $RomFilename :: Extracting CHD for Hashing"
 						chdman extractcd -i "$rom" -o "$TMP_DIR/game.$ExtractedExtension"
 						RaHash=$(/usr/local/RALibretro/bin64/RAHasher $ConsoleId "$TMP_DIR/game.$ExtractedExtension") || ret=1
 					fi
@@ -70,35 +85,35 @@ Process_Roms () {
 
 		
 		if [ "$SkipRahasher" = "false" ]; then
-			echo "$ConsoleName :: $RomFilename :: Hash Found :: $RaHash"
-			echo "$ConsoleName :: $RomFilename :: Matching To RetroAchievements.org DB"
+			log "$ConsoleName :: $RomFilename :: Hash Found :: $RaHash"
+			log "$ConsoleName :: $RomFilename :: Matching To RetroAchievements.org DB"
 			if cat "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | read; then
 				GameId=$(cat "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | jq -r .[] | grep -i "\"$RaHash\"" | cut -d ":" -f 2 | sed "s/\ //g" | sed "s/,//g")
-				echo "$ConsoleName :: $RomFilename :: Match Found :: Game ID :: $GameId"
+				log "$ConsoleName :: $RomFilename :: Match Found :: Game ID :: $GameId"
 				Skip="false"
 				if [ "$DeDupe" = "true" ]; then
 					if [ -f "/output/$ConsoleDirectory/$RomFilename" ]; then
-						echo "$ConsoleName :: $RomFilename :: Previously Imported, skipping..."
+						log "$ConsoleName :: $RomFilename :: Previously Imported, skipping..."
 						Skip="true"
 					elif [ -f "/config/logs/matched_games/$ConsoleDirectory/$GameId" ]; then
-						echo "$ConsoleName :: $RomFilename :: Duplicate Found, skipping..."
+						log "$ConsoleName :: $RomFilename :: Duplicate Found, skipping..."
 						Skip="true"
 					fi
 				else
-					echo "DeDuping process disabled..."
+					log "$ConsoleName :: DeDuping process disabled..."
 				fi
 				if [ "$Skip" = "false" ]; then
 					if [ ! -d /output/$ConsoleDirectory ]; then
-						echo "$ConsoleName :: $RomFilename :: Creating Console Directory \"/output/$ConsoleDirectory\""
+						log "$ConsoleName :: $RomFilename :: Creating Console Directory \"/output/$ConsoleDirectory\""
 						mkdir -p /output/$ConsoleDirectory
 						chmod 777 /output/$ConsoleDirectory
 						chown abc:abc /output/$ConsoleDirectory
 					fi
 					if [ ! -f "/output/$ConsoleDirectory/$RomFilename" ]; then
-						echo "$ConsoleName :: $RomFilename :: Copying ROM to \"/output/$ConsoleDirectory\""
+						log "$ConsoleName :: $RomFilename :: Copying ROM to \"/output/$ConsoleDirectory\""
 						cp "$rom" "/output/$ConsoleDirectory"/
 					else
-						echo "$ConsoleName :: $RomFilename :: Previously Imported, skipping..."
+						log "$ConsoleName :: $RomFilename :: Previously Imported, skipping..."
 					fi
 				fi
 				if [ ! -d "/config/logs/matched_games/$ConsoleDirectory" ]; then 
@@ -107,39 +122,39 @@ Process_Roms () {
 				fi
 				touch "/config/logs/matched_games/$ConsoleDirectory/$GameId"
 			else
-				echo "$ConsoleName :: $RomFilename :: ERROR :: Not Found on RetroAchievements.org DB"
+				log "$ConsoleName :: $RomFilename :: ERROR :: Not Found on RetroAchievements.org DB"
 			fi
 		else
 			if [ ! -d /output/$ConsoleDirectory ]; then
-				echo "$ConsoleName :: $RomFilename :: Creating Console Directory \"/output/$ConsoleDirectory\""
+				log "$ConsoleName :: $RomFilename :: Creating Console Directory \"/output/$ConsoleDirectory\""
 				mkdir -p /output/$ConsoleDirectory
 				chmod 777 /output/$ConsoleDirectory
 				chown abc:abc /output/$ConsoleDirectory
 			fi
 			if [ ! -f "/output/$ConsoleDirectory/$RomFilename" ]; then
-				echo "$ConsoleName :: $RomFilename :: Copying ROM to \"/output/$ConsoleDirectory\""
+				log "$ConsoleName :: $RomFilename :: Copying ROM to \"/output/$ConsoleDirectory\""
 				cp "$rom" "/output/$ConsoleDirectory"/
 			else
-				echo "$ConsoleName :: $RomFilename :: Previously Imported, skipping..."
+				log "$ConsoleName :: $RomFilename :: Previously Imported, skipping..."
 			fi
 		fi
 		# backup processed ROM to /backup
 		# create backup directories/path that matches input path
 		if [ ! -d "/backup/$(dirname "${Rom:7}")" ]; then
-			echo "$ConsoleName :: $RomFilename :: Creating Missing Backup Folder :: /backup/$(dirname "${Rom:7}")"
+			log "$ConsoleName :: $RomFilename :: Creating Missing Backup Folder :: /backup/$(dirname "${Rom:7}")"
 			mkdir -p "/backup/$(dirname "${Rom:7}")"
 			chmod 777 "/backup/$(dirname "${Rom:7}")"
 			chown abc:abc "/backup/$(dirname "${Rom:7}")"
 		fi
 		# copy ROM from /input to /backup
 		if [ ! -f "/backup/${Rom:7}" ]; then
-			echo "$ConsoleName :: $RomFilename :: Backing up ROM to: /backup/$(dirname "${Rom:7}")"
+			log "$ConsoleName :: $RomFilename :: Backing up ROM to: /backup/$(dirname "${Rom:7}")"
 			cp "$Rom" "/backup/${Rom:7}"
 			chmod 666 "/backup/${Rom:7}"
 			chown abc:abc "/backup/${Rom:7}"
 		fi
 		# remove ROM from input
-		echo "$ConsoleName :: $RomFilename :: Removing ROM from /input"
+		log "$ConsoleName :: $RomFilename :: Removing ROM from /input"
 		rm "$Rom"
 		
 	done
@@ -518,10 +533,10 @@ for folder in $(ls /input); do
 	fi
 	
 	if [ "$AquireRomSets" = "true" ]; then
-		echo "$ConsoleName :: Getting ROMs"
+		log "$ConsoleName :: Getting ROMs"
 		if [ ! -z "$ArchiveUrl" ]; then
 			
-			echo "$ConsoleName :: Downloading ROMs :: Please wait..."
+			log "$ConsoleName :: Downloading ROMs :: Please wait..."
 			
 			DlCount="$(echo "$ArchiveUrl" | wc -l)"
 			OLDIFS="$IFS"
@@ -537,7 +552,7 @@ for folder in $(ls /input); do
 				DownloadOutput="/input/$folder/temp/$romFile"
 					
 				if [ -f "/config/logs/downloaded/$folder/$romFileNoExt" ]; then
-					echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: ROM previously downloaded :: Skipping..."
+					log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: ROM previously downloaded :: Skipping..."
 					continue
 				fi
 					
@@ -553,7 +568,7 @@ for folder in $(ls /input); do
 						;;
 				esac
 				
-				echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Downloading..."
+				log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Downloading..."
 			
 				if [ -d /input/$folder/temp ]; then
 					rm -rf /input/$folder/temp
@@ -570,8 +585,8 @@ for folder in $(ls /input); do
 						DownloadVerification="$(chdman verify -i "$DownloadOutput" &>/dev/null; echo $?)"
 					fi
 					if [ "$DownloadVerification" = "0" ]; then
-						echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Download Complete!"
-						echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Unpacking to /input/$folder"
+						log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Download Complete!"
+						log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Unpacking to /input/$folder"
 						if [ "$Type" = "zip" ]; then
 							if [ $keepCompressed = false ]; then
 								unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
@@ -587,7 +602,7 @@ for folder in $(ls /input); do
 						elif [ "$Type" = "chd" ]; then
 							mv "$DownloadOutput" "/input/$folder"
 						fi
-						echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Done!"
+						log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Done!"
 						if [ ! -d /config/logs/downloaded ]; then
 							mkdir -p /config/logs/downloaded
 							chown abc:abc /config/logs/downloaded
@@ -607,14 +622,14 @@ for folder in $(ls /input); do
 						chmod 666 "/config/logs/downloaded/$folder/$romFileNoExt"
 						chown abc:abc "/config/logs/downloaded/$folder/$romFileNoExt"
 					else
-						echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Download Failed!"
+						log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Download Failed!"
 						if [ -d /input/$folder/temp ]; then
 							rm -rf /input/$folder/temp
 						fi
 						continue
 					fi
 				else
-					echo "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Download Failed!"
+					log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Download Failed!"
 					if [ -d /input/$folder/temp ]; then
 						rm -rf /input/$folder/temp
 					fi
@@ -623,12 +638,12 @@ for folder in $(ls /input); do
 			done
 		fi
 	else
-		echo "$ConsoleName :: ERROR :: No Archive.org URL found :: Skipping..."
+		log "$ConsoleName :: ERROR :: No Archive.org URL found :: Skipping..."
 	fi
 
 
 	if find /input/$folder -type f | read; then
-		echo "$ConsoleName :: Checking For ROMS in /input/$folder :: ROMs found, processing..."
+		log "$ConsoleName :: Checking For ROMS in /input/$folder :: ROMs found, processing..."
 
 		# create hash library folder
 		if [ ! -d /config/ra_hash_libraries ]; then
@@ -642,18 +657,18 @@ for folder in $(ls /input); do
 		
 		# aquire console hash library
 		if [ ! -f "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" ]; then
-			echo "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
+			log "$ConsoleName :: Getting the console hash library from RetroAchievements.org..."
 			curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary&c=$ConsoleId" | jq '.' > "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json"
 		fi
 
 		SkipRahasher=false
 		if cat "/config/ra_hash_libraries/${ConsoleDirectory}_hashes.json" | grep -i '"MD5List": \[\]' | read; then
-			echo "$ConsoleName :: Unsupported RA platform detected"
+			log "$ConsoleName :: Unsupported RA platform detected"
 			if [ "$EnableUnsupportedPlatforms" = "false" ]; then
-				echo "$ConsoleName :: Enable Unsupported RA platforms disalbed :: Skipping... "
+				log "$ConsoleName :: Enable Unsupported RA platforms disalbed :: Skipping... "
 				continue
 			else
-				echo "$ConsoleName :: Begin Processing Unsupported RA platform..."
+				log "$ConsoleName :: Begin Processing Unsupported RA platform..."
 				SkipRahasher=true
 			fi
 		fi
@@ -668,17 +683,17 @@ for folder in $(ls /input); do
 		find /input/$folder -mindepth 1 -type d -empty -exec rm -rf {} \; &>/dev/null
 
 	else
-		echo "$ConsoleName :: Checking For ROMS in /input/$folder :: No ROMs found, skipping..."
+		log "$ConsoleName :: Checking For ROMS in /input/$folder :: No ROMs found, skipping..."
 	fi
 
 	
 	if [ "$ScrapeMetadata" = "true" ]; then
 		if Skyscraper | grep -w "$folder" | read; then
-			echo "$ConsoleName :: Begin Skyscraper Process..."
+			log "$ConsoleName :: Begin Skyscraper Process..."
 			if find /output/$folder -type f | read; then
-				echo "$ConsoleName :: Checking For ROMS in /ouput/$folder :: ROMs found, processing..."
+				log "$ConsoleName :: Checking For ROMS in /ouput/$folder :: ROMs found, processing..."
 			else
-				echo "$ConsoleName :: Checking For ROMS in /output/$folder :: No ROMs found, skipping..."
+				log "$ConsoleName :: Checking For ROMS in /output/$folder :: No ROMs found, skipping..."
 				continue
 			fi
 			# Scrape from screenscraper
@@ -697,11 +712,11 @@ for folder in $(ls /input); do
 				done
 			fi
 		else 
-			echo "$ConsoleName :: Metadata Scraping :: ERROR :: Platform not supported, skipping..."
+			log "$ConsoleName :: Metadata Scraping :: ERROR :: Platform not supported, skipping..."
 		fi 
 	else
-		echo "$ConsoleName :: Metadata Scraping disabled..."
-		echo "$ConsoleName :: Enable by setting \"ScrapeMetadata=true\""
+		log "$ConsoleName :: Metadata Scraping disabled..."
+		log "$ConsoleName :: Enable by setting \"ScrapeMetadata=true\""
 	fi
 	
 	# set permissions
