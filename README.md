@@ -105,6 +105,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e ConcurrentDownloadThreads=5` | Number of concurrent threads to increase download speed... only aplicable if AquireRomSets is enabled (true) |
 | `-e EnableUnsupportedPlatforms=true` | true = Enabled :: Enabling this will allow the script to import and scrape ROMs for platforms without RA hashes, no deduping/validation is performed |
 | `-e ScrapeMetadata=false` | true = Enabled :: Enabling this will allow the script to process the ROMs with [skyscraper](https://github.com/muldjord/skyscraper) |
+| `-e skyscraperLanguagePreference=en` | Set to preferred language for Metadata, for more info visit: [skyscraper](https://github.com/muldjord/skyscraper/blob/master/docs/LANGUAGES.md#default-language-prioritization) |
 | `-e ScreenscraperUsername=Username` | Username for https://screenscraper.fr/ |
 | `-e ScreenscraperPassword=Password` | Password for https://screenscraper.fr/ |
 
@@ -129,6 +130,7 @@ docker create \
   -e ScrapeMetadata=false \
   -e ScreenscraperUsername=Username \
   -e ScreenscraperPassword=Password \
+  -e skyscraperLanguagePreference=en \
   --restart unless-stopped \
   randomninjaatk/raromprocessor 
 ```
@@ -162,6 +164,7 @@ services:
       - ScrapeMetadata=false
       - ScreenscraperUsername=Username
       - ScreenscraperPassword=Password
+      - skyscraperLanguagePreference=en
     restart: unless-stopped
 ```
  
