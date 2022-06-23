@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.0.0016"
+version="1.0.0.0017"
 
 Process_Roms () {
 	Region="$1"
@@ -8,7 +8,7 @@ Process_Roms () {
 	if [ "$Region" = "Other" ]; then
 		RegionGrep="."
 	fi
-	find /input/$folder -type f | grep -i "$RegionGrep" | sort | while read LINE;
+	find /input/$folder -type f | grep -i "$RegionGrep" | sort -r | while read LINE;
 	do
 		Rom="$LINE"
 		if [ -d "/tmp/rom_storage" ]; then
