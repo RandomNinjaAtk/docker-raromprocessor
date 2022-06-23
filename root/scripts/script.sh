@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.0.0018"
+version="1.0.0.0019"
 echo "----------------------------------------------------------------"
 echo "           |~) _ ._  _| _ ._ _ |\ |o._  o _ |~|_|_|"
 echo "           |~\(_|| |(_|(_)| | || \||| |_|(_||~| | |<"
@@ -10,6 +10,14 @@ echo "Donate: https://github.com/sponsors/RandomNinjaAtk"
 echo "Project: https://github.com/RandomNinjaAtk/docker-raromprocessor"
 echo "Support: https://discord.gg/JumQXDc"
 echo "----------------------------------------------------------------"
+sleep 5
+echo ""
+echo "Starting in..."; sleep 0.5
+echo "5"; sleep 1
+echo "4"; sleep 1
+echo "3"; sleep 1
+echo "2"; sleep 1
+echo "1"; sleep 1
 
 log () {
     m_time=`date "+%F %T"`
