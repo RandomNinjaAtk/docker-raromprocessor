@@ -1,5 +1,5 @@
-#!/usr/bin/with-contenv bash
-version="1.0.0.0013"
+#!/usr/bin/env bash
+version="1.0.0.0014"
 
 Process_Roms () {
 	Region="$1"
@@ -162,56 +162,56 @@ for folder in $(ls /input); do
 		ConsoleId=1
 		ConsoleName="Sega Mega Drive"
 		ConsoleDirectory="megadrive"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - Mega Drive - Genesis.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - Mega Drive - Genesis.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^n64$" | read; then
 		ConsoleId=2
 		ConsoleName="Nintendo 64"
 		ConsoleDirectory="n64"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Nintendo 64.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Nintendo 64.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^snes$" | read; then
 		ConsoleId=3
 		ConsoleName="Super Nintendo Entertainment System"
 		ConsoleDirectory="snes"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Super Nintendo Entertainment System.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Super Nintendo Entertainment System.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^gb$" | read; then
 		ConsoleId=4
 		ConsoleName="GameBoy"
 		ConsoleDirectory="gb"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Game Boy.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Game Boy.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^gba$" | read; then
 		ConsoleId=5
 		ConsoleName="GameBoy Advance"
 		ConsoleDirectory="gba"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Game Boy Advance.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Game Boy Advance.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^gbc$" | read; then
 		ConsoleId=6
 		ConsoleName="GameBoy Color"
 		ConsoleDirectory="gbc"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Game Boy Color.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Game Boy Color.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^nes$" | read; then
 		ConsoleId=7
 		ConsoleName="Nintendo Entertainment System"
 		ConsoleDirectory="nes"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Nintendo Entertainment System.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Nintendo Entertainment System.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^pcengine$" | read; then
@@ -232,16 +232,16 @@ for folder in $(ls /input); do
 		ConsoleId=10
 		ConsoleName="Sega 32X"
 		ConsoleDirectory="sega32x"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - 32X.zip"
-		keepCompressed=false
+		rchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - 32X.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^mastersystem$" | read; then
 		ConsoleId=11
 		ConsoleName="Sega Master System"
 		ConsoleDirectory="mastersystem"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - Master System - Mark III.zip"
-		keepCompressed=false
+		rchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - Master System - Mark III.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^psx$" | read; then
@@ -256,32 +256,32 @@ for folder in $(ls /input); do
 		ConsoleId=13
 		ConsoleName="Atari Lynx"
 		ConsoleDirectory="atarilynx"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - Lynx.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - Lynx.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^ngpc$" | read; then
 		ConsoleId=14
 		ConsoleName="SNK Neo Geo Pocket Color"
 		ConsoleDirectory="ngpc"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/SNK - Neo Geo Pocket Color.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/SNK - Neo Geo Pocket Color.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^gamegear$" | read; then
 		ConsoleId=15
 		ConsoleName="Game Gear"
 		ConsoleDirectory="gamegear"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - Game Gear.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - Game Gear.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^atarijaguar$" | read; then
 		ConsoleId=17
 		ConsoleName="Atari Jaguar"
 		ConsoleDirectory="atarijaguar"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - Jaguar.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - Jaguar.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^nds" | read; then
@@ -296,73 +296,74 @@ for folder in $(ls /input); do
 		ConsoleId=24
 		ConsoleName="Pokemon Mini"
 		ConsoleDirectory="pokemini"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Pokemon Mini.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Pokemon Mini.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^atari2600$" | read; then
 		ConsoleId=25
 		ConsoleName="Atari 2600"
 		ConsoleDirectory="atari2600"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - 2600.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - 2600.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^atari5200$" | read; then
 		ConsoleId=50
 		ConsoleName="Atari 5200"
 		ConsoleDirectory="atari5200"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari%20-%205200.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari%20-%205200.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^arcade$" | read; then
 		ConsoleId=27
 		ConsoleName="Arcade"
 		ConsoleDirectory="arcade"
-		ArchiveUrl="https://archive.org/download/2020_01_06_fbn/roms/arcade.zip"
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/2020_01_06_fbn/roms/arcade.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
 		SkipUnpackForHash="true"
-		keepCompressed=false
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^virtualboy$" | read; then
 		ConsoleId=28
 		ConsoleName="VirtualBoy"
 		ConsoleDirectory="virtualboy"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Virtual Boy.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Virtual Boy.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^sg-1000$" | read; then
 		ConsoleId=33
 		ConsoleName="SG-1000"
 		ConsoleDirectory="sg-1000"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - SG-1000.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - SG-1000.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^coleco$" | read; then
 		ConsoleId=44
 		ConsoleName="ColecoVision"
 		ConsoleDirectory="coleco"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Coleco - ColecoVision.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Coleco - ColecoVision.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^atari7800$" | read; then
 		ConsoleId=51
 		ConsoleName="Atari 7800"
 		ConsoleDirectory="atari7800"
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - Jaguar.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
 		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - 7800.zip"
-		keepCompressed=false
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^wonderswan$" | read; then
 		ConsoleId=53
 		ConsoleName="WonderSwan"
 		ConsoleDirectory="wonderswan"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Bandai - WonderSwan.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Bandai - WonderSwan.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 	
 	
@@ -370,24 +371,24 @@ for folder in $(ls /input); do
 		ConsoleId=53
 		ConsoleName="WonderSwan"
 		ConsoleDirectory="wonderswancolor"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Bandai - WonderSwan Color.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Bandai - WonderSwan Color.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^intellivision$" | read; then
 		ConsoleId=45
 		ConsoleName="Intellivision"
 		ConsoleDirectory="intellivision"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Mattel - Intellivision.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Mattel - Intellivision.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^vectrex$" | read; then
 		ConsoleId=46
 		ConsoleName="Vectrex"
 		ConsoleDirectory="vectrex"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/GCE - Vectrex.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/GCE - Vectrex.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^apple2$" | read; then
@@ -424,47 +425,46 @@ for folder in $(ls /input); do
 		ConsoleId=29
 		ConsoleName="MSX"
 		ConsoleDirectory="msx"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Microsoft - MSX.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Microsoft - MSX.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^odyssey2$" | read; then
 		ConsoleId=23
 		ConsoleName="Magnavox Odyssey 2"
 		ConsoleDirectory="odyssey2"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Magnavox - Odyssey2.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Magnavox - Odyssey2.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^ngp$" | read; then
 		ConsoleId=14
 		ConsoleName="SNK Neo Geo Pocket"
 		ConsoleDirectory="ngp"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/SNK - Neo Geo Pocket.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/SNK - Neo Geo Pocket.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi	
 	
 	if echo "$folder" | grep "^tg16$" | read; then
 		ConsoleId=8
 		ConsoleName="NEC TurboGrafx-16"
 		ConsoleDirectory="tg16"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/NEC - PC Engine - TurboGrafx 16.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/NEC - PC Engine - TurboGrafx 16.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 	
 	if echo "$folder" | grep "^x68000$" | read; then
 		ConsoleId=52
 		ConsoleName="Sharp X68000"
 		ConsoleDirectory="x68000"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sharp%20-%20X68000.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sharp%20-%20X68000.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^zxspectrum$" | read; then
 		ConsoleId=59
 		ConsoleName="ZX Spectrum"
 		ConsoleDirectory="zxspectrum"
-		#ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sinclair%20-%20ZX%20Spectrum.zip"
 		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sinclair%20-%20ZX%20Spectrum.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
 		keepCompressed=true
 	fi
@@ -473,7 +473,6 @@ for folder in $(ls /input); do
 		ConsoleId=30
 		ConsoleName="Commodore 64"
 		ConsoleDirectory="c64"
-		#ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%2064.zip"
 		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%2064.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
 		keepCompressed=true
 	fi
@@ -498,23 +497,23 @@ for folder in $(ls /input); do
 		ConsoleId=29
 		ConsoleName="MSX2"
 		ConsoleDirectory="msx2"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Microsoft%20-%20MSX2.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Microsoft%20-%20MSX2.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^channelf$" | read; then
 		ConsoleId=57
 		ConsoleName="Fairchild Channel F"
 		ConsoleDirectory="channelf"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Fairchild%20-%20Channel%20F.zip"
-		keepCompressed=false
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Fairchild%20-%20Channel%20F.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^neogeocd$" | read; then
 		ConsoleId=56
 		ConsoleName="Neo Geo CD"
 		ConsoleDirectory="neogeocd"
-		ArchiveUrl="https://archive.org/download/perfectromcollection/NEOGEO.rar"
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/perfectromcollection/NEOGEO.rar/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
 		keepCompressed=false
 	fi
 	
