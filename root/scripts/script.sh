@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.0.0020"
+version="1.0.0.0021"
 echo "----------------------------------------------------------------"
 echo "           |~) _ ._  _| _ ._ _ |\ |o._  o _ |~|_|_|"
 echo "           |~\(_|| |(_|(_)| | || \||| |_|(_||~| | |<"
@@ -558,9 +558,12 @@ for folder in $(ls /input); do
 				romFile="$(echo $(basename "$romFile"))"
 				romFileNoExt="$(echo "${romFile%.*}")"
 				DownloadOutput="/input/$folder/temp/$romFile"
-					
+												
 				if [ -f "/config/logs/downloaded/$folder/$romFileNoExt" ]; then
-					log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: ROM previously downloaded :: Skipping..."
+					log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: ROM previously downloaded (/config/logs/downloaded/$folder/$romFileNoExt) :: Skipping..."
+					continue
+				elif [ -f "/output/$folder/$romFile" ]; then
+					log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: ROM previously downloaded (/output/$folder/$romFile) :: Skipping..."
 					continue
 				fi
 					
