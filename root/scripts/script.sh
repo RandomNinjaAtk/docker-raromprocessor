@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.0.0028"
+version="1.0.0.0029"
 # Debugging settings
 #ScrapeMetadata=false
 #keepBackupsOfImportedRoms=false
@@ -622,8 +622,7 @@ for folder in $(ls /input); do
 		ConsoleId=51
 		ConsoleName="Atari 7800"
 		ConsoleDirectory="atari7800"
-		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - Jaguar.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
-		ArchiveUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - 7800.zip"
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - 7800.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
 		keepCompressed=true
 	fi
 
