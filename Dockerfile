@@ -2,7 +2,7 @@ FROM lsiobase/ubuntu:focal
 LABEL maintainer="RandomNinjaAtk"
 
 ENV TITLE="raromprocessor"
-ENV VERSION="0.0.008"
+ENV VERSION="0.0.009"
 ENV SKYSCRAPER_PATH /usr/local/skysource
 ENV RAHASHER_PATH /usr/local/RALibretro
 ENV ScriptInterval=1h
@@ -12,6 +12,7 @@ ENV ConcurrentDownloadThreads=1
 ENV ScrapeMetadata=false
 ENV EnableUnsupportedPlatforms=true
 ENV skyscraperLanguagePreference=en
+ENV keepBackupsOfImportedRoms=true
 
 RUN \
 	echo "************ install dependencies ************" && \
