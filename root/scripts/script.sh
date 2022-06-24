@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.0.0025"
+version="1.0.0.0026"
 echo "----------------------------------------------------------------"
 echo "           |~) _ ._  _| _ ._ _ |\ |o._  o _ |~|_|_|"
 echo "           |~\(_|| |(_|(_)| | || \||| |_|(_||~| | |<"
@@ -26,283 +26,240 @@ log () {
 
 CreateRomFolders () {
 	# Create ROM folders
+	log "Creating ROM Folders..."
 	if [ ! -d "/input/amiga" ]; then
-		echo "Created: /input/amiga"
-	
+		log "Created: /input/amiga"
+		mkdir -p /input/amiga
 	fi
 	
 	if [ ! -d "/input/amstradcpc" ]; then
-		echo "Created: /input/amstradcpc"
-	
+		log "Created: /input/amstradcpc"
+		mkdir -p /input/amstradcpc
 	fi
 	
 	if [ ! -d "/input/apple2" ]; then
-		echo "Created: /input/apple2"
-	
+		log "Created: /input/apple2"
+		mkdir -p /input/apple2
 	fi
 	
 	if [ ! -d "/input/arcade" ]; then
-		echo "Created: /input/arcade"
-	
+		log "Created: /input/arcade"
+		mkdir -p /input/arcade
 	fi
 	
 	if [ ! -d "/input/atari2600" ]; then
-		echo "Created: /input/atari2600"
-	
+		log "Created: /input/atari2600"
+		mkdir -p /input/atari2600
 	fi
 	
 	if [ ! -d "/input/atari5200" ]; then
-		echo "Created: /input/atari5200"
-	
+		log "Created: /input/atari5200"
+		mkdir -p /input/atari5200
 	fi
 	
 	if [ ! -d "/input/atari7800" ]; then
-		echo "Created: /input/atari7800"
-	
+		log "Created: /input/atari7800"
+		mkdir -p /input/atari7800
 	fi
 	
 	if [ ! -d "/input/atarijaguar" ]; then
-		echo "Created: /input/atarijaguar"
-	
+		log "Created: /input/atarijaguar"
+		mkdir -p /input/atarijaguar
 	fi
 	
 	if [ ! -d "/input/atarilynx" ]; then
-		echo "Created: /input/atarilynx"
-	
+		log "Created: /input/atarilynx"
+		mkdir -p /input/atarilynx
 	fi
-	
+
 	if [ ! -d "/input/atarist" ]; then
-		echo "Created: /input/atarist"
-	
+		log "Created: /input/atarist"
+		mkdir -p /input/atarist
 	fi
 	
 	if [ ! -d "/input/c64" ]; then
-		echo "Created: /input/c64"
-	
+		log "Created: /input/c64"
+		mkdir -p /input/c64
 	fi
 	
 	if [ ! -d "/input/channelf" ]; then
-		echo "Created: /input/channelf"
-	
+		log "Created: /input/channelf"
+		mkdir -p /input/channelf
 	fi
 	
 	if [ ! -d "/input/coleco" ]; then
-		echo "Created: /input/coleco"
-	
+		log "Created: /input/coleco"
+		mkdir -p /input/coleco
 	fi
-	
+
 	if [ ! -d "/input/dreamcast" ]; then
-		echo "Created: /input/dreamcast"
-	
+		log "Created: /input/dreamcast"
+		mkdir -p /input/dreamcast
 	fi
 	
 	if [ ! -d "/input/gamegear" ]; then
-		echo "Created: /input/gamegear"
-	
+		log "Created: /input/gamegear"
+		mkdir -p /input/gamegear
 	fi
 	
 	if [ ! -d "/input/gb" ]; then
-		echo "Created: /input/gb"
-	
+		log "Created: /input/gb"
+		mkdir -p /input/gb
 	fi
 	
 	if [ ! -d "/input/gba" ]; then
-		echo "Created: /input/gba"
-	
+		log "Created: /input/gba"
+		mkdir -p /input/gba
 	fi
 	
 	if [ ! -d "/input/gbc" ]; then
-		echo "Created: /input/gbc"
-	
+		log "Created: /input/gbc"
+		mkdir -p /input/gbc
 	fi
 	
 	if [ ! -d "/input/intellivision" ]; then
-		echo "Created: /input/intellivision"
-	
+		log "Created: /input/intellivision"
+		mkdir -p /input/intellivision
 	fi
 	
 	if [ ! -d "/input/mastersystem" ]; then
-		echo "Created: /input/mastersystem"
-	
+		log "Created: /input/mastersystem"
+		mkdir -p /input/mastersystem
 	fi
 	
 	if [ ! -d "/input/megadrive" ]; then
-		echo "Created: /input/megadrive"
-	
+		log "Created: /input/megadrive"
+		mkdir -p /input/megadrive
 	fi
 	
 	if [ ! -d "/input/msx" ]; then
-		echo "Created: /input/msx"
-	
+		log "Created: /input/msx"
+		mkdir -p /input/msx
 	fi
 	
 	if [ ! -d "/input/msx2" ]; then
-		echo "Created: /input/msx2psp"
-	
+		log "Created: /input/msx2"
+		mkdir -p /input/msx2
 	fi
 	
 	if [ ! -d "/input/n64" ]; then
-		echo "Created: /input/n64"
-	
+		log "Created: /input/n64"
+		mkdir -p /input/n64
 	fi
 	
 	if [ ! -d "/input/nds" ]; then
-		echo "Created: /input/nds"
-	
+		log "Created: /input/nds"
+		mkdir -p /input/nds
 	fi
 	
 	if [ ! -d "/input/neogeocd" ]; then
-		echo "Created: /input/neogeocd"
-	
+		log "Created: /input/neogeocd"
+		mkdir -p /input/neogeocd
 	fi
 	
 	if [ ! -d "/input/nes" ]; then
-		echo "Created: /input/nes"
-	
+		log "Created: /input/nes"
+		mkdir -p /input/nes
 	fi
 	
 	if [ ! -d "/input/ngp" ]; then
-		echo "Created: /input/ngp"
-	
+		log "Created: /input/ngp"
+		mkdir -p /input/ngp
 	fi
 	
 	if [ ! -d "/input/ngpc" ]; then
-		echo "Created: /input/ngpc"
-	
+		log "Created: /input/ngpc"
+		mkdir -p /input/ngpc
 	fi
 	
 	if [ ! -d "/input/odyssey2" ]; then
-		echo "Created: /input/odyssey2"
-	
+		log "Created: /input/odyssey2"
+		mkdir -p /input/odyssey2
 	fi
 	
 	if [ ! -d "/input/pcengine" ]; then
-		echo "Created: /input/pcengine"
-	
+		log "Created: /input/pcengine"
+		mkdir -p /input/pcengine
 	fi
 	
 	if [ ! -d "/input/pokemini" ]; then
-		echo "Created: /input/pokemini"
-	
+		log "Created: /input/pokemini"
+		mkdir -p /input/pokemini
 	fi
 	
 	if [ ! -d "/input/psp" ]; then
-		echo "Created: /input/psp"
-	
+		log "Created: /input/psp"
+		mkdir -p /input/psp
 	fi
 	
 	if [ ! -d "/input/psx" ]; then
-		echo "Created: /input/psx"
-	
+		log "Created: /input/psx"
+		mkdir -p /input/psx
 	fi
 	
 	if [ ! -d "/input/saturn" ]; then
-		echo "Created: /input/saturn"
-	
+		log "Created: /input/saturn"
+		mkdir -p /input/saturn
 	fi
 	
 	if [ ! -d "/input/sega32x" ]; then
-		echo "Created: /input/sega32x"
-	
+		log "Created: /input/sega32x"
+		mkdir -p /input/sega32x
 	fi
 	
 	if [ ! -d "/input/segacd" ]; then
-		echo "Created: /input/segacd"
-	
+		log "Created: /input/segacd"
+		mkdir -p /input/segacd
 	fi
 	
 	if [ ! -d "/input/sg-1000" ]; then
-		echo "Created: /input/sg-1000"
-	
+		log "Created: /input/sg-1000"
+		mkdir -p /input/sg-1000
 	fi
 	
 	if [ ! -d "/input/snes" ]; then
-		echo "Created: /input/snes"
-	
+		log "Created: /input/snes"
+		mkdir -p /input/snes
 	fi
 	
 	if [ ! -d "/input/tg16" ]; then
 		echo "Created: /input/tg16"
-	
+		mkdir -p /input/tg16
 	fi
 	
 	if [ ! -d "/input/vectrex" ]; then
-		echo "Created: /input/vectrex"
-	
+		log "Created: /input/vectrex"
+		mkdir -p /input/vectrex
 	fi
 	
-	
 	if [ ! -d "/input/virtualboy" ]; then
-		echo "Created: /input/virtualboy"
-	
+		log "Created: /input/virtualboy"
+		mkdir -p /input/virtualboy
 	fi
 	
 	if [ ! -d "/input/wonderswan" ]; then
-		echo "Created: /input/wonderswan"
-	
+		log "Created: /input/wonderswan"
+		mkdir -p /input/wonderswan
 	fi
 	
 	if [ ! -d "/input/wonderswancolor" ]; then
-		echo "Created: /input/wonderswancolor"
-	
+		log "Created: /input/wonderswancolor"
+		mkdir -p /input/wonderswancolor
 	fi
 	
 	if [ ! -d "/input/x68000" ]; then
-		echo "Created: /input/x68000"
-	
+		log "Created: /input/x68000"
+		mkdir -p /input/x68000
 	fi
 	
 	if [ ! -d "/input/zxspectrum" ]; then
-		echo "Created: /input/zxspectrum"
-	
+		log "Created: /input/zxspectrum"
+		mkdir -p /input/zxspectrum
 	fi
+
+	log "All ROM Folders created, setting permissions and ownership"
 	
-	mkdir -p /input/megadrive
-	mkdir -p /input/n64
-	mkdir -p /input/snes
-	mkdir -p /input/gb
-	mkdir -p /input/gba
-	mkdir -p /input/gbc
-	mkdir -p /input/nes
-	mkdir -p /input/pcengine
-	mkdir -p /input/segacd
-	mkdir -p /input/sega32x
-	mkdir -p /input/mastersystem
-	mkdir -p /input/psx
-	mkdir -p /input/atarilynx
-	mkdir -p /input/ngpc
-	mkdir -p /input/gamegear
-	mkdir -p /input/atarijaguar
-	mkdir -p /input/nds
-	mkdir -p /input/pokemini
-	mkdir -p /input/atari2600
-	mkdir -p /input/arcade
-	mkdir -p /input/virtualboy
-	mkdir -p /input/sg-1000
-	mkdir -p /input/coleco
-	mkdir -p /input/atari7800
-	mkdir -p /input/atari5200
-	mkdir -p /input/wonderswancolor
-	mkdir -p /input/intellivision
-	mkdir -p /input/vectrex
-	mkdir -p /input/apple2
-	mkdir -p /input/saturn
-	mkdir -p /input/dreamcast
-	mkdir -p /input/psp
-	mkdir -p /input/msx
-	mkdir -p /input/odyssey2
-	mkdir -p /input/ngp
-	mkdir -p /input/amstradcpc
-	mkdir -p /input/wonderswan
-	mkdir -p /input/tg16
-	mkdir -p /input/x68000
-	mkdir -p /input/zxspectrum
-	mkdir -p /input/c64
-	mkdir -p /input/amiga
-	mkdir -p /input/atarist
-	mkdir -p /input/msx2
-	mkdir -p /input/channelf
-	mkdir -p /input/neogeocd
+	# Set Permissions and Ownership
 	chmod 777 /input/*
 	chown abc:abc /input/*
 }
@@ -450,6 +407,8 @@ Process_Roms () {
 		
 	done
 }
+
+CreateRomFolders
 
 for folder in $(ls /input); do
 	ConsoleId=""
