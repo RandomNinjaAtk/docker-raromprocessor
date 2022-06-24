@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-version="1.0.0.0026"
+version="1.0.0.0027"
 echo "----------------------------------------------------------------"
 echo "           |~) _ ._  _| _ ._ _ |\ |o._  o _ |~|_|_|"
 echo "           |~\(_|| |(_|(_)| | || \||| |_|(_||~| | |<"
-echo "            Presenets: RA ROM Processor ($version)"
+echo "             Presents: RA ROM Processor ($version)"
 echo "                May the cheevos be with you!"
 echo "----------------------------------------------------------------"
 echo "Donate: https://github.com/sponsors/RandomNinjaAtk"
