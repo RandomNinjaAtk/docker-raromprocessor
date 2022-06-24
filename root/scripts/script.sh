@@ -24,6 +24,289 @@ log () {
     echo $m_time" :: "$1
 }
 
+CreateRomFolders () {
+	# Create ROM folders
+	if [ ! -d "/input/amiga" ]; then
+		echo "Created: /input/amiga"
+	
+	fi
+	
+	if [ ! -d "/input/amstradcpc" ]; then
+		echo "Created: /input/amstradcpc"
+	
+	fi
+	
+	if [ ! -d "/input/apple2" ]; then
+		echo "Created: /input/apple2"
+	
+	fi
+	
+	if [ ! -d "/input/arcade" ]; then
+		echo "Created: /input/arcade"
+	
+	fi
+	
+	if [ ! -d "/input/atari2600" ]; then
+		echo "Created: /input/atari2600"
+	
+	fi
+	
+	if [ ! -d "/input/atari5200" ]; then
+		echo "Created: /input/atari5200"
+	
+	fi
+	
+	if [ ! -d "/input/atari7800" ]; then
+		echo "Created: /input/atari7800"
+	
+	fi
+	
+	if [ ! -d "/input/atarijaguar" ]; then
+		echo "Created: /input/atarijaguar"
+	
+	fi
+	
+	if [ ! -d "/input/atarilynx" ]; then
+		echo "Created: /input/atarilynx"
+	
+	fi
+	
+	if [ ! -d "/input/atarist" ]; then
+		echo "Created: /input/atarist"
+	
+	fi
+	
+	if [ ! -d "/input/c64" ]; then
+		echo "Created: /input/c64"
+	
+	fi
+	
+	if [ ! -d "/input/channelf" ]; then
+		echo "Created: /input/channelf"
+	
+	fi
+	
+	if [ ! -d "/input/coleco" ]; then
+		echo "Created: /input/coleco"
+	
+	fi
+	
+	if [ ! -d "/input/dreamcast" ]; then
+		echo "Created: /input/dreamcast"
+	
+	fi
+	
+	if [ ! -d "/input/gamegear" ]; then
+		echo "Created: /input/gamegear"
+	
+	fi
+	
+	if [ ! -d "/input/gb" ]; then
+		echo "Created: /input/gb"
+	
+	fi
+	
+	if [ ! -d "/input/gba" ]; then
+		echo "Created: /input/gba"
+	
+	fi
+	
+	if [ ! -d "/input/gbc" ]; then
+		echo "Created: /input/gbc"
+	
+	fi
+	
+	if [ ! -d "/input/intellivision" ]; then
+		echo "Created: /input/intellivision"
+	
+	fi
+	
+	if [ ! -d "/input/mastersystem" ]; then
+		echo "Created: /input/mastersystem"
+	
+	fi
+	
+	if [ ! -d "/input/megadrive" ]; then
+		echo "Created: /input/megadrive"
+	
+	fi
+	
+	if [ ! -d "/input/msx" ]; then
+		echo "Created: /input/msx"
+	
+	fi
+	
+	if [ ! -d "/input/msx2" ]; then
+		echo "Created: /input/msx2psp"
+	
+	fi
+	
+	if [ ! -d "/input/n64" ]; then
+		echo "Created: /input/n64"
+	
+	fi
+	
+	if [ ! -d "/input/nds" ]; then
+		echo "Created: /input/nds"
+	
+	fi
+	
+	if [ ! -d "/input/neogeocd" ]; then
+		echo "Created: /input/neogeocd"
+	
+	fi
+	
+	if [ ! -d "/input/nes" ]; then
+		echo "Created: /input/nes"
+	
+	fi
+	
+	if [ ! -d "/input/ngp" ]; then
+		echo "Created: /input/ngp"
+	
+	fi
+	
+	if [ ! -d "/input/ngpc" ]; then
+		echo "Created: /input/ngpc"
+	
+	fi
+	
+	if [ ! -d "/input/odyssey2" ]; then
+		echo "Created: /input/odyssey2"
+	
+	fi
+	
+	if [ ! -d "/input/pcengine" ]; then
+		echo "Created: /input/pcengine"
+	
+	fi
+	
+	if [ ! -d "/input/pokemini" ]; then
+		echo "Created: /input/pokemini"
+	
+	fi
+	
+	if [ ! -d "/input/psp" ]; then
+		echo "Created: /input/psp"
+	
+	fi
+	
+	if [ ! -d "/input/psx" ]; then
+		echo "Created: /input/psx"
+	
+	fi
+	
+	if [ ! -d "/input/saturn" ]; then
+		echo "Created: /input/saturn"
+	
+	fi
+	
+	if [ ! -d "/input/sega32x" ]; then
+		echo "Created: /input/sega32x"
+	
+	fi
+	
+	if [ ! -d "/input/segacd" ]; then
+		echo "Created: /input/segacd"
+	
+	fi
+	
+	if [ ! -d "/input/sg-1000" ]; then
+		echo "Created: /input/sg-1000"
+	
+	fi
+	
+	if [ ! -d "/input/snes" ]; then
+		echo "Created: /input/snes"
+	
+	fi
+	
+	if [ ! -d "/input/tg16" ]; then
+		echo "Created: /input/tg16"
+	
+	fi
+	
+	if [ ! -d "/input/vectrex" ]; then
+		echo "Created: /input/vectrex"
+	
+	fi
+	
+	
+	if [ ! -d "/input/virtualboy" ]; then
+		echo "Created: /input/virtualboy"
+	
+	fi
+	
+	if [ ! -d "/input/wonderswan" ]; then
+		echo "Created: /input/wonderswan"
+	
+	fi
+	
+	if [ ! -d "/input/wonderswancolor" ]; then
+		echo "Created: /input/wonderswancolor"
+	
+	fi
+	
+	if [ ! -d "/input/x68000" ]; then
+		echo "Created: /input/x68000"
+	
+	fi
+	
+	if [ ! -d "/input/zxspectrum" ]; then
+		echo "Created: /input/zxspectrum"
+	
+	fi
+	
+	mkdir -p /input/megadrive
+	mkdir -p /input/n64
+	mkdir -p /input/snes
+	mkdir -p /input/gb
+	mkdir -p /input/gba
+	mkdir -p /input/gbc
+	mkdir -p /input/nes
+	mkdir -p /input/pcengine
+	mkdir -p /input/segacd
+	mkdir -p /input/sega32x
+	mkdir -p /input/mastersystem
+	mkdir -p /input/psx
+	mkdir -p /input/atarilynx
+	mkdir -p /input/ngpc
+	mkdir -p /input/gamegear
+	mkdir -p /input/atarijaguar
+	mkdir -p /input/nds
+	mkdir -p /input/pokemini
+	mkdir -p /input/atari2600
+	mkdir -p /input/arcade
+	mkdir -p /input/virtualboy
+	mkdir -p /input/sg-1000
+	mkdir -p /input/coleco
+	mkdir -p /input/atari7800
+	mkdir -p /input/atari5200
+	mkdir -p /input/wonderswancolor
+	mkdir -p /input/intellivision
+	mkdir -p /input/vectrex
+	mkdir -p /input/apple2
+	mkdir -p /input/saturn
+	mkdir -p /input/dreamcast
+	mkdir -p /input/psp
+	mkdir -p /input/msx
+	mkdir -p /input/odyssey2
+	mkdir -p /input/ngp
+	mkdir -p /input/amstradcpc
+	mkdir -p /input/wonderswan
+	mkdir -p /input/tg16
+	mkdir -p /input/x68000
+	mkdir -p /input/zxspectrum
+	mkdir -p /input/c64
+	mkdir -p /input/amiga
+	mkdir -p /input/atarist
+	mkdir -p /input/msx2
+	mkdir -p /input/channelf
+	mkdir -p /input/neogeocd
+	chmod 777 /input/*
+	chown abc:abc /input/*
+}
+
 Process_Roms () {
 	Region="$1"
 	RegionGrep="$1"
