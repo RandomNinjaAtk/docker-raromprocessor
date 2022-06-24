@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
-version="1.0.0.0027"
+version="1.0.0.0028"
+# Debugging settings
+#ScrapeMetadata=false
+#keepBackupsOfImportedRoms=false
+
 echo "----------------------------------------------------------------"
 echo "           |~) _ ._  _| _ ._ _ |\ |o._  o _ |~|_|_|"
 echo "           |~\(_|| |(_|(_)| | || \||| |_|(_||~| | |<"
-echo "             Presents: RA ROM Processor ($version)"
-echo "                May the cheevos be with you!"
+echo "            Presents: RA ROM Processor ($version)"
+echo "                 May the cheevos be with you!"
 echo "----------------------------------------------------------------"
 echo "Donate: https://github.com/sponsors/RandomNinjaAtk"
 echo "Project: https://github.com/RandomNinjaAtk/docker-raromprocessor"
@@ -953,7 +957,10 @@ for folder in $(ls /input); do
 	fi
 
 	
-	if [ "$ScrapeMetadata" = "true" ]; then
+	if [ "$ScrapeMetadata" != "true" ]; then
+		log "$ConsoleName :: Metadata Scraping disabled..."
+		log "$ConsoleName :: Enable by setting \"ScrapeMetadata=true\""
+	else
 		if Skyscraper | grep -w "$folder" | read; then
 			log "$ConsoleName :: Begin Skyscraper Process..."
 			if [ ! -d /output/$folder ]; then
@@ -984,19 +991,41 @@ for folder in $(ls /input); do
 		else 
 			log "$ConsoleName :: Metadata Scraping :: ERROR :: Platform not supported, skipping..."
 		fi 
-	else
-		log "$ConsoleName :: Metadata Scraping disabled..."
-		log "$ConsoleName :: Enable by setting \"ScrapeMetadata=true\""
 	fi
 	
+	if [ -d "/backup/$folder" ]; then
+		if [ $keepBackupsOfImportedRoms = false ]; then
+			log "$ConsoleName :: Removing ROMs from \"/backup/$folder\" that were successfully processed"
+			find /output/$folder -maxdepth 1 -type f -not -iname "*.xml" | while read LINE; do
+				rom="$LINE"
+				romFilename="${rom##*/}"
+				if [ -f "/backup/$folder/$romFilename" ]; then
+					log "$ConsoleName :: $romFilename :: Removing from /backup/$folder"
+					rm "/backup/$folder/$romFilename"
+				fi		
+			done
+			log "$ConsoleName :: Complete"
+		else
+			log "$ConsoleName :: ERROR :: Removing ROMs from \"/backup/$folder\" is disabled..."
+			log "$ConsoleName :: ERROR :: To enable, set \"keepBackupsOfImportedRoms=false\""
+		fi
+	fi
+
 	# set permissions
-	find /output/$folder -type d -exec chmod 777 {} \;
-	find /output/$folder -type d -exec chown abc:abc {} \;
-	find /output/$folder -type f -exec chmod 666 {} \;
-	find /output/$folder -type f -exec chown abc:abc {} \;
-	find /backup/$folder -type d -exec chmod 777 {} \;
-	find /backup/$folder -type d -exec chown abc:abc {} \;
-	find /backup/$folder -type f -exec chmod 666 {} \;
-	find /backup/$folder -type f -exec chown abc:abc {} \;
+	if [ -d "/output/$folder" ]; then
+		log "$ConsoleName :: /output/$folder :: Settting File Permissions and Ownership..."
+		find /output/$folder -type d -exec chmod 777 {} \;
+		find /output/$folder -type d -exec chown abc:abc {} \;
+		find /output/$folder -type f -exec chmod 666 {} \;
+		find /output/$folder -type f -exec chown abc:abc {} \;
+	fi
+	if [ -d "/backup/$folder" ]; then
+		log "$ConsoleName :: /backup/$folder :: Settting File Permissions and Ownership..."
+		find /backup/$folder -type d -exec chmod 777 {} \;
+		find /backup/$folder -type d -exec chown abc:abc {} \;
+		find /backup/$folder -type f -exec chmod 666 {} \;
+		find /backup/$folder -type f -exec chown abc:abc {} \;
+	fi
 done
+
 exit $?
