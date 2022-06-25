@@ -2,7 +2,7 @@ FROM lsiobase/ubuntu:focal
 LABEL maintainer="RandomNinjaAtk"
 
 ENV TITLE="raromprocessor"
-ENV VERSION="0.0.009"
+ENV VERSION="0.0.010"
 ENV SKYSCRAPER_PATH /usr/local/skysource
 ENV RAHASHER_PATH /usr/local/RALibretro
 ENV ScriptInterval=1h
@@ -54,9 +54,9 @@ RUN \
 	sed -i 's/sudo //g' update_skyscraper.sh && \
 	bash update_skyscraper.sh && \
 	echo "************ RAHasher installation ************" && \
-	git clone --recursive --depth 1 https://github.com/RetroAchievements/RALibretro.git ${RAHASHER_PATH} && \
-	cd ${RAHASHER_PATH} && \
-	make -f Makefile.RAHasher && \
+	mkdir -p ${RAHASHER_PATH} && \
+	wget "https://github.com/RetroAchievements/RALibretro/releases/download/1.3.11/RAHasher-x64-Linux-1.3.11.zip" -O "${RAHASHER_PATH}/rahasher.zip" && \
+	unzip  "${RAHASHER_PATH}/rahasher.zip" -d ${RAHASHER_PATH} && \
 	chmod -R 777 ${RAHASHER_PATH}
 		
 # copy local files
