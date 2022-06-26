@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.02"
+version="1.0.03"
 # Debugging settings
 #ScrapeMetadata=false
 #keepBackupsOfImportedRoms=false
@@ -31,6 +31,11 @@ log () {
 CreateRomFolders () {
 	# Create ROM folders
 	log "Creating ROM Folders..."
+	if [ ! -d "/input/3do" ]; then
+		log "Created: /input/3do"
+		mkdir -p /input/3do
+	fi	
+	
 	if [ ! -d "/input/amiga" ]; then
 		log "Created: /input/amiga"
 		mkdir -p /input/amiga
@@ -419,6 +424,15 @@ for folder in $(ls /input); do
 	ConsoleName=""
 	ArchiveUrl=""
 	SkipUnpackForHash="false"
+	
+	if echo "$folder" | grep "^3do$" | read; then
+		ConsoleId=43
+		ConsoleName="3DO Interactive Multiplayer"
+		ConsoleDirectory="3do"
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/retroachievements-rom-collection/The%203DO%20Company%20-%203DO.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
+	fi	
+	
 	if echo "$folder" | grep "^amstradcpc$" | read; then
 		ConsoleId=37
 		ConsoleName="Amstrad CPC"
