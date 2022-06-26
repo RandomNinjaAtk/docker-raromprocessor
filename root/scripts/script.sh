@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.01"
+version="1.0.02"
 # Debugging settings
 #ScrapeMetadata=false
 #keepBackupsOfImportedRoms=false
@@ -662,6 +662,8 @@ for folder in $(ls /input); do
 		ConsoleId=38
 		ConsoleName="Apple II"
 		ConsoleDirectory="apple2"
+		ArchiveUrl="$(wget -q -O - "https://archive.org/download/retroachievements-rom-collection/Apple%20-%20II.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^saturn$" | read; then
