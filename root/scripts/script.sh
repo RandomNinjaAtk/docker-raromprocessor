@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.04"
+version="1.0.05"
 # Debugging settings
 #ScrapeMetadata=false
 #keepBackupsOfImportedRoms=false
@@ -847,6 +847,9 @@ for folder in $(ls /input); do
 					*.chd|*.CHD)
 						Type=chd
 						;;
+					*.iso|*.ISO)
+						Type=iso
+						;;
 				esac
 				
 				log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Downloading..."
@@ -864,6 +867,8 @@ for folder in $(ls /input); do
 						DownloadVerification="$(unrar t "$DownloadOutput" &>/dev/null; echo $?)"
 					elif [ "$Type" = "chd" ]; then
 						DownloadVerification="$(chdman verify -i "$DownloadOutput" &>/dev/null; echo $?)"
+					elif [ "$Type" = "iso" ]; then
+						DownloadVerification="0"
 					fi
 					if [ "$DownloadVerification" = "0" ]; then
 						log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Download Complete!"
