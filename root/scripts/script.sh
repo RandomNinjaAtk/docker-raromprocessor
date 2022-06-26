@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.05"
+version="1.0.06"
 # Debugging settings
 #ScrapeMetadata=false
 #keepBackupsOfImportedRoms=false
@@ -797,7 +797,7 @@ for folder in $(ls /input); do
 		ConsoleName="Neo Geo CD"
 		ConsoleDirectory="neogeocd"
 		ArchiveUrl="$(wget -q -O - "https://archive.org/download/perfectromcollection/NEOGEO.rar/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
-		keepCompressed=false
+		keepCompressed=true
 	fi
 	
 	if [ "$AquireRomSets" = "true" ]; then
