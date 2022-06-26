@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.03"
+version="1.0.04"
 # Debugging settings
 #ScrapeMetadata=false
 #keepBackupsOfImportedRoms=false
@@ -700,8 +700,7 @@ for folder in $(ls /input); do
 		ConsoleId=41
 		ConsoleName="PlayStation Portable"
 		ConsoleDirectory="psp"
-		ArchiveUrl="$(curl -s "https://archive.org/download/PSP_US_Arquivista" | grep ".iso" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/PSP_US_Arquivista/|
-')"
+		ArchiveUrl="$(curl -s "https://archive.org/download/PSP_US_Arquivista" | grep ".iso" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/PSP_US_Arquivista/|')"
 		keepCompressed=true
 	fi
 
