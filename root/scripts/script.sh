@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.0.0029"
+version="1.0.01"
 # Debugging settings
 #ScrapeMetadata=false
 #keepBackupsOfImportedRoms=false
@@ -7,7 +7,7 @@ version="1.0.0.0029"
 echo "----------------------------------------------------------------"
 echo "           |~) _ ._  _| _ ._ _ |\ |o._  o _ |~|_|_|"
 echo "           |~\(_|| |(_|(_)| | || \||| |_|(_||~| | |<"
-echo "            Presents: RA ROM Processor ($version)"
+echo "              Presents: RA ROM Processor ($version)"
 echo "                 May the cheevos be with you!"
 echo "----------------------------------------------------------------"
 echo "Donate: https://github.com/sponsors/RandomNinjaAtk"
@@ -684,7 +684,8 @@ for folder in $(ls /input); do
 		ConsoleId=41
 		ConsoleName="PlayStation Portable"
 		ConsoleDirectory="psp"
-		ArchiveUrl="$(curl -s "https://archive.org/download/PSP_US_Arquivista" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/PSP_US_Arquivista|')"
+		ArchiveUrl="$(curl -s "https://archive.org/download/PSP_US_Arquivista" | grep ".iso" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/PSP_US_Arquivista/|
+')"
 		keepCompressed=true
 	fi
 
