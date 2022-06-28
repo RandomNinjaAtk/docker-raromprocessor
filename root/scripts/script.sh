@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-version="1.0.06"
+version="1.0.07"
 # Debugging settings
 #ScrapeMetadata=false
 #keepBackupsOfImportedRoms=false
@@ -889,6 +889,9 @@ for folder in $(ls /input); do
 								mv "$DownloadOutput" "/input/$folder"
 							fi
 						elif [ "$Type" = "chd" ]; then
+							log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
+							mv "$DownloadOutput" "/input/$folder"
+						elif [ "$Type" = "iso" ]; then
 							log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
 							mv "$DownloadOutput" "/input/$folder"
 						fi
