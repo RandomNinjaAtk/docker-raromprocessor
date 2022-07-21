@@ -196,6 +196,11 @@ CreateRomFolders () {
 		mkdir -p /input/pokemini
 	fi
 	
+	if [ ! -d "/input/ps2" ]; then
+		log "Created: /input/ps2"
+		mkdir -p /input/ps2
+	fi
+	
 	if [ ! -d "/input/psp" ]; then
 		log "Created: /input/psp"
 		mkdir -p /input/psp
@@ -246,11 +251,16 @@ CreateRomFolders () {
 		mkdir -p /input/virtualboy
 	fi
 	
+	if [ ! -d "/input/wii" ]; then
+		log "Created: /input/wii"
+		mkdir -p /input/wii
+	fi
+	
 	if [ ! -d "/input/wonderswan" ]; then
 		log "Created: /input/wonderswan"
 		mkdir -p /input/wonderswan
 	fi
-	
+
 	if [ ! -d "/input/wonderswancolor" ]; then
 		log "Created: /input/wonderswancolor"
 		mkdir -p /input/wonderswancolor
