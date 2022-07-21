@@ -575,6 +575,20 @@ for folder in $(ls /input); do
 		keepCompressed=true
 	fi
 
+	if echo "$folder" | grep "^wii" | read; then
+		ConsoleId=19
+		ConsoleName="Wii"
+		ConsoleDirectory="wii"
+		keepCompressed=true
+	fi
+
+	if echo "$folder" | grep "^ps2" | read; then
+		ConsoleId=21
+		ConsoleName="PlayStation2"
+		ConsoleDirectory="ps2"
+		keepCompressed=true
+	fi
+
 	if echo "$folder" | grep "^pokemini" | read; then
 		ConsoleId=24
 		ConsoleName="Pokemon Mini"
