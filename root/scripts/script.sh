@@ -575,6 +575,26 @@ for folder in $(ls /input); do
 		keepCompressed=true
 	fi
 
+	if echo "$folder" | grep "^wii" | read; then
+		ConsoleId=19
+		ConsoleName="Wii"
+		ConsoleDirectory="wii"
+		ArchiveUrl="$(curl -s "https://archive.org/download/wiiusaredump" | grep ".7z" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/wiiusaredump/|')"
+		ArchiveUrl="$(curl -s "https://archive.org/download/wiiusaredump2" | grep ".7z" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/wiiusaredump2/|')"
+		ArchiveUrl="$(curl -s "https://archive.org/download/wiiusaredump3" | grep ".7z" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/wiiusaredump3/|')"
+		keepCompressed=false
+	fi
+
+	if echo "$folder" | grep "^ps2" | read; then
+		ConsoleId=21
+		ConsoleName="PlayStation2"
+		ConsoleDirectory="ps2"
+		ArchiveUrl="$(curl -s "https://archive.org/download/ps2usaredump1" | grep ".7z" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/ps2usaredump1/|')"
+		ArchiveUrl="$(curl -s "https://archive.org/download/ps2usaredump1_20200816_1458" | grep ".7z" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/ps2usaredump1_20200816_1458/|')"
+		ArchiveUrl="$(curl -s "https://archive.org/download/httpsarchive.orgdetailsps2usaredump3" | grep ".7z" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/httpsarchive.orgdetailsps2usaredump3/|')"
+		keepCompressed=false
+	fi
+
 	if echo "$folder" | grep "^pokemini" | read; then
 		ConsoleId=24
 		ConsoleName="Pokemon Mini"
