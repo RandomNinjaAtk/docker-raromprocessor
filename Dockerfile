@@ -29,6 +29,7 @@ RUN \
 		make \
 		gcc \
 		unrar \
+		p7zip-full \
 		axel \
 		mame-tools \
 		mingw-w64 \
