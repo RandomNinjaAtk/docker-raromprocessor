@@ -844,6 +844,9 @@ for folder in $(ls /input); do
 					*.rar|*.RAR)
 						Type=rar
 						;;
+					*.7z|*.7Z)
+						Type=7z
+						;;
 					*.chd|*.CHD)
 						Type=chd
 						;;
@@ -865,6 +868,8 @@ for folder in $(ls /input); do
 						DownloadVerification="$(unzip -t "$DownloadOutput" &>/dev/null; echo $?)"
 					elif [ "$Type" = "rar" ]; then
 						DownloadVerification="$(unrar t "$DownloadOutput" &>/dev/null; echo $?)"
+					elif [ "$Type" = "7z" ]; then
+						DownloadVerification="$(7z t "$DownloadOutput" &>/dev/null; echo $?)"
 					elif [ "$Type" = "chd" ]; then
 						DownloadVerification="$(chdman verify -i "$DownloadOutput" &>/dev/null; echo $?)"
 					elif [ "$Type" = "iso" ]; then
@@ -884,6 +889,14 @@ for folder in $(ls /input); do
 							if [ $keepCompressed = false ]; then
 								log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Unpacking to /input/$folder"
 								unrar x "$DownloadOutput" "/input/$folder" &>/dev/null
+							else
+								log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
+								mv "$DownloadOutput" "/input/$folder"
+							fi
+						if [ "$Type" = "7z" ]; then
+							if [ $keepCompressed = false ]; then
+								log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Unpacking to /input/$folder"
+								unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
 							else
 								log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
 								mv "$DownloadOutput" "/input/$folder"
