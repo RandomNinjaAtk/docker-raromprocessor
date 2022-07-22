@@ -12,6 +12,8 @@ echo "Created: /input/segacd"
 echo "Created: /input/sega32x"
 echo "Created: /input/mastersystem"
 echo "Created: /input/psx"
+echo "Created: /input/ps2"
+echo "Created: /input/wii"
 echo "Created: /input/atarilynx"
 echo "Created: /input/ngpc"
 echo "Created: /input/gamegear"
@@ -58,6 +60,8 @@ mkdir -p /input/segacd
 mkdir -p /input/sega32x
 mkdir -p /input/mastersystem
 mkdir -p /input/psx
+mkdir -p /input/ps2
+mkdir -p /input/wii
 mkdir -p /input/atarilynx
 mkdir -p /input/ngpc
 mkdir -p /input/gamegear
