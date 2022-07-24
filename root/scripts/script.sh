@@ -893,10 +893,10 @@ for folder in $(ls /input); do
 								log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
 								mv "$DownloadOutput" "/input/$folder"
 							fi
-						if [ "$Type" = "7z" ]; then
+						elif [ "$Type" = "7z" ]; then
 							if [ $keepCompressed = false ]; then
 								log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Unpacking to /input/$folder"
-								unzip -o -d "/input/$folder" "$DownloadOutput" >/dev/null
+								7z -o -d "/input/$folder" "$DownloadOutput" >/dev/null
 							else
 								log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
 								mv "$DownloadOutput" "/input/$folder"
