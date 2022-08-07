@@ -896,7 +896,7 @@ for folder in $(ls /input); do
 						elif [ "$Type" = "7z" ]; then
 							if [ $keepCompressed = false ]; then
 								log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Unpacking to /input/$folder"
-								7z -o -d "/input/$folder" "$DownloadOutput" >/dev/null
+								7z x "$DownloadOutput" "/input/$folder" &>/dev/null
 							else
 								log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
 								mv "$DownloadOutput" "/input/$folder"
