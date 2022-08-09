@@ -7,6 +7,7 @@ echo "Created: /input/gb"
 echo "Created: /input/gba"
 echo "Created: /input/gbc"
 echo "Created: /input/nes"
+echo "Created: /input/gc"
 echo "Created: /input/pcengine"
 echo "Created: /input/segacd"
 echo "Created: /input/sega32x"
@@ -54,6 +55,7 @@ mkdir -p /input/snes
 mkdir -p /input/gb
 mkdir -p /input/gba
 mkdir -p /input/gbc
+mkdir -p /input/gc
 mkdir -p /input/nes
 mkdir -p /input/pcengine
 mkdir -p /input/segacd
