@@ -500,7 +500,7 @@ for folder in $(ls /input); do
 		ConsoleDirectory="gc"
 		ArchiveUrl="$(curl -s "https://archive.org/download/GCRedumpNKitPart1/" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/GCRedumpNKitPart1/|')"
 		keepCompressed=true
-		ArchiveUrl="$(curl -s "https://archive.org/download/GCRedumpNKitPart2/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/GCRedumpNKitPart2/|')"
+		ArchiveUrl="$(curl -s "https://archive.org/download/GCRedumpNKitPart2/" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/GCRedumpNKitPart2/|')"
 		keepCompressed=true
 	fi
 
