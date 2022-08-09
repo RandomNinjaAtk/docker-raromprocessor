@@ -126,6 +126,11 @@ CreateRomFolders () {
 		mkdir -p /input/gbc
 	fi
 	
+	if [ ! -d "/input/gc" ]; then
+		log "Created: /input/gc"
+		mkdir -p /input/gc
+	fi
+	
 	if [ ! -d "/input/intellivision" ]; then
 		log "Created: /input/intellivision"
 		mkdir -p /input/intellivision
