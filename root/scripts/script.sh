@@ -500,8 +500,6 @@ for folder in $(ls /input); do
 		ConsoleDirectory="gc"
 		ArchiveUrl="$(curl -s "https://archive.org/download/GCRedumpNKitPart1/" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/GCRedumpNKitPart1/|')"
 		keepCompressed=true
-		ArchiveUrl="$(curl -s "https://archive.org/download/GCRedumpNKitPart2/" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/GCRedumpNKitPart2/|')"
-		keepCompressed=true
 	fi
 
 	if echo "$folder" | grep "^nes$" | read; then
@@ -865,6 +863,9 @@ for folder in $(ls /input); do
 					*.iso|*.ISO)
 						Type=iso
 						;;
+					*.nkit.gcz|*.NKIT.GCZ)
+						Type=nkit
+						;;
 				esac
 				
 				log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Downloading..."
@@ -883,6 +884,8 @@ for folder in $(ls /input); do
 					elif [ "$Type" = "chd" ]; then
 						DownloadVerification="$(chdman verify -i "$DownloadOutput" &>/dev/null; echo $?)"
 					elif [ "$Type" = "iso" ]; then
+						DownloadVerification="0"
+					elif [ "$Type" = "nkit" ]; then
 						DownloadVerification="0"
 					fi
 					if [ "$DownloadVerification" = "0" ]; then
@@ -907,6 +910,9 @@ for folder in $(ls /input); do
 							log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
 							mv "$DownloadOutput" "/input/$folder"
 						elif [ "$Type" = "iso" ]; then
+							log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
+							mv "$DownloadOutput" "/input/$folder"
+						elif [ "$Type" = "nkit" ]; then
 							log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
 							mv "$DownloadOutput" "/input/$folder"
 						fi
