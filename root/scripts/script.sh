@@ -502,6 +502,14 @@ for folder in $(ls /input); do
 		keepCompressed=true
 	fi
 
+	if echo "$folder" | grep "^gc$" | read; then
+		ConsoleId=16
+		ConsoleName="GameCube"
+		ConsoleDirectory="gc"
+		ArchiveUrl="$(curl -s "https://archive.org/details/GCRedumpNKitPart2/" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/details/GCRedumpNKitPart2/|')"
+		keepCompressed=true
+	fi
+
 	if echo "$folder" | grep "^nes$" | read; then
 		ConsoleId=7
 		ConsoleName="Nintendo Entertainment System"
