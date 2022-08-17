@@ -195,7 +195,12 @@ CreateRomFolders () {
 		log "Created: /input/pokemini"
 		mkdir -p /input/pokemini
 	fi
-	
+
+	if [ ! -d "/input/ps2" ]; then
+		log "Created: /input/ps2"
+		mkdir -p /input/ps2
+	fi
+
 	if [ ! -d "/input/psp" ]; then
 		log "Created: /input/psp"
 		mkdir -p /input/psp
@@ -702,6 +707,30 @@ for folder in $(ls /input); do
 		ConsoleDirectory="psp"
 		ArchiveUrl="$(curl -s "https://archive.org/download/PSP_US_Arquivista" | grep ".iso" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/PSP_US_Arquivista/|')"
 		keepCompressed=true
+	fi
+
+	if echo "$folder" | grep "^ps2" | read; then
+		ConsoleId=21
+		ConsoleName="PlayStation2"
+		ConsoleDirectory="ps2"
+		ArchiveUrl="$(curl -s "https://archive.org/download/ps2usaredump1" | grep ".7z" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/ps2usaredump1/|')"
+		keepCompressed=false
+	fi
+
+	if echo "$folder" | grep "^ps2" | read; then
+		ConsoleId=21
+		ConsoleName="PlayStation2"
+		ConsoleDirectory="ps2"
+		ArchiveUrl="$(curl -s "https://archive.org/download/ps2usaredump1_20200816_1458" | grep ".7z" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/ps2usaredump1_20200816_1458/|')"
+		keepCompressed=false
+	fi
+
+	if echo "$folder" | grep "^ps2" | read; then
+		ConsoleId=21
+		ConsoleName="PlayStation2"
+		ConsoleDirectory="ps2"
+		ArchiveUrl="$(curl -s "https://archive.org/download/httpsarchive.orgdetailsps2usaredump3" | grep ".7z" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/httpsarchive.orgdetailsps2usaredump3/|')"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^msx$" | read; then
