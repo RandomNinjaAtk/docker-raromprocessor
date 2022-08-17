@@ -246,6 +246,11 @@ CreateRomFolders () {
 		mkdir -p /input/virtualboy
 	fi
 	
+	if [ ! -d "/input/wii" ]; then
+		log "Created: /input/wii"
+		mkdir -p /input/wii
+	fi
+
 	if [ ! -d "/input/wonderswan" ]; then
 		log "Created: /input/wonderswan"
 		mkdir -p /input/wonderswan
@@ -573,6 +578,30 @@ for folder in $(ls /input); do
 		ConsoleDirectory="nds"
 		ArchiveUrl="$(curl -s "https://archive.org/download/noIntroNintendoDsDecrypted2020Jan20" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/noIntroNintendoDsDecrypted2020Jan20/|')"
 		keepCompressed=true
+	fi
+
+	if echo "$folder" | grep "^wii" | read; then
+		ConsoleId=19
+		ConsoleName="Wii"
+		ConsoleDirectory="wii"
+		ArchiveUrl="$(curl -s "https://archive.org/download/wiiusaredump" | grep ".7z" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/wiiusaredump/|')"
+		keepCompressed=false
+	fi
+
+	if echo "$folder" | grep "^wii" | read; then
+		ConsoleId=19
+		ConsoleName="Wii"
+		ConsoleDirectory="wii"
+		ArchiveUrl="$(curl -s "https://archive.org/download/wiiusaredump2" | grep ".7z" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/wiiusaredump2/|')"
+		keepCompressed=false
+	fi
+
+	if echo "$folder" | grep "^wii" | read; then
+		ConsoleId=19
+		ConsoleName="Wii"
+		ConsoleDirectory="wii"
+		ArchiveUrl="$(curl -s "https://archive.org/download/wiiusaredump3" | grep ".7z" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/wiiusaredump3/|')"
+		keepCompressed=false
 	fi
 
 	if echo "$folder" | grep "^pokemini" | read; then
