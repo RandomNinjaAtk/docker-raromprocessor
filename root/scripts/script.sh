@@ -202,7 +202,7 @@ CreateRomFolders () {
 	fi
 	
 	if [ ! -d "/input/psp" ]; then
-		log "Created: /input/"
+		log "Created: /input/psp"
 		mkdir -p /input/psp
 	fi
 	
@@ -498,7 +498,7 @@ for folder in $(ls /input); do
 		ConsoleId=16
 		ConsoleName="GameCube"
 		ConsoleDirectory="gc"
-		ArchiveUrl="$(curl -s "https://archive.org/download/GCRedumpNKitPart1" | grep ".nkit.gzc" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/GCRedumpNKitPart1/|')"
+		ArchiveUrl="$(curl -s "https://archive.org/download/GCRedumpNKitPart1" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/GCRedumpNKitPart1/|')"
 		keepCompressed=true
 	fi
 
