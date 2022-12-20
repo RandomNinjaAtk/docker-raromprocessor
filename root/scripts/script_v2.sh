@@ -29,7 +29,7 @@ UncompressFile () {
     *.rar|*.RAR)
       unrar x "$1" "$2" &>/dev/null
       ;;
-		*.7z|*.7Z)
+    *.7z|*.7Z)
       7z x "$1" "$2" &>/dev/null
       ;;
   esac
