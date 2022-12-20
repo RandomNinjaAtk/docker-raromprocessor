@@ -18,6 +18,38 @@ Log () {
   echo $m_time" :: RA-Rom-Processor :: $scriptVersion :: "$1
 }
 
+DownloadFile () {
+  # $1 = URL
+  # $2 = Output Folder/file
+  # #3 = Number of concurrent connections to use
+  axel -q -n $3 --output="$2" "$1"
+}
+
+DownloadFileVerification () {
+  case "$1" in
+    *.zip|*.ZIP)
+      verify="$(unzip -t "$DownloadOutput" &>/dev/null; echo $?)"
+      ;;
+    *.rar|*.RAR)
+      verify="$(unrar t "$DownloadOutput" &>/dev/null; echo $?)"
+      ;;
+    *.7z|*.7Z)
+      verify="$(7z t "$DownloadOutput" &>/dev/null; echo $?)"
+      ;;
+    *.chd|*.CHD)
+      verify="$(chdman verify -i "$DownloadOutput" &>/dev/null; echo $?)"
+      ;;
+    *.iso|*.ISO)
+      verify="0"
+      ;;
+  esac
+  
+  if [ "$verify" != "0" ]; then
+    log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Download Failed!"
+    rm -rf "$1"
+  fi
+}
+
 UncompressFile () {
   # $1 is input file
   # $2 is output folder
