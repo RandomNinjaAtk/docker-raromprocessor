@@ -5,7 +5,7 @@ scriptVersion="2"
 
 # auto-clean up log file to reduce space usage
 if [ -f "/config/log.txt" ]; then
-	find /config/logs -type f -name "/config/log.txt" -size +1024k -delete
+  find /config/logs -type f -name "/config/log.txt" -size +1024k -delete
 fi
 
 touch "/config/log.txt"
