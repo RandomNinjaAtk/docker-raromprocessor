@@ -173,7 +173,7 @@ fi
 
 GetArchiveLinks "$archiveContentsUrl"
 
-consoles="snes,nes"
+consoles="psx,snes,nes"
 IFS=',' read -r -a filters <<< "$consoles"
 for console in "${filters[@]}"
 do
@@ -224,7 +224,9 @@ do
       Log "Skipping..."
       continue
     fi
-    UncompressFile "/config/temp/$fileName" "/config/temp"
+    if [ "$uncompressRom" == "true" ]; then
+      UncompressFile "/config/temp/$fileName" "/config/temp"
+    fi
     romFile=$(find /config/temp -type f)
     romFileExt="${romFile##*.}"
     Log "Checking for Valid ROM extension"
