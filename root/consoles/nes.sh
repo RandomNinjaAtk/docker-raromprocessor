@@ -1,0 +1,7 @@
+consoleName="Nintendo Entertainment System"
+consoleFolder="nes"
+consoleRomFileExt=".nes, .unif, .unf, .zip, .7z"
+raConsoleId="7"
+uncompressRom="false"
+compressRom="true"
+archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo%20-%20Nintendo%20Entertainment%20System.zip/"
