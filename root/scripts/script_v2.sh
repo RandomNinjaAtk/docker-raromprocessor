@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 scriptVersion="2"
 
+######### DEBUGGING
+#raUsername=
+#raWebApiKey=
+consoles="nes,snes,psx"
+
 ######### LOGGING
 
 # auto-clean up log file to reduce space usage
@@ -155,21 +160,20 @@ UrlDecode () { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
 
 ######### PROCESS
 
-if [ -d /consoles ]; then
-  if [ ! -d /config/consoles ]; then
-    mkdir -p /config/consoles
-    chmod 777 /config/consoles
-  fi
-  #cp /consoles/* /config/consoles/
-  chmod 666 /config/consoles/*
+if [ ! -d /config/consoles ]; then
+  mkdir -p /config/consoles
   chmod 777 /config/consoles
 fi
-#,psx,snes,
-consoles="nes"
+
 IFS=',' read -r -a filters <<< "$consoles"
 for console in "${filters[@]}"
 do
   source /config/consoles/$console.sh
+  if [ -z "$raUsername" ] || [ -z "$raWebApiKey" ]; then
+    Log "ERROR :: raUsername & raWebApiKey not set, exiting..."
+    exit
+  fi
+  
   raGameList="$(wget -qO- "https://retroachievements.org/API/API_GetGameList.php?z=${raUsername}&y=${raWebApiKey}&i=$raConsoleId")"
   raGameTitles=$(echo "$raGameList" | jq -r .[].Title)
   if [ -d /config/temp ]; then
