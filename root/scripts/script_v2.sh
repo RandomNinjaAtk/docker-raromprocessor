@@ -31,7 +31,6 @@ DownloadFile () {
   # $4 = fileName
   Log "Downloading :: $4"
   wget "$1" -O "$2"
-  sleep 1
   if [ ! -f "$2" ]; then
     Log "Download Failed :: $1"
   fi
@@ -231,8 +230,8 @@ do
       Log "Skipping..."
       continue
     else
-      mkdir -p $libraryPath/logs/$consoleFolder
-      touch "$libraryPath/logs/$consoleFolder/$fileName.txt"
+      mkdir -p "/config/logs/$consoleFolder"
+      touch "/config/logs/$consoleFolder/$fileName.txt"
     fi
     DownloadFileVerification "$libraryPath/temp/$fileName"
     if [ ! -f "$libraryPath/temp/$fileName" ]; then
