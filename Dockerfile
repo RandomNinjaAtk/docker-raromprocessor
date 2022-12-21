@@ -33,6 +33,8 @@ RUN \
 		zip \
 		mame-tools \
 		mingw-w64 \
+		gcc-multilib \
+		g++-multilib \
 		python3-pip && \
 	echo "************ install python packages ************" && \
 	python3 -m pip install --no-cache-dir -U \
