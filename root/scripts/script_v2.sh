@@ -4,7 +4,7 @@ scriptVersion="2"
 ######### DEBUGGING
 #raUsername=
 #raWebApiKey=
-consoles="nes,snes,psx"
+consoles="gb,nes,snes,psx"
 
 ######### LOGGING
 
@@ -168,7 +168,18 @@ fi
 IFS=',' read -r -a filters <<< "$consoles"
 for console in "${filters[@]}"
 do
-  source /config/consoles/$console.sh
+
+  consoleFile=/config/consoles/$console.sh
+  if [ ! -f $consoleFile ]; then
+    consoleFile=/consoles/$console.sh
+  fi
+
+  if [ ! $consoleFile ]; then
+    Log "ERROR :: Console Data File ($consoleFile) Missing..."
+    continue
+  fi
+  source $consoleFile
+
   if [ -z "$raUsername" ] || [ -z "$raWebApiKey" ]; then
     Log "ERROR :: raUsername & raWebApiKey not set, exiting..."
     exit
@@ -256,7 +267,7 @@ do
     MoveRomToFinalLocation "$romFile" "/config/$consoleFolder"
     
     if [ -d /config/temp ]; then
-      rm /config/temp/*
+      rm /config/temp/* &>/dev/null
     fi
     
   done
@@ -264,5 +275,7 @@ do
   if [ -d /config/temp ]; then
     rm -rf /config/temp
   fi
+
 done
+
 exit
