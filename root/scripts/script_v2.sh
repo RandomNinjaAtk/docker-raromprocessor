@@ -4,7 +4,8 @@ scriptVersion="2"
 ######### DEBUGGING
 #raUsername=
 #raWebApiKey=
-consoles="gb,nes,snes,psx"
+libraryPath="/roms"
+consoles="gb,nes,snes,mastersystem,sega32x,psx"
 
 ######### LOGGING
 
@@ -187,12 +188,12 @@ do
   
   raGameList="$(wget -qO- "https://retroachievements.org/API/API_GetGameList.php?z=${raUsername}&y=${raWebApiKey}&i=$raConsoleId")"
   raGameTitles=$(echo "$raGameList" | jq -r .[].Title)
-  if [ -d /config/temp ]; then
-    rm -rf /config/temp
+  if [ -d $libraryPath/temp ]; then
+    rm -rf $libraryPath/temp
   fi
 
-  if [ ! -d /config/temp ]; then
-    mkdir -p /config/temp
+  if [ ! -d $libraryPath/temp ]; then
+    mkdir -p $libraryPath/temp
   fi
 
   totalCount="$(echo "$archiveUrl" | wc -l)"
@@ -218,36 +219,36 @@ do
       Log "Previously Processed..."
       continue
     fi
-    if [ -f "/config/$consoleFolder/$fileNameNoExt.zip" ]; then
-      Log "/config/$consoleFolder/$fileNameNoExt.zip :: File already exists :: skipping..."
+    if [ -f "$libraryPath/$consoleFolder/$fileNameNoExt.zip" ]; then
+      Log "$libraryPath/$consoleFolder/$fileNameNoExt.zip :: File already exists :: skipping..."
       mkdir -p /config/logs/$consoleFolder
       touch "/config/logs/$consoleFolder/$fileName.txt"
       continue
     fi
-    DownloadFile "$downloadUrl" "/config/temp/$fileName" "$concurrentDownloadThreads" "$fileName"
+    DownloadFile "$downloadUrl" "$libraryPath/temp/$fileName" "$concurrentDownloadThreads" "$fileName"
 
-    if [ ! -f "/config/temp/$fileName" ]; then
+    if [ ! -f "$libraryPath/temp/$fileName" ]; then
       Log "Skipping..."
       continue
     else
-      mkdir -p /config/logs/$consoleFolder
-      touch "/config/logs/$consoleFolder/$fileName.txt"
+      mkdir -p $libraryPath/logs/$consoleFolder
+      touch "$libraryPath/logs/$consoleFolder/$fileName.txt"
     fi
-    DownloadFileVerification "/config/temp/$fileName"
-    if [ ! -f "/config/temp/$fileName" ]; then
+    DownloadFileVerification "$libraryPath/temp/$fileName"
+    if [ ! -f "$libraryPath/temp/$fileName" ]; then
       Log "Skipping..."
       continue
     fi
     if [ "$uncompressRom" == "true" ]; then
-      UncompressFile "/config/temp/$fileName" "/config/temp"
+      UncompressFile "$libraryPath/temp/$fileName" "$libraryPath/temp"
     fi
-    romFile=$(find /config/temp -type f)
+    romFile=$(find $libraryPath/temp -type f)
     romFileExt="${romFile##*.}"
     Log "Checking for Valid ROM extension"
     if ! echo "$consoleRomFileExt" | grep -E ".$romFileExt(,|$)" | read; then
       Log "ERROR :: \"$consoleRomFileExt\" file extension(s) expected :: \"$romFileExt\" found..."
       Log "Skipping..."
-      rm /config/temp/*
+      rm $libraryPath/temp/*
       continue
     else
       Log "Valid ROM extension found (.$romFileExt)"
@@ -261,19 +262,19 @@ do
       continue
     fi
     if [ "$compressRom" == "true" ]; then
-      CompressFile "$romFile" "/config/temp/$fileNameNoExt.zip"
+      CompressFile "$romFile" "$libraryPath/temp/$fileNameNoExt.zip"
     fi
-    romFile=$(find /config/temp -type f)
-    MoveRomToFinalLocation "$romFile" "/config/$consoleFolder"
+    romFile=$(find $libraryPath/temp -type f)
+    MoveRomToFinalLocation "$romFile" "$libraryPath/$consoleFolder"
     
-    if [ -d /config/temp ]; then
-      rm /config/temp/* &>/dev/null
+    if [ -d $libraryPath/temp ]; then
+      rm $libraryPath/temp/* &>/dev/null
     fi
     
   done
 
-  if [ -d /config/temp ]; then
-    rm -rf /config/temp
+  if [ -d $libraryPath/temp ]; then
+    rm -rf $libraryPath/temp
   fi
 
 done
