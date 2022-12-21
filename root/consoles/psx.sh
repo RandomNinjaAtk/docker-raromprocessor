@@ -4,7 +4,6 @@ consoleRomFileExt=".bin .cue .img .mdf .pbp .toc .cbn .m3u .ccd .chd"
 raConsoleId="12"
 uncompressRom="false"
 compressRom="false"
-raGameList="$(wget -qO- "https://retroachievements.org/API/API_GetGameList.php?z=${raUsername}&y=${raWebApiKey}&i=$raConsoleId")"
 
 # Create URL List
 archiveUrl="$(curl -s "https://archive.org/download/chd_psx/CHD-PSX-USA/" | grep ".chd" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/chd_psx/CHD-PSX-USA/|')"
