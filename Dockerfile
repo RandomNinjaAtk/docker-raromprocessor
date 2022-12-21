@@ -55,8 +55,8 @@ RUN \
 	bash update_skyscraper.sh && \
 	echo "************ RAHasher installation ************" && \
 	mkdir -p ${RAHASHER_PATH} && \
-	wget "https://github.com/RetroAchievements/RALibretro/releases/download/1.3.11/RAHasher-x64-Linux-1.3.11.zip" -O "${RAHASHER_PATH}/rahasher.zip" && \
-	unzip  "${RAHASHER_PATH}/rahasher.zip" -d ${RAHASHER_PATH} && \
+	wget "https://github.com/RetroAchievements/RALibretro/releases/download/1.4.0/RAHasher-x64-Linux-1.4.0.zip" -O "${RAHASHER_PATH}/rahasher.zip" && \
+	unzip "${RAHASHER_PATH}/rahasher.zip" -d ${RAHASHER_PATH} && \
 	chmod -R 777 ${RAHASHER_PATH}
 		
 # copy local files
