@@ -159,16 +159,13 @@ if [ -d /consoles ]; then
   if [ ! -d /config/consoles ]; then
     mkdir -p /config/consoles
     chmod 777 /config/consoles
-  else
-    #rm /config/consoles/*
-    sleep 0.01
   fi
-  mv /consoles/* /config/consoles/
+  cp /consoles/* /config/consoles/
   chmod 666 /config/consoles/*
   chmod 777 /config/consoles
 fi
 
-consoles="psx,snes,nes"
+consoles="snes,nes"
 IFS=',' read -r -a filters <<< "$consoles"
 for console in "${filters[@]}"
 do
