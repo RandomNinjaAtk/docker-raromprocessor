@@ -30,6 +30,7 @@ RUN \
 		gcc \
 		unrar \
 		axel \
+		zip \
 		mame-tools \
 		mingw-w64 \
 		python3-pip && \
