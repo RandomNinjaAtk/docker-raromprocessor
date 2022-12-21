@@ -160,17 +160,18 @@ if [ -d /consoles ]; then
     mkdir -p /config/consoles
     chmod 777 /config/consoles
   fi
-  cp /consoles/* /config/consoles/
+  #cp /consoles/* /config/consoles/
   chmod 666 /config/consoles/*
   chmod 777 /config/consoles
 fi
-
-consoles="snes,nes"
+#,psx,snes,
+consoles="nes"
 IFS=',' read -r -a filters <<< "$consoles"
 for console in "${filters[@]}"
 do
   source /config/consoles/$console.sh
-
+  raGameList="$(wget -qO- "https://retroachievements.org/API/API_GetGameList.php?z=${raUsername}&y=${raWebApiKey}&i=$raConsoleId")"
+  raGameTitles=$(echo "$raGameList" | jq -r .[].Title)
   if [ -d /config/temp ]; then
     rm -rf /config/temp
   fi
@@ -190,6 +191,14 @@ do
     decodedUrl="$(UrlDecode "$downloadUrl")"
     fileName="$(basename "$decodedUrl")"
     fileNameNoExt="${fileName%.*}"
+    fileNameSearch=$(echo "$fileNameNoExt"| cut -f1 -d"(" | sed "s/\ $//g" )
+    if echo "$raGameTitles" | grep -i "$fileNameSearch" | read; then
+      Log "$fileNameNoExt :: Title found on RA Game List"
+    else
+      Log "$fileNameNoExt :: title not found on RA Game List, skipping..."
+      continue
+    fi
+    
     if [ -f "/config/logs/$consoleFolder/$fileName.txt" ]; then
       Log "Previously Processed..."
       continue
