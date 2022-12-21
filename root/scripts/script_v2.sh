@@ -157,6 +157,7 @@ UrlDecode () { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
 concurrentDownloadThreads="2"
 consoleName="Nintendo Entertainment System"
 consoleFolder="nes"
+consoleRomFileExt="nes"
 raConsoleId="7"
 
 
@@ -214,6 +215,14 @@ for Url in ${!archiveUrls[@]}; do
   fi
   UncompressFile "/config/temp/$fileName" "/config/temp"
   romFile=$(find /config/temp -type f)
+  romFileExt="${romFile##*.}"
+  if [ "$romFileExt" != "$consoleRomFileExt" ]; then
+    Log "ERROR :: \"$consoleRomFileExt\" file extension expected :: \"$romFileExt\" found..."
+    Log "Skipping..."
+    rm /config/temp/*
+    continue
+  fi
+
   RaHashRom "$romFile" "$raConsoleId"
   DownloadRaHashLibrary "$raConsoleId" "$consoleFolder"
   RomRaHashVerification "$romFile" "$consoleFolder"
@@ -245,6 +254,9 @@ DownloadFile "$decodedUrl" "/config/temp/$fileName" "$concurrentDownloadThreads"
 DownloadFileVerification "/config/temp/$fileName"
 UncompressFile "/config/temp/$fileName" "/config/temp"
 romFile=$(find /config/temp -type f)
+if ! echo "$romFile" | grep ".$consoleRomFileExt$" | read; then
+
+fi
 RaHashRom "$romFile" "$raConsoleId"
 DownloadRaHashLibrary "$raConsoleId" "$consoleFolder"
 RomRaHashVerification "$romFile" "$consoleFolder"
