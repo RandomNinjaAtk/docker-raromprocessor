@@ -132,7 +132,7 @@ RomRaHashVerification () {
 }
 
 MoveRomToFinalLocation () {
-  # $1 = input file
+  # $1 = romFile
   # $2 = Destination
   if [ ! -d "$2" ]; then
     Log "Creating $2"
@@ -141,7 +141,7 @@ MoveRomToFinalLocation () {
     Log "Done"
   fi
   outputFile=""
-  outputFile="$2/$fileNameNoExt.zip"
+  outputFile="$2/$(basename "$romFile")"
   if [ ! -f "$outputFile" ]; then
     Log "$1 :: Moving file to: $outputFile"
     mv "$1" "$outputFile"
@@ -150,124 +150,110 @@ MoveRomToFinalLocation () {
   fi
 }
 
+GetArchiveLinks () {
+  # $1 = archiveContentsUrl
+  archiveUrl="$(wget -qO- "$1" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | grep -i "archive.org" | sed 's%^//%https://%g' | sort -u)"
+}
+
 UrlDecode () { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
 
 ######### PROCESS
 
-concurrentDownloadThreads="2"
-consoleName="Nintendo Entertainment System"
-consoleFolder="nes"
-consoleRomFileExt="nes"
-raConsoleId="7"
-
-
-url="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo%20-%20Nintendo%20Entertainment%20System.zip/Nintendo%20-%20Nintendo%20Entertainment%20System%2Fnes%2FLegend%20of%20Zelda%2C%20The%20%28USA%29%20%28Rev%201%29.zip"
-decodedUrl="$(UrlDecode "$url")"
-fileName="$(basename "$decodedUrl")"
-fileNameNoExt="${fileName%.*}"
-
-# https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo%20-%20Nintendo%20Entertainment%20System.zip/
-archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo%20-%20Nintendo%20Entertainment%20System.zip/"
-archiveUrl="$(wget -qO- "$archiveContentsUrl" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | grep -i "archive.org" | sed 's%^//%https://%g' | sort -u)"
-
-if [ -d /config/temp ]; then
-  rm -rf /config/temp
+if [ -d /consoles ]; then
+  if [ ! -d /config/consoles ]; then
+    mkdir -p /config/consoles
+    chmod 777 /config/consoles
+  fi
+  mv /consoles/* /config/consoles/
 fi
 
-if [ ! -d /config/temp ]; then
-  mkdir -p /config/temp
-fi
+GetArchiveLinks "$archiveContentsUrl"
 
-totalCount="$(echo "$archiveUrl" | wc -l)"
-OLDIFS="$IFS"
-IFS=$'\n'
-archiveUrls=($(echo "$archiveUrl"))
-IFS="$OLDIFS"
-for Url in ${!archiveUrls[@]}; do
-  currentsubprocessid=$(( $Url + 1 ))
-  downloadUrl="${archiveUrls[$Url]}"
-  decodedUrl="$(UrlDecode "$downloadUrl")"
-  fileName="$(basename "$decodedUrl")"
-  fileNameNoExt="${fileName%.*}"
-  if [ -f "/config/logs/$consoleFolder/$fileName.txt" ]; then
-    Log "Previously Processed..."
-    continue
-  fi
-  if [ -f "/config/$consoleFolder/$fileNameNoExt.zip" ]; then
-    Log "/config/$consoleFolder/$fileNameNoExt.zip :: File already exists :: skipping..."
-    mkdir -p /config/logs/$consoleFolder
-    touch "/config/logs/$consoleFolder/$fileName.txt"
-    continue
-  fi
-  DownloadFile "$downloadUrl" "/config/temp/$fileName" "$concurrentDownloadThreads" "$fileName"
+consoles="snes,nes"
+IFS=',' read -r -a filters <<< "$consoles"
+for console in "${filters[@]}"
+do
+  source /config/consoles/$console.sh
 
-  if [ ! -f "/config/temp/$fileName" ]; then
-    Log "Skipping..."
-    continue
-  else
-    mkdir -p /config/logs/$consoleFolder
-    touch "/config/logs/$consoleFolder/$fileName.txt"
-  fi
-  DownloadFileVerification "/config/temp/$fileName"
-  if [ ! -f "/config/temp/$fileName" ]; then
-    Log "Skipping..."
-    continue
-  fi
-  UncompressFile "/config/temp/$fileName" "/config/temp"
-  romFile=$(find /config/temp -type f)
-  romFileExt="${romFile##*.}"
-  if [ "$romFileExt" != "$consoleRomFileExt" ]; then
-    Log "ERROR :: \"$consoleRomFileExt\" file extension expected :: \"$romFileExt\" found..."
-    Log "Skipping..."
-    rm /config/temp/*
-    continue
-  fi
-
-  RaHashRom "$romFile" "$raConsoleId"
-  DownloadRaHashLibrary "$raConsoleId" "$consoleFolder"
-  RomRaHashVerification "$romFile" "$consoleFolder"
-  if [ ! -f "$romFile" ]; then
-    Log "Skipping..."
-    continue
-  fi
-  CompressFile "$romFile" "/config/temp/$fileNameNoExt.zip"
-  MoveRomToFinalLocation "/config/temp/$fileNameNoExt.zip" "/config/$consoleFolder"
-  
   if [ -d /config/temp ]; then
-    rm /config/temp/*
+    rm -rf /config/temp
   fi
-  
+
+  if [ ! -d /config/temp ]; then
+    mkdir -p /config/temp
+  fi
+
+  GetArchiveLinks "$archiveContentsUrl"
+
+  totalCount="$(echo "$archiveUrl" | wc -l)"
+  OLDIFS="$IFS"
+  IFS=$'\n'
+  archiveUrls=($(echo "$archiveUrl"))
+  IFS="$OLDIFS"
+  for Url in ${!archiveUrls[@]}; do
+    currentsubprocessid=$(( $Url + 1 ))
+    downloadUrl="${archiveUrls[$Url]}"
+    decodedUrl="$(UrlDecode "$downloadUrl")"
+    fileName="$(basename "$decodedUrl")"
+    fileNameNoExt="${fileName%.*}"
+    if [ -f "/config/logs/$consoleFolder/$fileName.txt" ]; then
+      Log "Previously Processed..."
+      continue
+    fi
+    if [ -f "/config/$consoleFolder/$fileNameNoExt.zip" ]; then
+      Log "/config/$consoleFolder/$fileNameNoExt.zip :: File already exists :: skipping..."
+      mkdir -p /config/logs/$consoleFolder
+      touch "/config/logs/$consoleFolder/$fileName.txt"
+      continue
+    fi
+    DownloadFile "$downloadUrl" "/config/temp/$fileName" "$concurrentDownloadThreads" "$fileName"
+
+    if [ ! -f "/config/temp/$fileName" ]; then
+      Log "Skipping..."
+      continue
+    else
+      mkdir -p /config/logs/$consoleFolder
+      touch "/config/logs/$consoleFolder/$fileName.txt"
+    fi
+    DownloadFileVerification "/config/temp/$fileName"
+    if [ ! -f "/config/temp/$fileName" ]; then
+      Log "Skipping..."
+      continue
+    fi
+    UncompressFile "/config/temp/$fileName" "/config/temp"
+    romFile=$(find /config/temp -type f)
+    romFileExt="${romFile##*.}"
+    Log "Checking for Valid ROM extension"
+    if ! echo "$consoleRomFileExt" | grep -E ".$romFileExt(,|$)" | read; then
+      Log "ERROR :: \"$consoleRomFileExt\" file extension(s) expected :: \"$romFileExt\" found..."
+      Log "Skipping..."
+      rm /config/temp/*
+      continue
+    else
+      Log "Valid ROM extension found (.$romFileExt)"
+    fi
+
+    RaHashRom "$romFile" "$raConsoleId"
+    DownloadRaHashLibrary "$raConsoleId" "$consoleFolder"
+    RomRaHashVerification "$romFile" "$consoleFolder"
+    if [ ! -f "$romFile" ]; then
+      Log "Skipping..."
+      continue
+    fi
+    if [ "$compressRom" == "true" ]; then
+      CompressFile "$romFile" "/config/temp/$fileNameNoExt.zip"
+    fi
+    romFile=$(find /config/temp -type f)
+    MoveRomToFinalLocation "$romFile" "/config/$consoleFolder"
+    
+    if [ -d /config/temp ]; then
+      rm /config/temp/*
+    fi
+    
+  done
+
+  if [ -d /config/temp ]; then
+    rm -rf /config/temp
+  fi
 done
-
-if [ -d /config/temp ]; then
-  rm -rf /config/temp
-fi
-exit
-
-
-if [ -f "/config/$consoleFolder/$fileNameNoExt.zip" ]; then
-  Log "/config/$consoleFolder/$fileNameNoExt.zip :: File already exists :: skipping..."
-  exit
-fi
-
-DownloadFile "$decodedUrl" "/config/temp/$fileName" "$concurrentDownloadThreads"
-DownloadFileVerification "/config/temp/$fileName"
-UncompressFile "/config/temp/$fileName" "/config/temp"
-romFile=$(find /config/temp -type f)
-if ! echo "$romFile" | grep ".$consoleRomFileExt$" | read; then
-
-fi
-RaHashRom "$romFile" "$raConsoleId"
-DownloadRaHashLibrary "$raConsoleId" "$consoleFolder"
-RomRaHashVerification "$romFile" "$consoleFolder"
-if [ ! -f "$romFile" ]; then
-  continue
-fi
-CompressFile "$romFile" "/config/temp/$fileNameNoExt.zip"
-MoveRomToFinalLocation "/config/temp/$fileNameNoExt.zip" "/config/$consoleFolder"
-
-if [ -d /config/temp ]; then
-  rm -rf /config/temp
-fi
-
 exit
