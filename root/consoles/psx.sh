@@ -1,0 +1,7 @@
+consoleName="PlayStation"
+consoleFolder="psx"
+consoleRomFileExt=".bin .cue .img .mdf .pbp .toc .cbn .m3u .ccd .chd"
+raConsoleId="12"
+uncompressRom="false"
+compressRom="false"
+archiveContentsUrl="https://archive.org/download/chd_psx/CHD-PSX-USA/"
