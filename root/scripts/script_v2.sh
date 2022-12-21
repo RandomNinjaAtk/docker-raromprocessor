@@ -5,7 +5,7 @@ scriptVersion="2"
 #raUsername=
 #raWebApiKey=
 libraryPath="/roms"
-consoles="gb,nes,snes,mastersystem,sega32x,psx"
+consoles="ps2,gb,nes,snes,mastersystem,sega32x,psx"
 
 ######### LOGGING
 
@@ -169,7 +169,7 @@ IFS=',' read -r -a filters <<< "$consoles"
 for console in "${filters[@]}"
 do
 
-  consoleFile=/config/consoles/$console.sh
+  consoleFile="/config/consoles/$console.sh"
   if [ ! -f $consoleFile ]; then
     consoleFile=/consoles/$console.sh
   fi
