@@ -163,8 +163,12 @@ if [ -d /consoles ]; then
   if [ ! -d /config/consoles ]; then
     mkdir -p /config/consoles
     chmod 777 /config/consoles
+  else
+    rm /config/consoles/*
   fi
   mv /consoles/* /config/consoles/
+  chmod 666 /config/consoles/*
+  chmod 777 /config/consoles
 fi
 
 GetArchiveLinks "$archiveContentsUrl"
