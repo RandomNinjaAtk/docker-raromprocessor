@@ -150,10 +150,6 @@ MoveRomToFinalLocation () {
   fi
 }
 
-GetArchiveLinks () {
-  # $1 = archiveContentsUrl
-  archiveUrl="$(wget -qO- "$1" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | grep -i "archive.org" | sed 's%^//%https://%g' | sort -u)"
-}
 
 UrlDecode () { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
 
@@ -164,14 +160,13 @@ if [ -d /consoles ]; then
     mkdir -p /config/consoles
     chmod 777 /config/consoles
   else
-    rm /config/consoles/*
+    #rm /config/consoles/*
+    sleep 0.01
   fi
   mv /consoles/* /config/consoles/
   chmod 666 /config/consoles/*
   chmod 777 /config/consoles
 fi
-
-GetArchiveLinks "$archiveContentsUrl"
 
 consoles="psx,snes,nes"
 IFS=',' read -r -a filters <<< "$consoles"
@@ -186,8 +181,6 @@ do
   if [ ! -d /config/temp ]; then
     mkdir -p /config/temp
   fi
-
-  GetArchiveLinks "$archiveContentsUrl"
 
   totalCount="$(echo "$archiveUrl" | wc -l)"
   OLDIFS="$IFS"
