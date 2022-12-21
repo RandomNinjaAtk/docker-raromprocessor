@@ -5,7 +5,7 @@ scriptVersion="2"
 #raUsername=
 #raWebApiKey=
 libraryPath="/roms"
-consoles="ps2,gb,nes,snes,mastersystem,sega32x,psx"
+consoles="gb,gbc,nes,snes,mastersystem,sega32x,psx,ps2"
 
 ######### LOGGING
 
