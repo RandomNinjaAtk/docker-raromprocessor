@@ -21,7 +21,7 @@ exec &> >(tee -a "/config/log.txt")
 
 Log () {
   m_time=`date "+%F %T"`
-  echo $m_time" :: RA-Rom-Processor :: $scriptVersion :: $consoleName ($consoleFolder) :: $currentsubprocessid of $totalCount :: "$1
+  echo $m_time" :: RA-Rom-Processor :: $scriptVersion :: $consoleName ($consoleFolder) :: $currentsubprocessid/$totalCount :: "$1
 }
 
 DownloadFile () {
@@ -115,6 +115,10 @@ DownloadRaHashLibrary () {
     mkdir -p /config/ra_hash_libraries
     chmod 777 /config/ra_hash_libraries    
   fi
+  if [ -f "/config/ra_hash_libraries/${2}_hashes.json" ]; then
+    rm "/config/ra_hash_libraries/${2}_hashes.json"
+  fi
+
   Log "Getting the console hash library from RetroAchievements.org..."
   if [ ! -f "/config/ra_hash_libraries/${2}_hashes.json" ]; then
     curl -s "https://retroachievements.org/dorequest.php?r=hashlibrary&c=$1" | jq '.' > "/config/ra_hash_libraries/${2}_hashes.json"
@@ -160,6 +164,8 @@ MoveRomToFinalLocation () {
 UrlDecode () { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
 
 ######### PROCESS
+currentsubprocessid=0
+totalCount=0
 
 if [ ! -d /config/consoles ]; then
   mkdir -p /config/consoles
@@ -198,6 +204,8 @@ do
   if [ ! -d $libraryPath/temp ]; then
     mkdir -p $libraryPath/temp
   fi
+
+  DownloadRaHashLibrary "$raConsoleId" "$consoleFolder"
 
   totalCount="$(echo "$archiveUrl" | wc -l)"
   OLDIFS="$IFS"
@@ -273,7 +281,6 @@ do
     fi
 
     RaHashRom "$romFile" "$raConsoleId"
-    DownloadRaHashLibrary "$raConsoleId" "$consoleFolder"
     RomRaHashVerification "$romFile" "$consoleFolder"
     if [ ! -f "$romFile" ]; then
       Log "Skipping..."
