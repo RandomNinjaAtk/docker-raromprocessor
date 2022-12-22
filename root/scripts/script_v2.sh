@@ -169,16 +169,19 @@ fi
 IFS=',' read -r -a filters <<< "$consoles"
 for console in "${filters[@]}"
 do
+  consoleName="Unknown"
+  consoleFolder="unk"
 
   consoleFile="/config/consoles/$console.sh"
-  if [ ! -f $consoleFile ]; then
+  if [ ! -f "$consoleFile" ]; then
     consoleFile=/consoles/$console.sh
   fi
 
-  if [ ! $consoleFile ]; then
+  if [ ! -f "$consoleFile" ]; then
     Log "ERROR :: Console Data File ($consoleFile) Missing..."
     continue
   fi
+
   source $consoleFile
 
   if [ -z "$raUsername" ] || [ -z "$raWebApiKey" ]; then
