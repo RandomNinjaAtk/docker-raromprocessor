@@ -288,7 +288,7 @@ do
     romFile=$(find $libraryPath/temp -type f)
     romFileExt="${romFile##*.}"
     Log "Checking for Valid ROM extension"
-    if ! echo "$consoleRomFileExt" | grep -E ".$romFileExt(,|$)" | read; then
+    if ! echo "$consoleRomFileExt" | grep -E "\.$romFileExt(,|$)" | read; then
       Log "ERROR :: \"$consoleRomFileExt\" file extension(s) expected :: \"$romFileExt\" found..."
       Log "Skipping..."
       rm $libraryPath/temp/*
