@@ -197,6 +197,7 @@ do
   
   raGameList="$(wget -qO- "https://retroachievements.org/API/API_GetGameList.php?z=${raUsername}&y=${raWebApiKey}&i=$raConsoleId")"
   raGameTitles=$(echo "$raGameList" | jq -r .[].Title)
+  raGameTitlesCount=$(echo -n "$raGameTitles" | wc -l)
   if [ -d $libraryPath/temp ]; then
     rm -rf $libraryPath/temp
   fi
@@ -298,6 +299,10 @@ do
     
   done
 
+  downloadRomCount=$(find "$libraryPath/$consoleFolder" -type f | wc -l)
+  Log "===================================================================="
+  Log "Downloaded and matched $downloadRomCount of $raGameTitlesCount possible RetroAchievements.org ROMs"
+  Log "Only $(( $raGameTitlesCount - $downloadRomCount)) ROMs missing..."
   if [ -d $libraryPath/temp ]; then
     rm -rf $libraryPath/temp
   fi
