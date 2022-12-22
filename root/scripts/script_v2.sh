@@ -21,7 +21,7 @@ exec &> >(tee -a "/config/log.txt")
 
 Log () {
   m_time=`date "+%F %T"`
-  echo $m_time" :: RA-Rom-Processor :: $scriptVersion :: $consoleName ($consoleFolder) :: $currentsubprocessid/$totalCount :: "$1
+  echo $m_time" :: RA-Rom-Processor :: $scriptVersion :: $consoleProcessNumber/$consolesToProcessNumber :: $consoleName ($consoleFolder) :: $currentsubprocessid/$totalCount :: "$1
 }
 
 DownloadFile () {
@@ -172,9 +172,18 @@ if [ ! -d /config/consoles ]; then
   chmod 777 /config/consoles
 fi
 
+consolesToProcessNumber=0
 IFS=',' read -r -a filters <<< "$consoles"
 for console in "${filters[@]}"
 do
+  consolesToProcessNumber=$(( $consolesToProcessNumber + 1 ))
+done
+
+consoleProcessNumber=0
+IFS=',' read -r -a filters <<< "$consoles"
+for console in "${filters[@]}"
+do
+  consoleProcessNumber=$(( $consoleProcessNumber + 1 ))
   consoleName="Unknown"
   consoleFolder="unk"
 
