@@ -5,7 +5,7 @@ scriptVersion="2"
 #raUsername=
 #raWebApiKey=
 libraryPath="/roms"
-consoles="atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nes,snes,mastersystem,sega32x,psx,ps2"
+consoles="lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nes,snes,mastersystem,sega32x,n64,psx,ps2"
 
 ######### LOGGING
 
@@ -204,6 +204,7 @@ do
     exit
   fi
   
+  raGameTitlesCount=0
   raGameList="$(wget -qO- "https://retroachievements.org/API/API_GetGameList.php?z=${raUsername}&y=${raWebApiKey}&i=$raConsoleId")"
   raGameTitles=$(echo "$raGameList" | jq -r .[].Title | sort -u)
   raGameTitlesCount=$(echo -n "$raGameTitles" | wc -l)
@@ -307,8 +308,11 @@ do
     fi
     
   done
-
-  downloadRomCount=$(find "$libraryPath/$consoleFolder" -type f | wc -l)
+  if [ -d  "$libraryPath/$consoleFolder" ]; then
+    downloadRomCount=$(find "$libraryPath/$consoleFolder" -type f | wc -l)
+  else
+    downloadRomCount=0
+  fi
   Log "===================================================================="
   Log "Downloaded and matched $downloadRomCount of $raGameTitlesCount possible RetroAchievements.org ROMs"
   Log "Only $(( $raGameTitlesCount - $downloadRomCount)) ROMs missing..."
