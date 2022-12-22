@@ -30,7 +30,7 @@ DownloadFile () {
   # $3 = Number of concurrent connections to use
   # $4 = fileName
   Log "Downloading :: $4"
-  wget "$1" -O "$2"
+  wget -q --show-progress --progress=bar:force 2>&1 "$1" -O "$2"
   if [ ! -f "$2" ]; then
     Log "Download Failed :: $1"
   fi
@@ -207,19 +207,28 @@ do
     fileName="$(basename "$decodedUrl")"
     fileNameNoExt="${fileName%.*}"
     fileNameSearch=$(echo "$fileNameNoExt"| cut -f1 -d"(" | sed "s/\ $//g" )
-    if echo "$raGameTitles" | grep -i "$fileNameSearch" | read; then
+    fileNameFirstWord="$(echo "$fileNameSearch"  | awk '{ print $1 }')"
+    fileNameFirstWordClean=$(echo "$fileNameFirstWord" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
+    fileNameFirstWordClean="${fileNameFirstWordClean:0:10}"
+    fileNameSecondWord="$(echo "$fileNameSearch"  | awk '{ print $2 }')"
+    fileNameSecondWordClean=$(echo "$fileNameSecondWord" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
+    fileNameSecondWordClean="${fileNameSecondWordClean:0:10}"
+    raGameTitlesClean=$(echo "$raGameTitles" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
+    #echo "$fileNameFirstWordClean $fileNameSecondWordClean"
+    
+    if echo "${raGameTitlesClean,,}" | grep -i "${fileNameFirstWordClean,,}" | grep -i "${fileNameSecondWordClean,,}" | read; then
       Log "$fileNameNoExt :: Title found on RA Game List"
     else
       Log "$fileNameNoExt :: title not found on RA Game List, skipping..."
       continue
     fi
-    
+
     if [ -f "/config/logs/$consoleFolder/$fileName.txt" ]; then
-      Log "Previously Processed..."
+      Log "$fileNameNoExt :: Previously Processed..."
       continue
     fi
-    if [ -f "$libraryPath/$consoleFolder/$fileNameNoExt.zip" ]; then
-      Log "$libraryPath/$consoleFolder/$fileNameNoExt.zip :: File already exists :: skipping..."
+    if find "$libraryPath/$consoleFolder" -type f -iname "$fileNameNoExt.*" | read; then
+      Log "$libraryPath/$consoleFolder/$fileNameNoExt.* :: File already exists :: skipping..."
       mkdir -p /config/logs/$consoleFolder
       touch "/config/logs/$consoleFolder/$fileName.txt"
       continue
@@ -227,7 +236,7 @@ do
     DownloadFile "$downloadUrl" "$libraryPath/temp/$fileName" "$concurrentDownloadThreads" "$fileName"
 
     if [ ! -f "$libraryPath/temp/$fileName" ]; then
-      Log "Skipping..."
+      Log "$fileNameNoExt :: Skipping..."
       continue
     else
       mkdir -p "/config/logs/$consoleFolder"
