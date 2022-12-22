@@ -5,7 +5,7 @@ scriptVersion="2"
 #raUsername=
 #raWebApiKey=
 libraryPath="/roms"
-consoles="gb,gbc,nes,snes,mastersystem,sega32x,psx,ps2"
+consoles="gb,gbc,gba,nes,snes,mastersystem,sega32x,psx,ps2"
 
 ######### LOGGING
 
@@ -40,6 +40,7 @@ DownloadFile () {
 }
 
 DownloadFileVerification () {
+  Log "$1 :: Verifing Download..."
   case "$1" in
     *.zip|*.ZIP)
       verify="$(unzip -t "$1" &>/dev/null; echo $?)"
@@ -227,11 +228,17 @@ do
       Log "$fileNameNoExt :: Previously Processed..."
       continue
     fi
-    if find "$libraryPath/$consoleFolder" -type f -iname "$fileNameNoExt.*" | read; then
-      Log "$libraryPath/$consoleFolder/$fileNameNoExt.* :: File already exists :: skipping..."
-      mkdir -p /config/logs/$consoleFolder
-      touch "/config/logs/$consoleFolder/$fileName.txt"
-      continue
+    if [ -d "$libraryPath/$consoleFolder" ]; then
+      if find "$libraryPath/$consoleFolder" -type f -iname "$fileNameNoExt.*" | read; then
+        Log "$libraryPath/$consoleFolder/$fileNameNoExt.* :: File already exists :: skipping..."
+        if [ ! -d /config/logs/$consoleFolder ]; then
+          mkdir -p /config/logs/$consoleFolder
+          chmod 777 /config/logs/$consoleFolder
+        fi
+        touch "/config/logs/$consoleFolder/$fileName.txt"
+        chmod 666 "/config/logs/$consoleFolder/$fileName.txt"
+        continue
+      fi
     fi
     DownloadFile "$downloadUrl" "$libraryPath/temp/$fileName" "$concurrentDownloadThreads" "$fileName"
 
