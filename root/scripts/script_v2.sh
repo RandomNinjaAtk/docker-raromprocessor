@@ -196,7 +196,7 @@ do
   fi
   
   raGameList="$(wget -qO- "https://retroachievements.org/API/API_GetGameList.php?z=${raUsername}&y=${raWebApiKey}&i=$raConsoleId")"
-  raGameTitles=$(echo "$raGameList" | jq -r .[].Title)
+  raGameTitles=$(echo "$raGameList" | jq -r .[].Title | sort -u)
   raGameTitlesCount=$(echo -n "$raGameTitles" | wc -l)
   if [ -d $libraryPath/temp ]; then
     rm -rf $libraryPath/temp
