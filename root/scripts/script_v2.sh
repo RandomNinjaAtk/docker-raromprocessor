@@ -218,6 +218,12 @@ do
 
   DownloadRaHashLibrary "$raConsoleId" "$consoleFolder"
 
+  if cat "/config/ra_hash_libraries/${consoleFolder}_hashes.json" | grep '"MD5List": \[\]' | read; then
+    Log "ERROR :: No hashes found on RetroAchievements.org website for this console..."
+    Log "Skipping..."
+    continue
+  fi
+
   totalCount="$(echo "$archiveUrl" | wc -l)"
   OLDIFS="$IFS"
   IFS=$'\n'
