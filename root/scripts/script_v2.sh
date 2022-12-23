@@ -6,7 +6,7 @@ scriptVersion="2"
 #raWebApiKey=
 libraryPath="/roms"
 consoles="channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,psp,nes,snes,megadrive,mastersystem,sega32x,3do,n64,segacd,saturn,psx,dreamcast,ps2"
-
+#consoles=psp
 ######### LOGGING
 
 # auto-clean up log file to reduce space usage
@@ -82,7 +82,7 @@ UncompressFile () {
       ;;
     *.7z|*.7Z)
       Log "7z file detected!"
-      7z x "$1" "$2" &>/dev/null
+      7z e "$1" -o"$2" &>/dev/null
       ;;
   esac
   Log "Uncompressing Complete!"
