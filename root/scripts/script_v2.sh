@@ -7,7 +7,6 @@ scriptVersion="2"
 libraryPath="/roms"
 consoles="apple2,supervision,wasm4,megaduck,arduboy,channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,psp,nes,snes,megadrive,mastersystem,sega32x,3do,n64,segacd,saturn,psx,dreamcast,ps2"
 #consoles=psp
-downloadAll="false"
 ######### LOGGING
 
 # auto-clean up log file to reduce space usage
@@ -188,6 +187,7 @@ do
   consoleProcessNumber=$(( $consoleProcessNumber + 1 ))
   consoleName="Unknown"
   consoleFolder="unk"
+  downloadAll="false"
 
   consoleFile="/config/consoles/$console.sh"
   if [ ! -f "$consoleFile" ]; then
