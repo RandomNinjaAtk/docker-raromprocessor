@@ -2,7 +2,7 @@ consoleName="Sony PlayStation Portable"
 consoleFolder="psp"
 consoleRomFileExt=".iso, .cso, .pbp"
 raConsoleId="41"
-uncompressRom="false"
+uncompressRom="true"
 compressRom="false"
 
 # Create URL List
