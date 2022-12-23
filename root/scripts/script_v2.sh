@@ -5,7 +5,7 @@ scriptVersion="2"
 #raUsername=
 #raWebApiKey=
 libraryPath="/roms"
-consoles="pcfx,pcenginecd,fbneo,apple2,supervision,wasm4,megaduck,arduboy,channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,psp,nes,snes,megadrive,mastersystem,sega32x,3do,n64,segacd,saturn,psx,dreamcast,ps2"
+consoles="pc88,pcfx,pcenginecd,fbneo,apple2,supervision,wasm4,megaduck,arduboy,channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,psp,nes,snes,megadrive,mastersystem,sega32x,3do,n64,segacd,saturn,psx,dreamcast,ps2"
 #consoles=psp
 ######### LOGGING
 
