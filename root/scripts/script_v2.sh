@@ -245,7 +245,7 @@ do
     raGameTitlesClean=$(echo "$raGameTitles" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
     #echo "$fileNameFirstWordClean $fileNameSecondWordClean"
     
-    if echo "${raGameTitlesClean,,}" | grep -i "${fileNameFirstWordClean,,}" | grep -i "${fileNameSecondWordClean,,}" | read; then
+    if echo "${raGameTitlesClean,,}" | grep -i "^${fileNameFirstWordClean,,}" | grep -i "${fileNameSecondWordClean,,}" | read; then
       Log "$fileNameNoExt :: Title found on RA Game List"
     else
       Log "$fileNameNoExt :: title not found on RA Game List, skipping..."
