@@ -7,5 +7,5 @@ compressRom="false"
 downloadAll="true"
 
 # Create URL List
-archiveContentsUrl="https://archive.org/download/retroachievements-rom-collection/NEC%20-%20PC-FX.zip/"
+archiveContentsUrl="https://archive.org/download/retroachievements-rom-collection/NEC%20-%20PC-8000-8800.zip/"
 archiveUrl="$(wget -qO- "$archiveContentsUrl" | grep -i "\.zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | grep -i "archive.org" | sed 's%^//%https://%g' | sort -u)"
