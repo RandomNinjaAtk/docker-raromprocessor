@@ -30,7 +30,8 @@ DownloadFile () {
   # $3 = Number of concurrent connections to use
   # $4 = fileName
   Log "Downloading :: $4"
-  wget -q --show-progress --progress=bar:force 2>&1 "$1" -O "$2"
+  axel -n $ConcurrentDownloadThreads --output="$2" "$1" | awk -W interactive '$0~/\[/{printf "%s'$'\r''", $0}'
+  #wget -q --show-progress --progress=bar:force 2>&1 "$1" -O "$2"
   if [ ! -f "$2" ]; then
     Log "Download Failed :: $1"
   fi
@@ -103,7 +104,7 @@ RaHashRom (){
   # $2 = Console ID
   raHash=""
   Log "$1 :: Hashing..."
-	raHash=$(/usr/local/RALibretro/bin64/RAHasher $2 "$1") || ret=1
+  raHash=$(/usr/local/RALibretro/bin64/RAHasher $2 "$1") || ret=1
   Log "$1 :: Hash Found :: $raHash"
 }
 
