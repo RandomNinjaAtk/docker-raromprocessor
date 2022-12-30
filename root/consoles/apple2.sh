@@ -4,6 +4,7 @@ consoleRomFileExt=".nib, .do, .po, .dsk, .mfi, .dfi, .rti, .edd, .woz, .wav, .zi
 raConsoleId="38"
 uncompressRom="false"
 compressRom="false"
+skyscraperPlatform="apple2"
 downloadAll="true"
 
 # Create URL List
