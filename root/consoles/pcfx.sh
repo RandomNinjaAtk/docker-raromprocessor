@@ -4,6 +4,8 @@ consoleRomFileExt=".cue, .ccd, .toc, .chd, .zip, .7z"
 raConsoleId="49"
 uncompressRom="false"
 compressRom="false"
+skyscraperPlatform="pcfx"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/PCFXCHD_Arquivista/"
