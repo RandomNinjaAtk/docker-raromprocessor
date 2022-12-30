@@ -165,6 +165,45 @@ MoveRomToFinalLocation () {
 
 UrlDecode () { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
 
+Skraper () {
+  # $1 - CosoleFolder
+  # $2 - Output folder
+  # #3 - Skyskarper platform name 
+
+  if [ "$ScrapeMetadata" = "true" ]; then
+		if Skyscraper | grep -w "$1" | read; then
+			Log "Begin Skyscraper Process..."
+			if find /output/$folder -type f | read; then
+				Log "Checking For ROMS in $2 :: ROMs found, processing..."
+			else
+				echo "Checking For ROMS in $2 :: No ROMs found, skipping..."
+				continue
+			fi
+			# Scrape from screenscraper
+			if [ "$compressRom" == "true" ]; then
+				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $1 -d /cache/$1 -s screenscraper -i "$2" --flags relative,videos,unattend,nobrackets,unpack
+			else
+				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $1 -d /cache/$1 -s screenscraper -i "$2" --flags relative,videos,unattend,nobrackets
+			fi
+			# Save scraped data to output folder
+			Skyscraper -f emulationstation -p $1 -d /cache/$1 -i "$2" --flags relative,videos,unattend,nobrackets
+			# Remove skipped roms
+			if [ -f /root/.skyscraper/skipped-$1-cache.txt ]; then
+				cat /root/.skyscraper/skipped-$1-cache.txt | while read LINE;
+				do 
+					rm "$LINE"
+				done
+			fi
+		else 
+			Log "Metadata Scraping :: ERROR :: Platform not supported, skipping..."
+		fi 
+	else
+		Log "Metadata Scraping disabled..."
+		Log "Enable by setting \"ScrapeMetadata=true\""
+	fi
+
+}
+
 ######### PROCESS
 currentsubprocessid=0
 totalCount=0
@@ -230,7 +269,7 @@ do
   totalCount="$(echo "$archiveUrl" | wc -l)"
   OLDIFS="$IFS"
   IFS=$'\n'
-  archiveUrls=($(echo "$archiveUrl"))
+  archiveUrls=($(echo "$archiveUrl" | sort -ur))
   IFS="$OLDIFS"
   for Url in ${!archiveUrls[@]}; do
     currentsubprocessid=$(( $Url + 1 ))
@@ -245,11 +284,14 @@ do
     fileNameSecondWord="$(echo "$fileNameSearch"  | awk '{ print $2 }')"
     fileNameSecondWordClean=$(echo "$fileNameSecondWord" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
     fileNameSecondWordClean="${fileNameSecondWordClean:0:10}"
+    fileNameThirdWord="$(echo "$fileNameSearch"  | awk '{ print $2 }')"
+    ffileNameThirdWordClean=$(echo "$fileNameThirdWord" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
+    fileNameThirdWordClean="${ffileNameThirdWordClean:0:10}"
     raGameTitlesClean=$(echo "$raGameTitles" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
     #echo "$fileNameFirstWordClean $fileNameSecondWordClean"
     
     if [ "$downloadAll" == "false" ]; then
-      if echo "${raGameTitlesClean,,}" | grep -i "^${fileNameFirstWordClean,,}" | grep -i "${fileNameSecondWordClean,,}" | read; then
+      if echo "${raGameTitlesClean,,}" | grep -i "${fileNameFirstWordClean,,}" | grep -i "${fileNameSecondWordClean,,}" | grep -i "${fileNameThirdWordClean,,}" | read; then
         Log "$fileNameNoExt :: Title found on RA Game List"
       else
         Log "$fileNameNoExt :: ERROR :: Title not found on RA Game List, skipping..."
@@ -321,17 +363,21 @@ do
     
   done
   if [ -d  "$libraryPath/$consoleFolder" ]; then
-    downloadRomCount=$(find "$libraryPath/$consoleFolder" -type f | wc -l)
+    downloadRomCount=$(find "$libraryPath/$consoleFolder" -maxdepth 1 -type f -not -iname "*.xml" | wc -l)
   else
     downloadRomCount=0
   fi
   Log "===================================================================="
   Log "Downloaded and matched $downloadRomCount of $raGameTitlesCount possible RetroAchievements.org ROMs"
   Log "Only $(( $raGameTitlesCount - $downloadRomCount)) ROMs missing..."
+  sleep 2
   if [ -d $libraryPath/temp ]; then
     rm -rf $libraryPath/temp
   fi
 
+  if [ -d "$libraryPath/$consoleFolder" ]; then
+    Skraper "$consoleFolder" "$libraryPath/$consoleFolder"
+  fi
 done
 
 exit
