@@ -4,6 +4,8 @@ consoleRomFileExt=".iso, .mdf, .nrg, .bin, .img, .dump, .gz, .cso, .chd"
 raConsoleId="21"
 uncompressRom="false"
 compressRom="false"
+skyscraperPlatform="ps2"
+downloadAll="false"
 
 # Create URL List
 if [ -f templist ]; then
