@@ -4,6 +4,8 @@ consoleRomFileExt=".cue, .iso, .chd, .m3u"
 raConsoleId="9"
 uncompressRom="false"
 compressRom="false"
+skyscraperPlatform="segacd"
+downloadAll="false"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/SEGACD_CHD_PLUS/"
