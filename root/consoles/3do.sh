@@ -4,6 +4,8 @@ consoleRomFileExt=".iso, .chd, .cue"
 raConsoleId="43"
 uncompressRom="false"
 compressRom="false"
+skyscraperPlatform="3do"
+downloadAll="false"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/chd_3do/CHD-3DO/"
