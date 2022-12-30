@@ -4,6 +4,8 @@ consoleRomFileExt=".dsk, .sna, .tap, .cdt, .voc, .m3u, .zip, .7z"
 raConsoleId="37"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="amstradcpc"
+downloadAll="false"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Amstrad - CPC.zip/"
