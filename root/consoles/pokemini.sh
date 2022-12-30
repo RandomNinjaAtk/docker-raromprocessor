@@ -4,6 +4,8 @@ consoleRomFileExt=".min, .zip, .7z"
 raConsoleId="24"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="pokemini"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Pokemon Mini.zip/"
