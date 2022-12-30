@@ -3,7 +3,9 @@ consoleFolder="arduboy"
 consoleRomFileExt=".hex, .zip, .7z"
 raConsoleId="71"
 uncompressRom="false"
-compressRom="false"
+compressRom="true"
+skyscraperPlatform="unsupported"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/ArduboyRoms/Arduboy/"
