@@ -142,8 +142,15 @@ RomRaHashVerification () {
       mkdir -p "/config/logs/$2/matched"
       chmod 777 "/config/logs/$consoleFolder/matched"
     fi
-    touch "/config/logs/$2/matched/${raGameId}_ra_game_id"
-    chmod 666 "/config/logs/$2/matched/${raGameId}_ra_game_id"
+    if [ ! "/config/logs/$2/matched/${raGameId}_ra_game_id" ]; then
+      touch "/config/logs/$2/matched/${raGameId}_ra_game_id"
+      chmod 666 "/config/logs/$2/matched/${raGameId}_ra_game_id"
+    else
+      Log "$1 :: ROM Previously Matched, skipping..."
+      if [ -d "$libraryPath/_temp_$1" ]; then
+        rm -rf "$libraryPath/_temp_$1" &>/dev/null
+      fi
+    fi
   else
     Log "$1 :: ERROR :: Not Found on RetroAchievements.org DB"
     rm "$1"
@@ -328,6 +335,34 @@ ParallelProcessing () {
       fi
 }
 
+ProcessLinks () {
+  region="$1"
+  regionShort="${region:0:1}"  
+  echo "" > temp_url_list
+  for i in $(echo $archiveUrl); do
+    decodedUrl="$(UrlDecode "$i")"
+    echo $decodedUrl >> temp_url_list
+  done
+  archiveUrl=$(cat "temp_url_list")
+  rm temp_url_list
+	# Process ROMs with RAHasher
+	if [ "$region" = "Other" ]; then
+		region="."
+	fi
+  Log "Processing $region ROMs..."
+  N=$ParallelProcesses
+  totalCount="$(echo "$archiveUrl" | grep -iE "$region| \($regionShort" | sort -ur | wc -l)"
+  OLDIFS="$IFS"
+  IFS=$'\n'
+  archiveUrls=($(echo "$archiveUrl" | grep -iE "$region| \($regionShort" | sort -ur))
+  IFS="$OLDIFS"
+  for Url in ${!archiveUrls[@]}; do
+    currentsubprocessid=$(( $Url + 1 ))
+    downloadUrl="${archiveUrls[$Url]}"
+    ParallelProcessing "$currentsubprocessid" "$downloadUrl" &
+    if [[ $(jobs -r -p | wc -l) -ge $N ]]; then wait -n; fi
+  done
+}
 ######### PROCESS
 currentsubprocessid=0
 totalCount=0
@@ -381,6 +416,12 @@ do
     Log "Skipping..."
     continue
   fi
+
+  ProcessLinks USA
+	ProcessLinks Europe
+	ProcessLinks World
+	ProcessLinks Japan
+	ProcessLinks Other
 
   N=$ParallelProcesses
   totalCount="$(echo "$archiveUrl" | wc -l)"
