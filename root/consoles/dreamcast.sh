@@ -4,6 +4,8 @@ consoleRomFileExt=".cdi, .cue, .gdi, .chd, .m3u"
 raConsoleId="40"
 uncompressRom="false"
 compressRom="false"
+skyscraperPlatform="dreamcast"
+downloadAll="false"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/chd_dc/CHD-Dreamcast/"
