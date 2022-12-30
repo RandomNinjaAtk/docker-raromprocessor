@@ -4,6 +4,8 @@ consoleRomFileExt=".wasm"
 raConsoleId="72"
 uncompressRom="false"
 compressRom="false"
+skyscraperPlatform="unsupported"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/wasm-4-complete-archive-emulator/WASM-4%20Complete%20Archive%20%2B%20Emulator.zip/"
