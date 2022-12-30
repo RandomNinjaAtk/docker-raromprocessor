@@ -4,6 +4,8 @@ consoleRomFileExt=".rom, .xfd, .atr, .atx, .cdm, .cas, .car, .bin, .a52, .xex, .
 raConsoleId="50"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="atari5200"
+downloadAll="false"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari%20-%205200.zip/"
