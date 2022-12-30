@@ -4,6 +4,7 @@ consoleRomFileExt=".zip, .7z"
 raConsoleId="27"
 uncompressRom="false"
 compressRom="false"
+skyscraperPlatform="arcade"
 downloadAll="true"
 
 # Create URL List
