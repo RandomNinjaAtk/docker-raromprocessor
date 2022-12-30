@@ -4,6 +4,8 @@ consoleRomFileExt=".d64, .d81, .crt, .prg, .tap, .t64, .m3u, .zip, .7z"
 raConsoleId="30"
 uncompressRom="false"
 compressRom="false"
+skyscraperPlatform="c64"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Commodore%20-%2064.zip/"
