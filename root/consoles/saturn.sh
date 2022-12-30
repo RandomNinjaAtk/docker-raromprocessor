@@ -4,6 +4,8 @@ consoleRomFileExt=".cue, .ccd, .m3u, .chd, .iso, .zip"
 raConsoleId="39"
 uncompressRom="false"
 compressRom="false"
+skyscraperPlatform="saturn"
+downloadAll="false"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/chd_saturn/CHD-Saturn/USA/"
