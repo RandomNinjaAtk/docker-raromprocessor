@@ -4,7 +4,7 @@ consoleRomFileExt=".zip, .7z"
 raConsoleId="27"
 uncompressRom="false"
 compressRom="false"
-downloadAll="false"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/2020_01_06_fbn/roms/arcade.zip/"
