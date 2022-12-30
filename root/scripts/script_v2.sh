@@ -142,14 +142,23 @@ RomRaHashVerification () {
       mkdir -p "/config/logs/$2/matched"
       chmod 777 "/config/logs/$consoleFolder/matched"
     fi
-    if [ ! "/config/logs/$2/matched/${raGameId}_ra_game_id" ]; then
+
+    # Wait for all jobs to finish
+    for (( ; ; ))
+    do
+      if [[ $(jobs -r -p | wc -l) != 0 ]]; then
+        wait -n
+      else
+        break
+      fi
+    done
+
+    if [ ! -f "/config/logs/$2/matched/${raGameId}_ra_game_id" ]; then
       touch "/config/logs/$2/matched/${raGameId}_ra_game_id"
       chmod 666 "/config/logs/$2/matched/${raGameId}_ra_game_id"
     else
       Log "$1 :: ROM Previously Matched, skipping..."
-      if [ -d "$libraryPath/_temp_$1" ]; then
-        rm -rf "$libraryPath/_temp_$1" &>/dev/null
-      fi
+      rm "$1"
     fi
   else
     Log "$1 :: ERROR :: Not Found on RetroAchievements.org DB"
@@ -219,8 +228,7 @@ Skraper () {
 }
 
 ParallelProcessing () {
-      decodedUrl="$(UrlDecode "$2")"
-      fileName="$(basename "$decodedUrl")"
+      fileName="$(basename "$2")"
       fileNameNoExt="${fileName%.*}"
       fileNameSearch=$(echo "$fileNameNoExt"| cut -f1 -d"(" | sed "s/\ $//g" )
       fileNameFirstWord="$(echo "$fileNameSearch"  | awk '{ print $1 }')"
@@ -338,29 +346,38 @@ ParallelProcessing () {
 ProcessLinks () {
   region="$1"
   regionShort="${region:0:1}"  
+  Log "Processing $region ROMs..."
   echo "" > temp_url_list
-  for i in $(echo $archiveUrl); do
+  for i in $(echo $2); do
     decodedUrl="$(UrlDecode "$i")"
     echo $decodedUrl >> temp_url_list
   done
-  archiveUrl=$(cat "temp_url_list")
+  regionArchiveUrl=$(cat "temp_url_list")
   rm temp_url_list
 	# Process ROMs with RAHasher
 	if [ "$region" = "Other" ]; then
 		region="."
 	fi
-  Log "Processing $region ROMs..."
   N=$ParallelProcesses
-  totalCount="$(echo "$archiveUrl" | grep -iE " \($region| \($regionShort" | sort -u | wc -l)"
+  totalCount="$(echo "$regionArchiveUrl" | grep -iE " \($region| \($regionShort" | sort -u | wc -l)"
   OLDIFS="$IFS"
   IFS=$'\n'
-  archiveUrls=($(echo "$archiveUrl" | grep -iE " \($region| \($regionShort" | sort -u))
+  regionArchiveUrls=($(echo "$regionArchiveUrl" | grep -iE " \($region| \($regionShort" | sort -u))
   IFS="$OLDIFS"
-  for Url in ${!archiveUrls[@]}; do
+  for Url in ${!regionArchiveUrls[@]}; do
     currentsubprocessid=$(( $Url + 1 ))
-    downloadUrl="${archiveUrls[$Url]}"
+    downloadUrl="${regionArchiveUrls[$Url]}"
     ParallelProcessing "$currentsubprocessid" "$downloadUrl" &
     if [[ $(jobs -r -p | wc -l) -ge $N ]]; then wait -n; fi
+  done
+  # Wait for all jobs to finish
+  for (( ; ; ))
+  do
+    if [[ $(jobs -r -p | wc -l) != 0 ]]; then
+      wait -n
+    else
+      break
+    fi
   done
 }
 ######### PROCESS
@@ -417,34 +434,13 @@ do
     continue
   fi
 
-  ProcessLinks USA
-	ProcessLinks Europe
-	ProcessLinks World
-	ProcessLinks Japan
-	ProcessLinks Other
-
-  N=$ParallelProcesses
-  totalCount="$(echo "$archiveUrl" | wc -l)"
-  OLDIFS="$IFS"
-  IFS=$'\n'
-  archiveUrls=($(echo "$archiveUrl" | sort -ur))
-  IFS="$OLDIFS"
-  for Url in ${!archiveUrls[@]}; do
-    currentsubprocessid=$(( $Url + 1 ))
-    downloadUrl="${archiveUrls[$Url]}"
-    ParallelProcessing "$currentsubprocessid" "$downloadUrl" &
-    if [[ $(jobs -r -p | wc -l) -ge $N ]]; then wait -n; fi
-  done
+  ProcessLinks USA "$archiveUrl"
+	ProcessLinks Europe "$archiveUrl"
+	ProcessLinks World "$archiveUrl"
+	ProcessLinks Japan "$archiveUrl"
+	ProcessLinks Other "$archiveUrl"
   
-  # Wait for all jobs to finish
-  for (( ; ; ))
-  do
-    if [[ $(jobs -r -p | wc -l) != 0 ]]; then
-      wait -n
-    else
-      break
-    fi
-  done
+  
 
   if [ -d  "$libraryPath/$consoleFolder" ]; then
     downloadRomCount=$(find "$libraryPath/$consoleFolder" -maxdepth 1 -type f -not -iname "*.xml" | wc -l)
