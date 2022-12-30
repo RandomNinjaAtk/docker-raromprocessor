@@ -4,6 +4,8 @@ consoleRomFileExt=".bin, .gam, .vec, .zip, .7z"
 raConsoleId="46"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="vectrex"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/GCE - Vectrex.zip/"
