@@ -146,7 +146,12 @@ RomRaHashVerification () {
     # Wait for all jobs to finish
     for (( ; ; ))
     do
-      if [[ $(jobs -r -p | wc -l) != 0 ]]; then
+      if ps aux | grep "Skyscraper" | grep -v "grep" | read; then
+        skyscraperProcessCount=$(ps aux | grep "Skyscraper" | grep -v "grep" | wc -l)
+      else
+        skyscraperProcessCount=0
+      fi
+      if [[ $(( $(jobs -r -p | wc -l) - $skyscraperProcessCount )) -gt 0 ]]; then
         wait -n
       else
         break
@@ -214,12 +219,12 @@ Skraper () {
 			if [ -f /root/.skyscraper/skipped-$1-cache.txt ]; then
 				cat /root/.skyscraper/skipped-$1-cache.txt | while read LINE;
 				do
-          if [ ! -d "$libraryPath/_unscapable/$1" ]; then
-            mkdir -p "$libraryPath/_unscapable/$1"
-            chmod 777 "$libraryPath/_unscapable/$1"
+          if [ ! -d "$libraryPath/_unscrapable/$1" ]; then
+            mkdir -p "$libraryPath/_unscrapable/$1"
+            chmod 777 "$libraryPath/_unscrapable/$1"
           fi
-          Log "Moving $(basname "$LINE") to $libraryPath/_unscapable/$1/"
-					mv "$LINE" "$libraryPath/_unscapable/$1"/
+          Log "Moving $(basname "$LINE") to $libraryPath/_unscrapable/$1/"
+					mv "$LINE" "$libraryPath/_unscrapable/$1"/
 				done
 			fi
 		else 
@@ -378,7 +383,12 @@ ProcessLinks () {
   # Wait for all jobs to finish
   for (( ; ; ))
   do
-    if [[ $(jobs -r -p | wc -l) != 0 ]]; then
+    if ps aux | grep "Skyscraper" | grep -v "grep" | read; then
+      skyscraperProcessCount=$(ps aux | grep "Skyscraper" | grep -v "grep" | wc -l)
+    else
+      skyscraperProcessCount=0
+    fi
+    if [[ $(( $(jobs -r -p | wc -l) - $skyscraperProcessCount )) -gt 0 ]]; then
       wait -n
     else
       break
@@ -459,8 +469,10 @@ do
   Log "$(( $downloadRomCount - $matchedRomCount)) Duplicate ROMs found..."
   sleep 5
   
-  if [ -d "$libraryPath/$consoleFolder" ]; then
-    Skraper "$consoleFolder" "$libraryPath/$consoleFolder"
+  if [[ $(jobs -r -p | wc -l) -ge $N ]]; then
+    wait -n;
+  else
+    Skraper "$consoleFolder" "$libraryPath/$consoleFolder" &
   fi
 done
 
