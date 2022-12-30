@@ -4,6 +4,7 @@ consoleRomFileExt=".fds, .zip, .7z"
 raConsoleId="7"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="fds"
 downloadAll="true"
 
 # Create URL List
