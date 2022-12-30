@@ -4,6 +4,8 @@ consoleRomFileExt=".gba, .zip, .7z"
 raConsoleId="5"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="gba"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Game Boy Advance.zip/"
