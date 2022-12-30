@@ -4,6 +4,8 @@ consoleRomFileExt=".pce, .bin, .zip, .7z"
 raConsoleId="8"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="pcengine"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/NEC - PC Engine - TurboGrafx 16.zip/"
