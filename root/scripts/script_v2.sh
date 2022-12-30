@@ -137,7 +137,12 @@ RomRaHashVerification () {
   if cat "/config/ra_hash_libraries/${2}_hashes.json" | jq -r .[] | grep -i "\"$raHash\"" | read; then
     raGameId=$(cat "/config/ra_hash_libraries/${2}_hashes.json" | jq -r .[] | grep -i "\"$raHash\"" | cut -d ":" -f 2 | sed "s/\ //g" | sed "s/,//g")
     Log "$1 :: Match Found :: Game ID :: $raGameId"
-    touch "/config/logs/$2/_matched_${raGameId}_ra_game_id"
+    if [ ! -d "/config/logs/$2/matched" ]; then
+      mkdir -p "/config/logs/$2/matched"
+      chmod 777 "/config/logs/$consoleFolder/matched"
+    fi
+    touch "/config/logs/$2/matched/${raGameId}_ra_game_id"
+    chmod 666 "/config/logs/$2/matched/${raGameId}_ra_game_id"
   else
     Log "$1 :: ERROR :: Not Found on RetroAchievements.org DB"
     rm "$1"
@@ -312,8 +317,12 @@ do
           mkdir -p /config/logs/$consoleFolder
           chmod 777 /config/logs/$consoleFolder
         fi
-        touch "/config/logs/$consoleFolder/$fileName.txt"
-        chmod 666 "/config/logs/$consoleFolder/$fileName.txt"
+        if [ ! -d "/config/logs/$consoleFolder/downloaded" ]; then
+          mkdir -p "/config/logs/$consoleFolder/downloaded"
+          chmod 777 "/config/logs/$consoleFolder/downloaded"
+        fi
+        touch "/config/logs/$consoleFolder/downloaded/$fileName.txt"
+        chmod 666 "/config/logs/$consoleFolder/downloaded/$fileName.txt"
         continue
       fi
     fi
@@ -324,7 +333,11 @@ do
       continue
     else
       mkdir -p "/config/logs/$consoleFolder"
-      touch "/config/logs/$consoleFolder/$fileName.txt"
+       if [ ! -d "/config/logs/$consoleFolder/downloaded" ]; then
+          mkdir -p "/config/logs/$consoleFolder/downloaded"
+          chmod 777 "/config/logs/$consoleFolder/downloaded"
+        fi
+      touch "/config/logs/$consoleFolder/downloaded/$fileName.txt"
     fi
     DownloadFileVerification "$libraryPath/temp/$fileName"
     if [ ! -f "$libraryPath/temp/$fileName" ]; then
@@ -365,12 +378,14 @@ do
   done
   if [ -d  "$libraryPath/$consoleFolder" ]; then
     downloadRomCount=$(find "$libraryPath/$consoleFolder" -maxdepth 1 -type f -not -iname "*.xml" | wc -l)
+    matchedRomCount=$(find "/config/logs/$consoleFolder/matched" -type f | wc -l)
   else
     downloadRomCount=0
   fi
   Log "===================================================================="
-  Log "Downloaded and matched $downloadRomCount of $raGameTitlesCount possible RetroAchievements.org ROMs"
-  Log "Only $(( $raGameTitlesCount - $downloadRomCount)) ROMs missing..."
+  Log "Downloaded ($downloadRomCount) ROMs and matched $matchedRomCount of $raGameTitlesCount possible RetroAchievements.org ROMs"
+  Log "Only $(( $raGameTitlesCount - $matchedRomCount)) ROMs missing..."
+  Log "$(( $downloadRomCount - $matchedRomCount)) Duplicate ROMs found..."
   sleep 2
   if [ -d $libraryPath/temp ]; then
     rm -rf $libraryPath/temp
