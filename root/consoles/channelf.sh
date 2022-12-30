@@ -4,6 +4,8 @@ consoleRomFileExt=".zip, .rom, .bin, .chf"
 raConsoleId="57"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="channelf"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Fairchild%20-%20Channel%20F.zip/"
