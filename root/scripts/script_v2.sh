@@ -204,17 +204,22 @@ Skraper () {
 			fi
 			# Scrape from screenscraper
 			if [ "$compressRom" == "true" ]; then
-				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $1 -d /cache/$1 -s screenscraper -i "$2" --flags relative,videos,unattend,nobrackets,unpack
+				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $1 -d /cache/$1 -s screenscraper -i "$2" --flags nosubdirs,noresize,relative,videos,unattend,nobrackets
 			else
-				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $1 -d /cache/$1 -s screenscraper -i "$2" --flags relative,videos,unattend,nobrackets
+				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $1 -d /cache/$1 -s screenscraper -i "$2" --flags nosubdirs,noresize,relative,videos,unattend,nobrackets
 			fi
 			# Save scraped data to output folder
 			Skyscraper -f emulationstation -p $1 -d /cache/$1 -i "$2" --flags relative,videos,unattend,nobrackets
 			# Remove skipped roms
 			if [ -f /root/.skyscraper/skipped-$1-cache.txt ]; then
 				cat /root/.skyscraper/skipped-$1-cache.txt | while read LINE;
-				do 
-					rm "$LINE"
+				do
+          if [ ! -d "$libraryPath/_unscapable/$1" ]; then
+            mkdir -p "$libraryPath/_unscapable/$1"
+            chmod 777 "$libraryPath/_unscapable/$1"
+          fi
+          Log "Moving $(basname "$LINE") to $libraryPath/_unscapable/$1/"
+					mv "$LINE" "$libraryPath/_unscapable/$1"/
 				done
 			fi
 		else 
@@ -359,10 +364,10 @@ ProcessLinks () {
 		region="."
 	fi
   N=$ParallelProcesses
-  totalCount="$(echo "$regionArchiveUrl" | grep -iE " \($region| \($regionShort" | sort -u | wc -l)"
+  totalCount="$(echo "$regionArchiveUrl" | grep -iE "$region| \($regionShort" | sort -u | wc -l)"
   OLDIFS="$IFS"
   IFS=$'\n'
-  regionArchiveUrls=($(echo "$regionArchiveUrl" | grep -iE " \($region| \($regionShort" | sort -u))
+  regionArchiveUrls=($(echo "$regionArchiveUrl" | grep -iE "$region| \($regionShort" | sort -u))
   IFS="$OLDIFS"
   for Url in ${!regionArchiveUrls[@]}; do
     currentsubprocessid=$(( $Url + 1 ))
@@ -425,7 +430,6 @@ do
   raGameTitlesCount=0
   raGameList="$(wget -qO- "https://retroachievements.org/API/API_GetGameList.php?z=${raUsername}&y=${raWebApiKey}&i=$raConsoleId")"
   raGameTitles=$(echo "$raGameList" | jq -r .[].Title | sort -u)
-  raGameTitlesCount=$(echo -n "$raGameTitles" | wc -l)
   DownloadRaHashLibrary "$raConsoleId" "$consoleFolder"
 
   if cat "/config/ra_hash_libraries/${consoleFolder}_hashes.json" | grep '"MD5List": \[\]' | read; then
@@ -445,6 +449,7 @@ do
   if [ -d  "$libraryPath/$consoleFolder" ]; then
     downloadRomCount=$(find "$libraryPath/$consoleFolder" -maxdepth 1 -type f -not -iname "*.xml" | wc -l)
     matchedRomCount=$(find "/config/logs/$consoleFolder/matched" -type f | wc -l)
+    raGameTitlesCount=$(cat "/config/ra_hash_libraries/${consoleFolder}_hashes.json" | jq -r .[] | sed -r "s/,//g" | grep -o -E ':\ [0-9]*$' | sort -u | wc -l)
   else
     downloadRomCount=0
   fi
