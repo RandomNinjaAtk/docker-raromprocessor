@@ -4,6 +4,8 @@ consoleRomFileExt=".vb, .zip, .7z"
 raConsoleId="28"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="virtualboy"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Virtual Boy.zip/"
