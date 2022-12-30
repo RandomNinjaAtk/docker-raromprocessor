@@ -351,10 +351,10 @@ ProcessLinks () {
 	fi
   Log "Processing $region ROMs..."
   N=$ParallelProcesses
-  totalCount="$(echo "$archiveUrl" | grep -iE "$region| \($regionShort" | sort -u | wc -l)"
+  totalCount="$(echo "$archiveUrl" | grep -iE " \($region| \($regionShort" | sort -u | wc -l)"
   OLDIFS="$IFS"
   IFS=$'\n'
-  archiveUrls=($(echo "$archiveUrl" | grep -iE "$region| \($regionShort" | sort -u))
+  archiveUrls=($(echo "$archiveUrl" | grep -iE " \($region| \($regionShort" | sort -u))
   IFS="$OLDIFS"
   for Url in ${!archiveUrls[@]}; do
     currentsubprocessid=$(( $Url + 1 ))
