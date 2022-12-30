@@ -199,22 +199,28 @@ Skraper () {
   # #3 - Skyskarper platform name 
 
   if [ "$ScrapeMetadata" = "true" ]; then
-		if Skyscraper | grep -w "$1" | read; then
-			Log "Begin Skyscraper Process..."
-			if find /output/$folder -type f | read; then
-				Log "Checking For ROMS in $2 :: ROMs found, processing..."
-			else
-				echo "Checking For ROMS in $2 :: No ROMs found, skipping..."
-				continue
-			fi
+    Log "Begin Skyscraper Process..."
+    if find "$2" -type f | read; then
+			Log "Checking For ROMS in $2 :: ROMs found, processing..."
+		else
+			Log "Checking For ROMS in $2 :: No ROMs found, skipping..."
+			return
+		fi
+    
+		if [ "$skyscraperPlatform" == "unspported" ]; then
+      Log "Metadata Scraping :: ERROR :: Platform not supported, skipping..."
+      return
+    fi
+
+	
 			# Scrape from screenscraper
 			if [ "$compressRom" == "true" ]; then
-				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $1 -d /cache/$1 -s screenscraper -i "$2" --flags nosubdirs,noresize,relative,videos,unattend,nobrackets
+				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $3 -d /cache/$1 -s screenscraper -i "$2" --flags nosubdirs,noresize,relative,videos,unattend,nobrackets
 			else
-				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $1 -d /cache/$1 -s screenscraper -i "$2" --flags nosubdirs,noresize,relative,videos,unattend,nobrackets
+				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $3 -d /cache/$1 -s screenscraper -i "$2" --flags nosubdirs,noresize,relative,videos,unattend,nobrackets
 			fi
 			# Save scraped data to output folder
-			Skyscraper -f emulationstation -p $1 -d /cache/$1 -i "$2" --flags relative,videos,unattend,nobrackets
+			Skyscraper -f emulationstation -p $3 -d /cache/$1 -i "$2" --flags relative,videos,unattend,nobrackets
 			# Remove skipped roms
 			if [ -f /root/.skyscraper/skipped-$1-cache.txt ]; then
 				cat /root/.skyscraper/skipped-$1-cache.txt | while read LINE;
@@ -227,9 +233,7 @@ Skraper () {
 					mv "$LINE" "$libraryPath/_unscrapable/$1"/
 				done
 			fi
-		else 
-			Log "Metadata Scraping :: ERROR :: Platform not supported, skipping..."
-		fi 
+
 	else
 		Log "Metadata Scraping disabled..."
 		Log "Enable by setting \"ScrapeMetadata=true\""
@@ -472,7 +476,7 @@ do
   if [[ $(jobs -r -p | wc -l) -ge $N ]]; then
     wait -n;
   else
-    Skraper "$consoleFolder" "$libraryPath/$consoleFolder" &
+    Skraper "$consoleFolder" "$libraryPath/$consoleFolder" "$skyscraperPlatform" &
   fi
 done
 
