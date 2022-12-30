@@ -4,6 +4,7 @@ consoleRomFileExt=".d88, .u88, .m3u"
 raConsoleId="47"
 uncompressRom="true"
 compressRom="false"
+skyscraperPlatform="pc88"
 downloadAll="true"
 
 # Create URL List
