@@ -4,6 +4,8 @@ consoleRomFileExt=".j64, .jag, .zip, .7z"
 raConsoleId="17"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="atarijaguar"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - Jaguar.zip/"
