@@ -4,6 +4,7 @@ consoleRomFileExt=".smc, .fig, .sfc, .gd3, .gd7, .dx2, .bsx, .swc, .zip, .7z"
 raConsoleId="3"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="snes"
 downloadAll="true"
 
 # Create URL List
