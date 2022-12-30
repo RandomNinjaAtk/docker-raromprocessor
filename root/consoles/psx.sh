@@ -4,6 +4,8 @@ consoleRomFileExt=".bin .cue .img .mdf .pbp .toc .cbn .m3u .ccd .chd"
 raConsoleId="12"
 uncompressRom="false"
 compressRom="false"
+skyscraperPlatform="psx"
+downloadAll="false"
 
 # Create URL List
 if [ -f templist ]; then
