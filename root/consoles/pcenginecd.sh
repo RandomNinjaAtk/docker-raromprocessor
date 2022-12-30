@@ -4,6 +4,8 @@ consoleRomFileExt=".pce, .cue, .ccd, .iso, .img, .chd"
 raConsoleId="76"
 uncompressRom="false"
 compressRom="false"
+skyscraperPlatform="pcenginecd"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/redump-nec-pc-engine-cd-turbografx-cd-2021-06-06/"
