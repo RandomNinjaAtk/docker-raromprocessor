@@ -4,6 +4,8 @@ consoleRomFileExt=".lnx, .zip, .7z"
 raConsoleId="13"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="atarilynx"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - Lynx.zip/"
