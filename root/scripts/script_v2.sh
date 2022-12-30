@@ -6,6 +6,7 @@ scriptVersion="2"
 #raWebApiKey=
 libraryPath="/roms"
 consoles="fds,pc88,pcfx,pcenginecd,fbneo,apple2,supervision,wasm4,megaduck,arduboy,channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,,nes,snes,megadrive,mastersystem,sega32x,3do,n64,psp,segacd,saturn,psx,dreamcast,ps2"
+ParallelProcesses=1
 #consoles=psp
 ######### LOGGING
 
@@ -210,6 +211,112 @@ Skraper () {
 
 }
 
+ParallelProcessing () {
+      decodedUrl="$(UrlDecode "$2")"
+      fileName="$(basename "$decodedUrl")"
+      fileNameNoExt="${fileName%.*}"
+      fileNameSearch=$(echo "$fileNameNoExt"| cut -f1 -d"(" | sed "s/\ $//g" )
+      fileNameFirstWord="$(echo "$fileNameSearch"  | awk '{ print $1 }')"
+      fileNameFirstWordClean=$(echo "$fileNameFirstWord" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
+      fileNameFirstWordClean="${fileNameFirstWordClean:0:10}"
+      fileNameSecondWord="$(echo "$fileNameSearch"  | awk '{ print $2 }')"
+      fileNameSecondWordClean=$(echo "$fileNameSecondWord" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
+      fileNameSecondWordClean="${fileNameSecondWordClean:0:10}"
+      fileNameThirdWord="$(echo "$fileNameSearch"  | awk '{ print $2 }')"
+      ffileNameThirdWordClean=$(echo "$fileNameThirdWord" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
+      fileNameThirdWordClean="${ffileNameThirdWordClean:0:10}"
+      raGameTitlesClean=$(echo "$raGameTitles" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
+      #echo "$fileNameFirstWordClean $fileNameSecondWordClean"
+      #echo "test $1" >> log.txt
+      if [ "$downloadAll" == "false" ]; then
+        if echo "${raGameTitlesClean,,}" | grep -i "${fileNameFirstWordClean,,}" | grep -i "${fileNameSecondWordClean,,}" | grep -i "${fileNameThirdWordClean,,}" | read; then
+          Log "$fileNameNoExt :: Title found on RA Game List"
+        else
+          Log "$fileNameNoExt :: ERROR :: Title not found on RA Game List, skipping..."
+          Log "$fileNameNoExt :: ERROR :: To download all roms, set \"downloadAll=true\" in file: $consoleFile"
+          return
+        fi
+      fi
+
+      if [ -f "/config/logs/$consoleFolder/downloaded/$fileName.txt" ]; then
+        Log "$fileNameNoExt :: Previously Processed..."
+        return
+      fi
+      if [ -d "$libraryPath/$consoleFolder" ]; then
+        if find "$libraryPath/$consoleFolder" -type f -iname "$fileNameNoExt.*" | read; then
+          Log "$libraryPath/$consoleFolder/$fileNameNoExt.* :: File already exists :: skipping..."
+          if [ ! -d /config/logs/$consoleFolder ]; then
+            mkdir -p /config/logs/$consoleFolder
+            chmod 777 /config/logs/$consoleFolder
+          fi
+          if [ ! -d "/config/logs/$consoleFolder/downloaded" ]; then
+            mkdir -p "/config/logs/$consoleFolder/downloaded"
+            chmod 777 "/config/logs/$consoleFolder/downloaded"
+          fi
+          touch "/config/logs/$consoleFolder/downloaded/$fileName.txt"
+          chmod 666 "/config/logs/$consoleFolder/downloaded/$fileName.txt"
+          return
+        fi
+      fi
+
+      if [ -d "$libraryPath/_temp_$1" ]; then
+        rm -rf "$libraryPath/_temp_$1"
+      fi
+
+      if [ ! -d "$libraryPath/_temp_$1" ]; then
+        mkdir -p "$libraryPath/_temp_$1"
+      fi
+      
+      DownloadFile "$downloadUrl" "$libraryPath/_temp_$1/$fileName" "$concurrentDownloadThreads" "$fileName"
+
+      if [ ! -f "$libraryPath/_temp_$1/$fileName" ]; then
+        Log "$fileNameNoExt :: Skipping..."
+        return
+      else
+        mkdir -p "/config/logs/$consoleFolder"
+        if [ ! -d "/config/logs/$consoleFolder/downloaded" ]; then
+            mkdir -p "/config/logs/$consoleFolder/downloaded"
+            chmod 777 "/config/logs/$consoleFolder/downloaded"
+          fi
+        touch "/config/logs/$consoleFolder/downloaded/$fileName.txt"
+      fi
+      DownloadFileVerification "$libraryPath/_temp_$1/$fileName"
+      if [ ! -f "$libraryPath/_temp_$1/$fileName" ]; then
+        Log "Skipping..."
+        return
+      fi
+      if [ "$uncompressRom" == "true" ]; then
+        UncompressFile "$libraryPath/_temp_$1/$fileName" "$libraryPath/_temp_$1"
+      fi
+      romFile=$(find $libraryPath/_temp_$1 -type f)
+      romFileExt="${romFile##*.}"
+      Log "Checking for Valid ROM extension"
+      if ! echo "$consoleRomFileExt" | grep -E "\.$romFileExt(,|$)" | read; then
+        Log "ERROR :: \"$consoleRomFileExt\" file extension(s) expected :: \"$romFileExt\" found..."
+        Log "Skipping..."
+        rm "$libraryPath/_temp_$1"/*
+        return
+      else
+        Log "Valid ROM extension found (.$romFileExt)"
+      fi
+
+      RaHashRom "$romFile" "$raConsoleId"
+      RomRaHashVerification "$romFile" "$consoleFolder"
+      if [ ! -f "$romFile" ]; then
+        Log "Skipping..."
+        return
+      fi
+      if [ "$compressRom" == "true" ]; then
+        CompressFile "$romFile" "$libraryPath/_temp_$1/$fileNameNoExt.zip"
+      fi
+      romFile=$(find "$libraryPath/_temp_$1" -type f)
+      MoveRomToFinalLocation "$romFile" "$libraryPath/$consoleFolder"
+      
+      if [ -d "$libraryPath/_temp_$1" ]; then
+        rm -rf "$libraryPath/_temp_$1" &>/dev/null
+      fi
+}
+
 ######### PROCESS
 currentsubprocessid=0
 totalCount=0
@@ -256,14 +363,6 @@ do
   raGameList="$(wget -qO- "https://retroachievements.org/API/API_GetGameList.php?z=${raUsername}&y=${raWebApiKey}&i=$raConsoleId")"
   raGameTitles=$(echo "$raGameList" | jq -r .[].Title | sort -u)
   raGameTitlesCount=$(echo -n "$raGameTitles" | wc -l)
-  if [ -d $libraryPath/temp ]; then
-    rm -rf $libraryPath/temp
-  fi
-
-  if [ ! -d $libraryPath/temp ]; then
-    mkdir -p $libraryPath/temp
-  fi
-
   DownloadRaHashLibrary "$raConsoleId" "$consoleFolder"
 
   if cat "/config/ra_hash_libraries/${consoleFolder}_hashes.json" | grep '"MD5List": \[\]' | read; then
@@ -272,6 +371,7 @@ do
     continue
   fi
 
+  N=$ParallelProcesses
   totalCount="$(echo "$archiveUrl" | wc -l)"
   OLDIFS="$IFS"
   IFS=$'\n'
@@ -280,102 +380,20 @@ do
   for Url in ${!archiveUrls[@]}; do
     currentsubprocessid=$(( $Url + 1 ))
     downloadUrl="${archiveUrls[$Url]}"
-    decodedUrl="$(UrlDecode "$downloadUrl")"
-    fileName="$(basename "$decodedUrl")"
-    fileNameNoExt="${fileName%.*}"
-    fileNameSearch=$(echo "$fileNameNoExt"| cut -f1 -d"(" | sed "s/\ $//g" )
-    fileNameFirstWord="$(echo "$fileNameSearch"  | awk '{ print $1 }')"
-    fileNameFirstWordClean=$(echo "$fileNameFirstWord" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
-    fileNameFirstWordClean="${fileNameFirstWordClean:0:10}"
-    fileNameSecondWord="$(echo "$fileNameSearch"  | awk '{ print $2 }')"
-    fileNameSecondWordClean=$(echo "$fileNameSecondWord" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
-    fileNameSecondWordClean="${fileNameSecondWordClean:0:10}"
-    fileNameThirdWord="$(echo "$fileNameSearch"  | awk '{ print $2 }')"
-    ffileNameThirdWordClean=$(echo "$fileNameThirdWord" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
-    fileNameThirdWordClean="${ffileNameThirdWordClean:0:10}"
-    raGameTitlesClean=$(echo "$raGameTitles" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
-    #echo "$fileNameFirstWordClean $fileNameSecondWordClean"
-    
-    if [ "$downloadAll" == "false" ]; then
-      if echo "${raGameTitlesClean,,}" | grep -i "${fileNameFirstWordClean,,}" | grep -i "${fileNameSecondWordClean,,}" | grep -i "${fileNameThirdWordClean,,}" | read; then
-        Log "$fileNameNoExt :: Title found on RA Game List"
-      else
-        Log "$fileNameNoExt :: ERROR :: Title not found on RA Game List, skipping..."
-        Log "$fileNameNoExt :: ERROR :: To download all roms, set \"downloadAll=true\" in file: $consoleFile"
-        continue
-      fi
-    fi
-
-    if [ -f "/config/logs/$consoleFolder/downloaded/$fileName.txt" ]; then
-      Log "$fileNameNoExt :: Previously Processed..."
-      continue
-    fi
-    if [ -d "$libraryPath/$consoleFolder" ]; then
-      if find "$libraryPath/$consoleFolder" -type f -iname "$fileNameNoExt.*" | read; then
-        Log "$libraryPath/$consoleFolder/$fileNameNoExt.* :: File already exists :: skipping..."
-        if [ ! -d /config/logs/$consoleFolder ]; then
-          mkdir -p /config/logs/$consoleFolder
-          chmod 777 /config/logs/$consoleFolder
-        fi
-        if [ ! -d "/config/logs/$consoleFolder/downloaded" ]; then
-          mkdir -p "/config/logs/$consoleFolder/downloaded"
-          chmod 777 "/config/logs/$consoleFolder/downloaded"
-        fi
-        touch "/config/logs/$consoleFolder/downloaded/$fileName.txt"
-        chmod 666 "/config/logs/$consoleFolder/downloaded/$fileName.txt"
-        continue
-      fi
-    fi
-    DownloadFile "$downloadUrl" "$libraryPath/temp/$fileName" "$concurrentDownloadThreads" "$fileName"
-
-    if [ ! -f "$libraryPath/temp/$fileName" ]; then
-      Log "$fileNameNoExt :: Skipping..."
-      continue
-    else
-      mkdir -p "/config/logs/$consoleFolder"
-       if [ ! -d "/config/logs/$consoleFolder/downloaded" ]; then
-          mkdir -p "/config/logs/$consoleFolder/downloaded"
-          chmod 777 "/config/logs/$consoleFolder/downloaded"
-        fi
-      touch "/config/logs/$consoleFolder/downloaded/$fileName.txt"
-    fi
-    DownloadFileVerification "$libraryPath/temp/$fileName"
-    if [ ! -f "$libraryPath/temp/$fileName" ]; then
-      Log "Skipping..."
-      continue
-    fi
-    if [ "$uncompressRom" == "true" ]; then
-      UncompressFile "$libraryPath/temp/$fileName" "$libraryPath/temp"
-    fi
-    romFile=$(find $libraryPath/temp -type f)
-    romFileExt="${romFile##*.}"
-    Log "Checking for Valid ROM extension"
-    if ! echo "$consoleRomFileExt" | grep -E "\.$romFileExt(,|$)" | read; then
-      Log "ERROR :: \"$consoleRomFileExt\" file extension(s) expected :: \"$romFileExt\" found..."
-      Log "Skipping..."
-      rm $libraryPath/temp/*
-      continue
-    else
-      Log "Valid ROM extension found (.$romFileExt)"
-    fi
-
-    RaHashRom "$romFile" "$raConsoleId"
-    RomRaHashVerification "$romFile" "$consoleFolder"
-    if [ ! -f "$romFile" ]; then
-      Log "Skipping..."
-      continue
-    fi
-    if [ "$compressRom" == "true" ]; then
-      CompressFile "$romFile" "$libraryPath/temp/$fileNameNoExt.zip"
-    fi
-    romFile=$(find $libraryPath/temp -type f)
-    MoveRomToFinalLocation "$romFile" "$libraryPath/$consoleFolder"
-    
-    if [ -d $libraryPath/temp ]; then
-      rm $libraryPath/temp/* &>/dev/null
-    fi
-    
+    ParallelProcessing "$currentsubprocessid" "$downloadUrl" &
+    if [[ $(jobs -r -p | wc -l) -ge $N ]]; then wait -n; fi
   done
+  
+  # Wait for all jobs to finish
+  for (( ; ; ))
+  do
+    if [[ $(jobs -r -p | wc -l) != 0 ]]; then
+      wait -n
+    else
+      break
+    fi
+  done
+
   if [ -d  "$libraryPath/$consoleFolder" ]; then
     downloadRomCount=$(find "$libraryPath/$consoleFolder" -maxdepth 1 -type f -not -iname "*.xml" | wc -l)
     matchedRomCount=$(find "/config/logs/$consoleFolder/matched" -type f | wc -l)
@@ -387,10 +405,7 @@ do
   Log "Only $(( $raGameTitlesCount - $matchedRomCount)) ROMs missing..."
   Log "$(( $downloadRomCount - $matchedRomCount)) Duplicate ROMs found..."
   sleep 5
-  if [ -d $libraryPath/temp ]; then
-    rm -rf $libraryPath/temp
-  fi
-
+  
   if [ -d "$libraryPath/$consoleFolder" ]; then
     Skraper "$consoleFolder" "$libraryPath/$consoleFolder"
   fi
