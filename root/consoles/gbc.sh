@@ -4,6 +4,8 @@ consoleRomFileExt=".gbc, .zip, .7z"
 raConsoleId="6"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="gbc"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Game Boy Color.zip/"
