@@ -4,6 +4,8 @@ consoleRomFileExt=".a26, .bin, .zip, .7z"
 raConsoleId="25"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="atari2600"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - 2600.zip/"
