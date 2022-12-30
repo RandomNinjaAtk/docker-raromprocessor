@@ -4,6 +4,8 @@ consoleRomFileExt=".z64, .n64, .v64, .zip, .7z"
 raConsoleId="2"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="n64"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Nintendo 64.zip/"
