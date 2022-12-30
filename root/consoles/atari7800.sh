@@ -4,6 +4,8 @@ consoleRomFileExt=".a78, .bin, .zip, .7z"
 raConsoleId="51"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="atari7800"
+downloadAll="false"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - 7800.zip/"
