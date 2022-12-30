@@ -4,6 +4,8 @@ consoleRomFileExt=".bin, .zip, .7z"
 raConsoleId="69"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="unsupported"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/MegaDuck201808/ROMS.zip/"
