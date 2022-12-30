@@ -4,6 +4,8 @@ consoleRomFileExt=".bin, .sms, .zip, .7z"
 raConsoleId="11"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="mastersystem"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega%20-%20Master%20System%20-%20Mark%20III.zip/"
