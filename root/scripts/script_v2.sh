@@ -5,7 +5,7 @@ scriptVersion="2"
 #raUsername=
 #raWebApiKey=
 libraryPath="/roms"
-consoles="fds,pc88,pcfx,pcenginecd,fbneo,apple2,supervision,wasm4,megaduck,arduboy,channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,psp,nes,snes,megadrive,mastersystem,sega32x,3do,n64,segacd,saturn,psx,dreamcast,ps2"
+consoles="fds,pc88,pcfx,pcenginecd,fbneo,apple2,supervision,wasm4,megaduck,arduboy,channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,,nes,snes,megadrive,mastersystem,sega32x,3do,n64,psp,segacd,saturn,psx,dreamcast,ps2"
 #consoles=psp
 ######### LOGGING
 
@@ -306,7 +306,7 @@ do
       fi
     fi
 
-    if [ -f "/config/logs/$consoleFolder/$fileName.txt" ]; then
+    if [ -f "/config/logs/$consoleFolder/downloaded/$fileName.txt" ]; then
       Log "$fileNameNoExt :: Previously Processed..."
       continue
     fi
@@ -386,7 +386,7 @@ do
   Log "Downloaded ($downloadRomCount) ROMs and matched $matchedRomCount of $raGameTitlesCount possible RetroAchievements.org ROMs"
   Log "Only $(( $raGameTitlesCount - $matchedRomCount)) ROMs missing..."
   Log "$(( $downloadRomCount - $matchedRomCount)) Duplicate ROMs found..."
-  sleep 2
+  sleep 5
   if [ -d $libraryPath/temp ]; then
     rm -rf $libraryPath/temp
   fi
