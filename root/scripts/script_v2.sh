@@ -137,6 +137,7 @@ RomRaHashVerification () {
   if cat "/config/ra_hash_libraries/${2}_hashes.json" | jq -r .[] | grep -i "\"$raHash\"" | read; then
     raGameId=$(cat "/config/ra_hash_libraries/${2}_hashes.json" | jq -r .[] | grep -i "\"$raHash\"" | cut -d ":" -f 2 | sed "s/\ //g" | sed "s/,//g")
     Log "$1 :: Match Found :: Game ID :: $raGameId"
+    touch "/config/logs/$2/_matched_${raGameId}_ra_game_id"
   else
     Log "$1 :: ERROR :: Not Found on RetroAchievements.org DB"
     rm "$1"
