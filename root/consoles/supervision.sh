@@ -4,6 +4,8 @@ consoleRomFileExt=".sv, .zip, .7z"
 raConsoleId="63"
 uncompressRom="false"
 compressRom="false"
+skyscraperPlatform="unsupported"
+downloadAll="false"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/WataraSupervision_201809/ROMS.zip/"
