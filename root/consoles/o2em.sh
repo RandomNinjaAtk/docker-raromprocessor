@@ -4,6 +4,8 @@ consoleRomFileExt=".bin, .zip, .7z"
 raConsoleId="23"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="unsupported"
+downloadAll="false"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Magnavox - Odyssey2.zip/"
