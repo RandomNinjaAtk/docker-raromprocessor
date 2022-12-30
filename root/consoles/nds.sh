@@ -4,6 +4,8 @@ consoleRomFileExt=".nds, .bin, .zip, .7z"
 raConsoleId="18"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="nds"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/noIntroNintendoDsDecrypted2020Jan20/"
