@@ -4,6 +4,8 @@ consoleRomFileExt=".bin, .sg, .zip, .7z"
 raConsoleId="33"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="sg-1000"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - SG-1000.zip/"
