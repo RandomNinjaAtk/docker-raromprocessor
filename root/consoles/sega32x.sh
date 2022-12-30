@@ -4,6 +4,8 @@ consoleRomFileExt=".32x, .smd, .bin, .md, .zip, .7z"
 raConsoleId="10"
 uncompressRom="true"
 compressRom="true"
+skyscraperPlatform="sega32x"
+downloadAll="true"
 
 # Create URL List
 archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega%20-%2032X.zip/"
