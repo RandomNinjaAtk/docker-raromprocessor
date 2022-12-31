@@ -229,8 +229,10 @@ Skraper () {
             mkdir -p "$libraryPath/$1/_unscrapable_"
             chmod 777 "$libraryPath/$1/_unscrapable_"
           fi
-          Log "Moving $(basname "$LINE") to $libraryPath/$1/_unscrapable_"
-					mv "$LINE" "$libraryPath/$1/_unscrapable_"/
+          if [ -f "$libraryPath/$1/_unscrapable_/$(basename "$1")" ]; then
+            Log "Moving $(basname "$LINE") to $libraryPath/$1/_unscrapable_"
+            mv "$LINE" "$libraryPath/$1/_unscrapable_/$(basename "$1")"
+          fi
 				done
 			fi
 
