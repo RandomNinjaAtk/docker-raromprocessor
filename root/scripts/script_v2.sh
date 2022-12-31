@@ -207,6 +207,11 @@ Skraper () {
       return
     fi
 
+    if [ -d "$2/_unscrapable_" ]; then
+      Log "Moving previous unscapable Roms to main directory for scraping..."
+      find "$2/_unscrapable_" -type f -exec mv "{}" "$2"/ \;
+    fi
+
 	
 			# Scrape from screenscraper
 			if [ "$compressRom" == "true" ]; then
