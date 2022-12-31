@@ -202,7 +202,7 @@ Skraper () {
 			return
 		fi
     
-		if [ "$skyscraperPlatform" == "unspported" ]; then
+		if [ "$skyscraperPlatform" == "unsupported" ]; then
       Log "Metadata Scraping :: ERROR :: Platform not supported, skipping..."
       return
     fi
