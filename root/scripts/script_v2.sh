@@ -5,7 +5,7 @@ scriptVersion="2"
 #raUsername=
 #raWebApiKey=
 libraryPath="/roms"
-consoles="fds,pc88,pcfx,pcenginecd,fbneo,apple2,supervision,wasm4,megaduck,arduboy,channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,nes,snes,megadrive,mastersystem,sega32x,3do,n64,psp,segacd,saturn,psx,dreamcast,ps2"
+consoles="fds,pcfx,pcenginecd,fbneo,apple2,supervision,wasm4,megaduck,arduboy,channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,nes,snes,megadrive,mastersystem,sega32x,3do,n64,psp,segacd,saturn,psx,dreamcast,ps2"
 ParallelProcesses=1
 #consoles=psp
 ######### LOGGING
@@ -384,6 +384,14 @@ ProcessLinks () {
     currentsubprocessid=$(( $Url + 1 ))
     downloadUrl="${regionArchiveUrls[$Url]}"
     ParallelProcessing "$currentsubprocessid" "$downloadUrl" &
+    for (( ; ; ))
+    do
+      if [[ $(jobs -r -p | wc -l) -ge $N ]]; then
+        wait -n
+      else
+        break
+      fi
+    done
     if [[ $(jobs -r -p | wc -l) -ge $N ]]; then wait -n; fi
   done
   # Wait for all jobs to finish
