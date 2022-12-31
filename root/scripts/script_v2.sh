@@ -146,7 +146,7 @@ RomRaHashVerification () {
     # Wait for all jobs to finish
     for (( ; ; ))
     do 
-      if [[ $(jobs -r -p | wc -l) -gt 0 ]]; then
+      if [[ $(jobs -r | grep -v "Skraper" | wc -l) -gt 0 ]]; then
         sleep 0.01
       else
         break
@@ -210,9 +210,9 @@ Skraper () {
 	
 			# Scrape from screenscraper
 			if [ "$compressRom" == "true" ]; then
-				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $3 -d /cache/$1 -s screenscraper -i "$2" --flags nosubdirs,noresize,relative,videos,unattend,nobrackets
+				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $3 -d /cache/$1 -s screenscraper -i "$2" --flags nosubdirs,relative,videos,unattend,nobrackets
 			else
-				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $3 -d /cache/$1 -s screenscraper -i "$2" --flags nosubdirs,noresize,relative,videos,unattend,nobrackets
+				Skyscraper -f emulationstation -u $ScreenscraperUsername:$ScreenscraperPassword -p $3 -d /cache/$1 -s screenscraper -i "$2" --flags nosubdirs,relative,videos,unattend,nobrackets
 			fi
 			# Save scraped data to output folder
 			Skyscraper -f emulationstation -p $3 -d /cache/$1 -i "$2" --flags relative,videos,unattend,nobrackets
@@ -386,6 +386,7 @@ ProcessLinks () {
     currentsubprocessid=$(( $Url + 1 ))
     downloadUrl="${regionArchiveUrls[$Url]}"
     ParallelProcessing "$currentsubprocessid" "$downloadUrl" &
+
     # Wait for all jobs to finish
     for (( ; ; ))
     do 
@@ -399,7 +400,7 @@ ProcessLinks () {
   # Wait for all jobs to finish
   for (( ; ; ))
   do 
-    if [[ $(jobs -r -p | wc -l) -gt 0 ]]; then
+    if [[ $(jobs -r | grep -v "Skraper" | wc -l) -gt 0 ]]; then
       sleep 0.01
     else
       break
@@ -480,7 +481,16 @@ do
   Log "$(( $downloadRomCount - $matchedRomCount)) Duplicate ROMs found..."
   sleep 5
 
-  Skraper "$consoleFolder" "$libraryPath/$consoleFolder" "$skyscraperPlatform"
+  for (( ; ; ))
+    do 
+      if [[ $(jobs -r -p | wc -l) -ge $N ]]; then
+        sleep 0.01
+      else
+        break
+      fi
+    done
+
+  Skraper "$consoleFolder" "$libraryPath/$consoleFolder" "$skyscraperPlatform" &
 done
 
 exit
