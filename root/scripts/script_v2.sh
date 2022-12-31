@@ -6,7 +6,7 @@ scriptVersion="2"
 #raWebApiKey=
 libraryPath="/roms"
 consoles="fds,pcfx,pcenginecd,fbneo,apple2,supervision,wasm4,megaduck,arduboy,channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,nes,snes,megadrive,mastersystem,sega32x,3do,n64,psp,segacd,saturn,psx,dreamcast,ps2"
-ParallelProcesses=1
+ParallelProcesses=5
 #consoles=psp
 ######### LOGGING
 
@@ -145,14 +145,9 @@ RomRaHashVerification () {
 
     # Wait for all jobs to finish
     for (( ; ; ))
-    do
-      if ps aux | grep "Skyscraper" | grep -v "grep" | read; then
-        skyscraperProcessCount=$(ps aux | grep "Skyscraper" | grep -v "grep" | wc -l)
-      else
-        skyscraperProcessCount=0
-      fi
-      if [[ $(( $(jobs -r -p | wc -l) - $skyscraperProcessCount )) -gt 0 ]]; then
-        wait -n
+    do 
+      if [[ $(jobs -r -p | wc -l) -gt 0 ]]; then
+        sleep 0.01
       else
         break
       fi
@@ -259,6 +254,7 @@ ParallelProcessing () {
       raGameTitlesClean=$(echo "$raGameTitles" | sed -e "s%[^[:alpha:][:digit:]]%%g" -e "s/  */ /g" | sed 's/^[.]*//' | sed  's/[.]*$//g' | sed  's/^ *//g' | sed 's/ *$//g')
       #echo "$fileNameFirstWordClean $fileNameSecondWordClean"
       #echo "test $1" >> log.txt
+
       if [ "$downloadAll" == "false" ]; then
         if echo "${raGameTitlesClean,,}" | grep -i "${fileNameFirstWordClean,,}" | grep -i "${fileNameSecondWordClean,,}" | grep -i "${fileNameThirdWordClean,,}" | read; then
           Log "$fileNameNoExt :: Title found on RA Game List"
@@ -297,8 +293,12 @@ ParallelProcessing () {
       if [ ! -d "$libraryPath/_temp_$1" ]; then
         mkdir -p "$libraryPath/_temp_$1"
       fi
+
+      
       
       DownloadFile "$downloadUrl" "$libraryPath/_temp_$1/$fileName" "$concurrentDownloadThreads" "$fileName"
+
+      
 
       if [ ! -f "$libraryPath/_temp_$1/$fileName" ]; then
         Log "$fileNameNoExt :: Skipping..."
@@ -316,15 +316,17 @@ ParallelProcessing () {
       fi
       DownloadFileVerification "$libraryPath/_temp_$1/$fileName"
       if [ ! -f "$libraryPath/_temp_$1/$fileName" ]; then
-        Log "Skipping..."
+        Log "Skipping... huh"
         if [ -d "$libraryPath/_temp_$1" ]; then
           rm -rf "$libraryPath/_temp_$1" &>/dev/null
         fi
         return
       fi
+
       if [ "$uncompressRom" == "true" ]; then
         UncompressFile "$libraryPath/_temp_$1/$fileName" "$libraryPath/_temp_$1"
       fi
+
       romFile=$(find $libraryPath/_temp_$1 -type f)
       romFileExt="${romFile##*.}"
       Log "Checking for Valid ROM extension"
@@ -384,26 +386,21 @@ ProcessLinks () {
     currentsubprocessid=$(( $Url + 1 ))
     downloadUrl="${regionArchiveUrls[$Url]}"
     ParallelProcessing "$currentsubprocessid" "$downloadUrl" &
+    # Wait for all jobs to finish
     for (( ; ; ))
-    do
+    do 
       if [[ $(jobs -r -p | wc -l) -ge $N ]]; then
-        wait -n
+        sleep 0.01
       else
         break
       fi
     done
-    if [[ $(jobs -r -p | wc -l) -ge $N ]]; then wait -n; fi
   done
   # Wait for all jobs to finish
   for (( ; ; ))
-  do
-    if ps aux | grep "Skyscraper" | grep -v "grep" | read; then
-      skyscraperProcessCount=$(ps aux | grep "Skyscraper" | grep -v "grep" | wc -l)
-    else
-      skyscraperProcessCount=0
-    fi
-    if [[ $(( $(jobs -r -p | wc -l) - $skyscraperProcessCount )) -gt 0 ]]; then
-      wait -n
+  do 
+    if [[ $(jobs -r -p | wc -l) -gt 0 ]]; then
+      sleep 0.01
     else
       break
     fi
@@ -447,8 +444,8 @@ do
   source $consoleFile
 
   if [ -z "$raUsername" ] || [ -z "$raWebApiKey" ]; then
-    Log "ERROR :: raUsername & raWebApiKey not set, exiting..."
-    exit
+    Log "ERROR :: raUsername & raWebApiKey not set, returning..."
+    return
   fi
   
   raGameTitlesCount=0
@@ -482,12 +479,8 @@ do
   Log "Only $(( $raGameTitlesCount - $matchedRomCount)) ROMs missing..."
   Log "$(( $downloadRomCount - $matchedRomCount)) Duplicate ROMs found..."
   sleep 5
-  
-  if [[ $(jobs -r -p | wc -l) -ge $N ]]; then
-    wait -n;
-  else
-    Skraper "$consoleFolder" "$libraryPath/$consoleFolder" "$skyscraperPlatform" &
-  fi
+
+  Skraper "$consoleFolder" "$libraryPath/$consoleFolder" "$skyscraperPlatform"
 done
 
 exit
