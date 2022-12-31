@@ -225,12 +225,12 @@ Skraper () {
 			if [ -f /root/.skyscraper/skipped-$1-cache.txt ]; then
 				cat /root/.skyscraper/skipped-$1-cache.txt | while read LINE;
 				do
-          if [ ! -d "$libraryPath/_unscrapable/$1" ]; then
-            mkdir -p "$libraryPath/_unscrapable/$1"
-            chmod 777 "$libraryPath/_unscrapable/$1"
+          if [ ! -d "$libraryPath/$1/_unscrapable_" ]; then
+            mkdir -p "$libraryPath/$1/_unscrapable_"
+            chmod 777 "$libraryPath/$1/_unscrapable_"
           fi
-          Log "Moving $(basname "$LINE") to $libraryPath/_unscrapable/$1/"
-					mv "$LINE" "$libraryPath/_unscrapable/$1"/
+          Log "Moving $(basname "$LINE") to $libraryPath/$1/_unscrapable_"
+					mv "$LINE" "$libraryPath/$1/_unscrapable_"/
 				done
 			fi
 
