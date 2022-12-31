@@ -6,7 +6,7 @@ scriptVersion="2"
 #raWebApiKey=
 libraryPath="/roms"
 consoles="fds,pcfx,pcenginecd,fbneo,apple2,supervision,wasm4,megaduck,arduboy,channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,nes,snes,megadrive,mastersystem,sega32x,3do,n64,psp,segacd,saturn,psx,dreamcast,ps2"
-ParallelProcesses=5
+ParallelProcesses=10
 #consoles=psp
 ######### LOGGING
 
@@ -229,10 +229,8 @@ Skraper () {
             mkdir -p "$libraryPath/$1/_unscrapable_"
             chmod 777 "$libraryPath/$1/_unscrapable_"
           fi
-          if [ -f "$libraryPath/$1/_unscrapable_/$(basename "$1")" ]; then
-            Log "Moving $(basname "$LINE") to $libraryPath/$1/_unscrapable_"
-            mv "$LINE" "$libraryPath/$1/_unscrapable_/$(basename "$1")"
-          fi
+          Log "Moving \"$LINE\" to \"$libraryPath/$1/_unscrapable_\""
+          mv "$LINE" "$libraryPath/$1/_unscrapable_"/
 				done
 			fi
 
