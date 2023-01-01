@@ -8,5 +8,5 @@ skyscraperPlatform="n64"
 downloadAll="true"
 
 # Create URL List
-archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Nintendo 64.zip/"
+archiveContentsUrl="https://archive.org/download/no-intro-nintendo-nintendo64-20170110/No-Intro%20-%20Nintendo%20-%20Nintendo%2064%20%282017-01-10%29.zip/"
 archiveUrl="$(wget -qO- "$archiveContentsUrl" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | grep -i "archive.org" | sed 's%^//%https://%g' | sort -u)"
