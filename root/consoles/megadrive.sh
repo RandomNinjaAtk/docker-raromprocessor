@@ -8,5 +8,5 @@ skyscraperPlatform="megadrive"
 downloadAll="true"
 
 # Create URL List
-archiveContentsUrl="https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Sega - Mega Drive - Genesis.zip/"
+archiveContentsUrl="https://archive.org/download/sega-mega-drive-genesis-no-intro/Sega%20Mega%20Drive%20%28No-Intro%29.rar/"
 archiveUrl="$(wget -qO- "$archiveContentsUrl" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | grep -i "archive.org" | sed 's%^//%https://%g' | sort -u)"
