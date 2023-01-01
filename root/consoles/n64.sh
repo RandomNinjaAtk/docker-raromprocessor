@@ -3,7 +3,7 @@ consoleFolder="n64"
 consoleRomFileExt=".z64, .n64, .v64, .zip, .7z"
 raConsoleId="2"
 uncompressRom="true"
-compressRom="true"
+compressRom="false"
 skyscraperPlatform="n64"
 downloadAll="true"
 
