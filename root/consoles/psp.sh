@@ -4,6 +4,8 @@ consoleRomFileExt=".iso, .cso, .pbp"
 raConsoleId="41"
 uncompressRom="true"
 compressRom="false"
+skyscraperPlatform="psp"
+downloadAll="false"
 
 # Create URL List
 
