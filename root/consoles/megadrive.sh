@@ -3,7 +3,7 @@ consoleFolder="megadrive"
 consoleRomFileExt=".bin, .gen, .md, .sg, .smd, .zip, .7z"
 raConsoleId="1"
 uncompressRom="true"
-compressRom="true"
+compressRom="false"
 skyscraperPlatform="megadrive"
 downloadAll="true"
 
