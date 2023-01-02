@@ -3,7 +3,7 @@ consoleFolder="gbc"
 consoleRomFileExt=".gbc, .zip, .7z"
 raConsoleId="6"
 uncompressRom="true"
-compressRom="true"
+compressRom="false"
 skyscraperPlatform="gbc"
 downloadAll="true"
 
