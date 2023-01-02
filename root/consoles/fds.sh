@@ -3,7 +3,7 @@ consoleFolder="fds"
 consoleRomFileExt=".fds, .zip, .7z"
 raConsoleId="7"
 uncompressRom="true"
-compressRom="true"
+compressRom="false"
 skyscraperPlatform="fds"
 downloadAll="true"
 
