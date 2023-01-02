@@ -3,7 +3,7 @@ consoleFolder="virtualboy"
 consoleRomFileExt=".vb, .zip, .7z"
 raConsoleId="28"
 uncompressRom="true"
-compressRom="true"
+compressRom="false"
 skyscraperPlatform="virtualboy"
 downloadAll="true"
 
