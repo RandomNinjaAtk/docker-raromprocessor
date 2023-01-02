@@ -3,7 +3,7 @@ consoleFolder="snes"
 consoleRomFileExt=".smc, .fig, .sfc, .gd3, .gd7, .dx2, .bsx, .swc, .zip, .7z"
 raConsoleId="3"
 uncompressRom="true"
-compressRom="true"
+compressRom="false"
 skyscraperPlatform="snes"
 downloadAll="true"
 
