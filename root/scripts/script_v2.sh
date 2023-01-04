@@ -279,6 +279,14 @@ ParallelProcessing () {
         Log "$fileNameNoExt :: Previously Processed ($libraryPath/$consoleFolder)..."
         touch "/config/logs/$consoleFolder/downloaded/$fileName.txt"
         return
+      elif ls "$libraryPath/$consoleFolder" | grep "^$fileNameSearch" | read; then
+        if echo "$fileNameNoExt" | grep -i "(Disc" | read; then
+          sleep 0.01
+        else
+          Log "$fileNameNoExt :: Previously Processed ($libraryPath/$consoleFolder)..."
+          touch "/config/logs/$consoleFolder/downloaded/$fileName.txt"
+          return
+        fi
       fi
 
       if [ -d "$libraryPath/$consoleFolder" ]; then
