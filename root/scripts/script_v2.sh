@@ -5,7 +5,7 @@ scriptVersion="2"
 #raUsername=
 #raWebApiKey=
 libraryPath="/roms"
-consoles="snes,nes,megadrive,gamegear,n64,fds,pcfx,pcenginecd,fbneo,apple2,supervision,wasm4,megaduck,arduboy,channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,nes,snes,megadrive,mastersystem,sega32x,3do,n64,psp,segacd,saturn,psx,dreamcast,ps2"
+consoles="fds,pcfx,pcenginecd,fbneo,apple2,supervision,wasm4,megaduck,arduboy,channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,nes,snes,megadrive,mastersystem,sega32x,3do,n64,psp,segacd,saturn,psx,dreamcast,ps2"
 ParallelProcesses=10
 #consoles=psp
 ######### LOGGING
@@ -157,8 +157,12 @@ RomRaHashVerification () {
       touch "/config/logs/$2/matched/${raGameId}_ra_game_id"
       chmod 666 "/config/logs/$2/matched/${raGameId}_ra_game_id"
     else
-      Log "$1 :: ROM Previously Matched, skipping..."
-      rm "$1"
+      if echo "$1" | grep -i "(Disc" | read; then
+        Log "$1 :: ROM Previously Matched, but detected multidisk, importing..."
+      else
+        Log "$1 :: ROM Previously Matched, skipping..."
+        rm "$1"
+      fi
     fi
   else
     Log "$1 :: ERROR :: Not Found on RetroAchievements.org DB"
@@ -271,7 +275,11 @@ ParallelProcessing () {
       if [ -f "/config/logs/$consoleFolder/downloaded/$fileName.txt" ]; then
         Log "$fileNameNoExt :: Previously Processed..."
         return
+      elif ls "$libraryPath/$consoleFolder" | grep "^$fileNameNoExt" | read; then
+        Log "$fileNameNoExt :: Previously Processed ($libraryPath/$consoleFolder)..."
+        return
       fi
+
       if [ -d "$libraryPath/$consoleFolder" ]; then
         if find "$libraryPath/$consoleFolder" -type f -iname "$fileNameNoExt.*" | read; then
           Log "$libraryPath/$consoleFolder/$fileNameNoExt.* :: File already exists :: skipping..."
