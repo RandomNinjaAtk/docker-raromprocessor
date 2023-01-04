@@ -277,6 +277,7 @@ ParallelProcessing () {
         return
       elif ls "$libraryPath/$consoleFolder" | grep "^$fileNameNoExt" | read; then
         Log "$fileNameNoExt :: Previously Processed ($libraryPath/$consoleFolder)..."
+        touch "/config/logs/$consoleFolder/downloaded/$fileName.txt"
         return
       fi
 
