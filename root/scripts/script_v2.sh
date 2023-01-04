@@ -6,8 +6,8 @@ scriptVersion="2"
 #raWebApiKey=
 libraryPath="/roms"
 consoles="fds,pcfx,pcenginecd,fbneo,apple2,supervision,wasm4,megaduck,arduboy,channelf,atarist,c64,zxspectrum,x68000,pcengine,o2em,msx2,msx1,ngp,ngpc,amstradcpc,lynx,jaguar,atari2600,atari5200,vectrex,intellivision,wswan,wswanc,atari7800,colecovision,sg1000,virtualboy,pokemini,gamegear,gb,gbc,gba,nds,nes,snes,megadrive,mastersystem,sega32x,3do,n64,psp,segacd,saturn,psx,dreamcast,ps2"
-regions="usa,europe,world,hack,homebrew"
-#regions="usa,europe,world,japan,other,hack,homebrew"
+defaultRegions="usa,europe,world,japan,other,hack,homebrew"
+regionsOverride="usa,europe,world,hack,homebrew"
 ParallelProcesses=10
 #consoles=psp
 ######### LOGGING
@@ -480,7 +480,12 @@ do
     continue
   fi
 
-  IFS=',' read -r -a filters <<< "$regions"
+  if [ ! -z "$regionsOverride" ]; then
+    Log "Setting default regions to: $regionsOverride"
+    defaultRegions="$regionsOverride"
+  fi
+
+  IFS=',' read -r -a filters <<< "$defaultRegions"
   for region in "${filters[@]}"
   do
     ProcessLinks $region "$archiveUrl"
