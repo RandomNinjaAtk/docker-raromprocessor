@@ -1,9 +1,8 @@
-# RA ROM Processor
-[![Docker Build](https://img.shields.io/docker/cloud/automated/randomninjaatk/raromprocessor?style=flat-square)](https://hub.docker.com/r/randomninjaatk/raromprocessor)
-[![Docker Pulls](https://img.shields.io/docker/pulls/randomninjaatk/raromprocessor?style=flat-square)](https://hub.docker.com/r/randomninjaatk/raromprocessor)
-[![Docker Stars](https://img.shields.io/docker/stars/randomninjaatk/raromprocessor?style=flat-square)](https://hub.docker.com/r/randomninjaatk/raromprocessor)
-[![Docker Hub](https://img.shields.io/badge/Open%20On-DockerHub-blue?style=flat-square)](https://hub.docker.com/r/randomninjaatk/raromprocessor)
+# Deprecated
 
+This repository is now deprecated, will no longer be updated and is being archived. 
+
+# RA ROM Processor
 
 [RA ROM Processor](https://github.com/RandomNinjaAtk/docker-raromprocessor) is a Docker container that is used to aquire/orgainze/process/verify/dedupe/scrape a ROMs library automatically by matching ROMs to the [RetroAchievement.org](https://retroachievements.org) website Hash database. This was inspired by other projects such as: [hascheevos](https://github.com/meleu/hascheevos) 
 
