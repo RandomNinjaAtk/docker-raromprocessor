@@ -246,6 +246,11 @@ CreateRomFolders () {
 		mkdir -p /input/virtualboy
 	fi
 	
+	if [ ! -d "/input/wii" ]; then
+		log "Created: /input/wii"
+		mkdir -p /input/wii
+	fi
+	
 	if [ ! -d "/input/wonderswan" ]; then
 		log "Created: /input/wonderswan"
 		mkdir -p /input/wonderswan
@@ -637,6 +642,70 @@ for folder in $(ls /input); do
 		ConsoleName="Atari 7800"
 		ConsoleDirectory="atari7800"
 		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Atari - 7800.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
+	fi
+
+	if echo "$folder" | grep "^wii" | read; then
+		ConsoleId=19
+		ConsoleName="Wii"
+		ConsoleDirectory="wii"
+		ArchiveUrl="$(curl -s "https://archive.org/download/WiiRedumpNKitPart1" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/WiiRedumpNKitPart1/|')"
+		keepCompressed=true
+	fi
+
+	if echo "$folder" | grep "^wii" | read; then
+		ConsoleId=19
+		ConsoleName="Wii"
+		ConsoleDirectory="wii"
+		ArchiveUrl="$(curl -s "https://archive.org/details/WiiRedumpNKitPart2" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/details/WiiRedumpNKitPart2/|')"
+		keepCompressed=true
+	fi
+
+	if echo "$folder" | grep "^wii" | read; then
+		ConsoleId=19
+		ConsoleName="Wii"
+		ConsoleDirectory="wii"
+		ArchiveUrl="$(curl -s "https://archive.org/download/WiiRedumpNKitPart3" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/WiiRedumpNKitPart3/|')"
+		keepCompressed=true
+	fi
+
+	if echo "$folder" | grep "^wii" | read; then
+		ConsoleId=19
+		ConsoleName="Wii"
+		ConsoleDirectory="wii"
+		ArchiveUrl="$(curl -s "https://archive.org/details/WiiRedumpNKitPart4" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/details/WiiRedumpNKitPart4/|')"
+		keepCompressed=true
+	fi
+
+	if echo "$folder" | grep "^wii" | read; then
+		ConsoleId=19
+		ConsoleName="Wii"
+		ConsoleDirectory="wii"
+		ArchiveUrl="$(curl -s "https://archive.org/download/WiiRedumpNKitPart5" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/WiiRedumpNKitPart5/|')"
+		keepCompressed=true
+	fi
+
+	if echo "$folder" | grep "^wii" | read; then
+		ConsoleId=19
+		ConsoleName="Wii"
+		ConsoleDirectory="wii"
+		ArchiveUrl="$(curl -s "https://archive.org/download/WiiRedumpNKitPart6" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/WiiRedumpNKitPart6/|')"
+		keepCompressed=true
+	fi
+
+	if echo "$folder" | grep "^wii" | read; then
+		ConsoleId=19
+		ConsoleName="Wii"
+		ConsoleDirectory="wii"
+		ArchiveUrl="$(curl -s "https://archive.org/download/WiiRedumpNKitPart7" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/WiiRedumpNKitPart7/|')"
+		keepCompressed=true
+	fi
+
+	if echo "$folder" | grep "^wii" | read; then
+		ConsoleId=19
+		ConsoleName="Wii"
+		ConsoleDirectory="wii"
+		ArchiveUrl="$(curl -s "https://archive.org/download/WiiRedumpNKitPart8" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/WiiRedumpNKitPart8/|')"
 		keepCompressed=true
 	fi
 
