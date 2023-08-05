@@ -126,6 +126,11 @@ CreateRomFolders () {
 		mkdir -p /input/gbc
 	fi
 	
+	if [ ! -d "/input/gc" ]; then
+		log "Created: /input/gc"
+		mkdir -p /input/gc
+	fi
+
 	if [ ! -d "/input/intellivision" ]; then
 		log "Created: /input/intellivision"
 		mkdir -p /input/intellivision
@@ -486,6 +491,14 @@ for folder in $(ls /input); do
 		ConsoleName="GameBoy Color"
 		ConsoleDirectory="gbc"
 		ArchiveUrl="$(wget -q -O - "https://archive.org/download/hearto-1g1r-collection/hearto_1g1r_collection/Nintendo - Game Boy Color.zip/" | grep ".zip" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sort -u | sed 's%//archive.org%https://archive.org%g')"
+		keepCompressed=true
+	fi
+
+	if echo "$folder" | grep "^gc$" | read; then
+		ConsoleId=16
+		ConsoleName="GameCube"
+		ConsoleDirectory="gc"
+		ArchiveUrl="$(curl -s "https://archive.org/download/GCRedumpNKitPart1" | grep ".nkit.gcz" | grep -io '<a href=['"'"'"][^"'"'"']*['"'"'"]' |   sed -e 's/^<a href=["'"'"']//i' -e 's/["'"'"']$//i' | sed 's/\///g' | sort -u | sed 's|^|https://archive.org/download/GCRedumpNKitPart1/|')"
 		keepCompressed=true
 	fi
 
@@ -850,6 +863,9 @@ for folder in $(ls /input); do
 					*.iso|*.ISO)
 						Type=iso
 						;;
+					*.nkit.gcz|*.NKIT.GCZ)
+						Type=nkit
+						;;
 				esac
 				
 				log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Downloading..."
@@ -868,6 +884,8 @@ for folder in $(ls /input); do
 					elif [ "$Type" = "chd" ]; then
 						DownloadVerification="$(chdman verify -i "$DownloadOutput" &>/dev/null; echo $?)"
 					elif [ "$Type" = "iso" ]; then
+						DownloadVerification="0"
+					elif [ "$Type" = "nkit" ]; then
 						DownloadVerification="0"
 					fi
 					if [ "$DownloadVerification" = "0" ]; then
@@ -892,6 +910,9 @@ for folder in $(ls /input); do
 							log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
 							mv "$DownloadOutput" "/input/$folder"
 						elif [ "$Type" = "iso" ]; then
+							log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
+							mv "$DownloadOutput" "/input/$folder"
+						elif [ "$Type" = "nkit" ]; then
 							log "$ConsoleName :: $currentsubprocessid of $DlCount :: $romFile :: Moving to /input/$folder"
 							mv "$DownloadOutput" "/input/$folder"
 						fi
